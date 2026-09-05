@@ -26,7 +26,7 @@ $routes->group('rfkopd', ['filter' => 'role:superadmin'], function ($routes) {
     $routes->post('simpanprofile', 'Silacak\HomeRfk::simpanprofile');
 });
 /*---  ROUTE PORTAL LRFK ADMIN --------------------- */
-$routes->group('superadmin', ['filter' => 'role:useropdrfk'], function ($routes) {
+$routes->group('superadmin', ['filter' => 'role:superadmin'], function ($routes) {
     //$routes->group('lrfkadmin',  function ($routes) {
     // $routes->get('', 'Home::maintenis');
 
