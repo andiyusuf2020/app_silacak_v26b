@@ -77,7 +77,7 @@
 
                 <h1>SILACAK<br>Executive Dashboard</h1>
                 <p>Penyampaian Resume Data Pembangunan Kabupaten Tulang Bawang Barat melalui Sistem Laporan Capaian Kinerja (SILACAK)</p>
-                <a href="<?= base_url('silacak/opd') ?>" class="cta-button">MASUK</a>
+                <a href="<?= base_url('pilihakses') ?>" class="cta-button">MASUK</a>
 
             </div>
             <div class="hero-visual">

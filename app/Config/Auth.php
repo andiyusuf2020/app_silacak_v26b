@@ -16,7 +16,7 @@ class Auth extends \Myth\Auth\Config\Auth
      * @var string
      */
     // public $defaultUserGroup;
-    public $defaultUserGroup = 'userumum';
+    public $defaultUserGroup = '';
     /**
      * --------------------------------------------------------------------
      * Landing Route
@@ -73,7 +73,8 @@ class Auth extends \Myth\Auth\Config\Auth
      * @var array
      */
     public $views = [
-        //'login'           => 'App\Views\Auth\login',
+        // 'login'           => 'App\Views\Auth\login',
+        // 'login'           => 'App\Views\silacaklogin\login',
         'login'           => 'App\Views\login3',
 
         'register'        => 'App\Views\Auth\register',

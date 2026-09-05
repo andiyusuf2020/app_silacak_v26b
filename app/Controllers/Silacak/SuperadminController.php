@@ -4,7 +4,7 @@ namespace App\Controllers\Silacak;
 
 use App\Controllers\BaseController;
 
-class Home extends BaseController
+class SuperadminController extends BaseController
 {
     public function __construct()
     {
@@ -13,7 +13,8 @@ class Home extends BaseController
 
     public function index()
     {
-        return view('silacak/home');
+        echo "Masuk halaman superadmin";
+        // return view('silacak/home');
     }
     public function dashboard()
     {

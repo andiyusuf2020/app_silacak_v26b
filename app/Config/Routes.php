@@ -11,11 +11,72 @@ use CodeIgniter\Router\RouteCollection;
 
 $routes->get('/', 'Silacak\Home::index');
 $routes->get('dashboard', 'Silacak\Home::dashboard');
+$routes->get('pilihakses', 'Silacak\Home::pilihakses');
+
+/*---  ROUTE SILACAK LRFK OPD TUBA --------------------- */
+$routes->group('rfkopd', ['filter' => 'role:useropdrfk'], function ($routes) {
+    $routes->get('', 'SilacakRfk\HomeRfk::index');
+    // $routes->get('', 'Home::adbang');
+    $routes->get('datarfk', 'SilacakRfk\HomeRfk::datarfk');
+    $routes->get('cetak', 'SilacakRfk\HomeRfk::cetak');
+    $routes->post('simpanrfk', 'SilacakRfk\HomeRfk::simpanprfk');
+    $routes->get('profile', 'SilacakRfk\HomeRfk::profile');
+    $routes->post('simpanprofile', 'SilacakRfk\HomeRfk::simpanprofile');
+});
+/*---  ROUTE PORTAL LRFK ADMIN --------------------- */
+$routes->group('superadmin', ['filter' => 'role:superadmin'], function ($routes) {
+    //$routes->group('lrfkadmin',  function ($routes) {
+    // $routes->get('', 'Home::maintenis');
+
+    $routes->get('', 'SilacakRfk\SuperadminController::index');
+    $routes->get('jadwal', 'LrfkController\AdminLrfkController::index');
+    $routes->get('jadwaladmin', 'LrfkController\AdminLrfkController::jadwal');
+
+    //Manajemen User Sitapis Admin Adbang
+    $routes->get('usersitapis', 'UserController\UserSitapisController::index');
+    $routes->get('manajemenuser', 'UserController\UserSitapisController::user');
+    $routes->post('setpassword', 'UserController\UserSitapisController::setPassword');
+    $routes->post('groupset', 'UserController\UserSitapisController::changeGroup');
+    $routes->post('ubahopdprov', 'UserController\UserSitapisController::simpanubahopd');
+});
+$routes->group('adminprov', ['filter' => 'role:adminprov'], function ($routes) {
+    $routes->get('', 'AdminAdbang\adminadbang::index');
+    $routes->get('uploadapbd', 'AdminAdbang\ExcelUploadRApbd::index');
+    $routes->post('uploadapbd/upload', 'AdminAdbang\ExcelUploadRApbd::upload');
+
+    $routes->get('uploadsipd', 'AdminAdbang\ExcelUploadRSipd::index');
+    $routes->post('uploadrsipd/upload', 'AdminAdbang\ExcelUploadRSipd::upload');
+
+    $routes->get('uploadrealrup', 'AdminAdbang\ExcelUploadRealRup::index');
+    $routes->post('uploadrealrup/upload', 'AdminAdbang\ExcelUploadRealRup::upload');
+
+    $routes->get('uploadrup', 'AdminAdbang\ExcelUploadRup::index');
+    $routes->post('uploadrup/upload', 'AdminAdbang\ExcelUploadRup::upload');
+
+    $routes->get('uploadpendapatan', 'AdminAdbang\ExcelUploadPend::index');
+    $routes->post('uploadpendapatan/upload', 'AdminAdbang\ExcelUploadPend::upload');
+
+    //-------------------------------------------------------------------------------------------------
+    ///Route Admin App 2026
+    $routes->get('apbdopd', 'AdminAdbang\adminadbang26::index');
+    $routes->get('capkin', 'AdminAdbang\adminadbang26::index');
+    $routes->get('pendapatan', 'AdminAdbang\adminadbang26::pendapatan');
+    $routes->get('angkasapbd', 'AdminAdbang\adminadbang26::angkasapbd');
+    $routes->get('realpbj', 'AdminAdbang\adminadbang26::realpbj');
+    $routes->get('ruppbj', 'AdminAdbang\adminadbang26::ruppbj');
+    $routes->get('laporanapbdopd', 'AdminAdbang\adminadbang26::laporanapbdopd');
+});
+
 
 
 
 
 // end of routes for the application SILACAK.
+/*---  ROUTE SILACAK LRFK OPD TUBA --------------------- */
+
+
+
+
 
 // $routes->get('users', 'Usersx::index');
 // $routes->get('users/index', 'Usersx::index');
