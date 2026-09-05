@@ -370,7 +370,51 @@
                         </div>
                     </div>
                 </div>
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">🌍 APBD Per Rekening Belanja</h3>
+                    </div>
+                    <div class="chart-container">
+                        <table border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse; text-align: center;">
+                            <thead>
+                                <tr>
+                                    <th>Uraian Belanja</th>
+                                    <th>Pagu</th>
+                                    <th>Persentase Realisasi </th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
+                                <tr>
+                                    <td>Belanja Pegawai</td>
+                                    <td>Rp 42.000.000</td>
+                                    <td>42%</td>
+                                </tr>
+                                <tr>
+                                    <td>Belanja Barang dan Jasa</td>
+                                    <td>Rp 28.000.000</td>
+                                    <td>28%</td>
+                                </tr>
+                                <tr>
+                                    <td>Belanja Modal</td>
+                                    <td>Rp 18.000.000</td>
+                                    <td>18%</td>
+                                </tr>
+                                <tr>
+                                    <td>Belanja Perjalanan Dinas</td>
+                                    <td>Rp 12.000.000</td>
+                                    <td>12%</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Total</th>
+                                    <th>Rp 100.000.000</th>
+                                    <th>100%</th>
+                                </tr>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
         </div>
