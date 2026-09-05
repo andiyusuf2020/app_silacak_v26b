@@ -38,7 +38,7 @@
         crossorigin="anonymous" />
     <!--end::Third Party Plugin(Bootstrap Icons)-->
     <!--begin::Required Plugin(AdminLTE)-->
-    <link rel="stylesheet" href="<?= base_url() ?>dist/css/adminlte.css" />
+    <link rel="stylesheet" href="<?= base_url() ?>dist_v4/css/adminlte.css" />
     <!--end::Required Plugin(AdminLTE)-->
 </head>
 <!--end::Head-->
@@ -56,12 +56,12 @@
                 </div>
             <?php endif; ?>
             <div class="card-header">
-                <img src="<?= base_url() ?>/cssportal/img_home/Sitapis.png" class="img-preview"
+                <img src="<?= base_url() ?>/cssportal/img_home/silacak3a.png" class="img-preview"
                     style="max-width: 300px; justify-content: center; align-items: center;">
             </div>
             <div class="card-body login-card-body">
-                <p class="login-box-msg">Biro Administrasi Pembangunan Setda Provinsi Lampung</p>
-                <?= form_open_multipart('simpantahun'); ?>
+                <p class="login-box-msg">Bagian Administrasi Pembangunan Setda Kabupaten Tulang Bawang Baraat</p>
+                <?= form_open_multipart('simpantahunsilacak'); ?>
                 <?= csrf_field(); ?>
                 <div class="input-group mb-1">
                     <select name="tahun" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
@@ -109,7 +109,7 @@
         integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
         crossorigin="anonymous"></script>
     <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
-    <script src="../../../dist/js/adminlte.js"></script>
+    <script src="../../../dist_v4/js/adminlte.js"></script>
     <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
     <script>
         const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';

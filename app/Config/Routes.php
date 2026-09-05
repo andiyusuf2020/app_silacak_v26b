@@ -12,9 +12,11 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'Silacak\Home::index');
 $routes->get('dashboard', 'Silacak\Home::dashboard');
 $routes->get('pilihakses', 'Silacak\Home::pilihakses');
+$routes->post('simpantahunsilacak', 'Silacak\Home::simpantahun');
+$routes->get('user', 'Silacak\Home::dilarang');
 
 /*---  ROUTE SILACAK LRFK OPD TUBA --------------------- */
-$routes->group('rfkopd', ['filter' => 'role:useropdrfk'], function ($routes) {
+$routes->group('rfkopd', ['filter' => 'role:superadmin'], function ($routes) {
     $routes->get('', 'Silacak\HomeRfk::index');
     // $routes->get('', 'Home::adbang');
     $routes->get('datarfk', 'Silacak\HomeRfk::datarfk');

@@ -38,7 +38,7 @@ class SuperadminController extends BaseController
         }
         // echo dd($data['groupmenu']);
         // echo dd($tahun . '-'  . $tgldataaktif);
-        return view('lrfk/admin/dashboard', $data);
+        return view('silacak/superadmin/dashboard', $data);
     }
     public function dashboard()
     {

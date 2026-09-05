@@ -220,7 +220,7 @@
         if ($groupuser == 'adminprogkerja') {
             echo view('template/_part/menuadmin');
         }
-        if ($groupmenu == 'adminprov') {
+        if ($groupmenu == 'useropdrfk') {
             echo view('template/_part/menusuperadmin');
         }
         if ($groupmenu == 'userdesakumaju') {
