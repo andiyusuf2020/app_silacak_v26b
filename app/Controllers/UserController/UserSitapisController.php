@@ -8,7 +8,7 @@ use \Myth\Auth\Authorization\GroupModel;
 use App\Models\UserModel;
 use \Myth\Auth\Password;
 use App\Models\UserModel\TaUserModel;
-use App\Models\adbangmodel\ProgKerjaModel as programkeramodel;
+// use App\Models\adbangmodel\ProgKerjaModel as programkeramodel;
 use App\Models\LrfkProvModel\SubKegModel; // as lrfkModel;
 use App\Models\DataApbdModel\RealApbdModel;
 
@@ -16,7 +16,7 @@ class UserSitapisController extends BaseController
 {
 
     protected $tausermodel;
-    protected $Programkerjamodel;
+    // protected $Programkerjamodel;
     protected $keyword;
     protected $subkegmodel;
 
@@ -26,7 +26,7 @@ class UserSitapisController extends BaseController
     {
         helper(['form']);
         $this->tausermodel = new TaUserModel();
-        $this->Programkerjamodel = new programkeramodel();
+        // $this->Programkerjamodel = new programkeramodel();
         $this->subkegmodel = new SubKegModel();
         $this->realapbdmodel = new RealApbdModel();
     }
@@ -56,12 +56,12 @@ class UserSitapisController extends BaseController
             $datausera[] = null;
             $datauser = $this->tausermodel->listuser();
         }
-        $dataprogram = $this->Programkerjamodel->ProgKerjaAll();
+        // $dataprogram = $this->Programkerjamodel->ProgKerjaAll();
 
         // $userdata = $datauser->paginate(10, 'users');
 
         $data = [
-            'titlepage' => 'Selamat datang ' . $useraktif . ' di Halaman Manajemen User Sistem Pelaporan SiTAPIS',
+            'titlepage' => 'Selamat datang ' . $useraktif . ' di Halaman Manajemen User',
             // 'menu' => 'adminlrfk',
             'groupmenu' => $namagroup,
             'listuser' =>  $datauser,

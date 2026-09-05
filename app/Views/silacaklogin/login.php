@@ -64,7 +64,7 @@
                                 <!-- </div> -->
                                 <div class="form-group last mb-4">
                                     <label for="password">Password</label>
-                                    <input type="password" name="password" class="form-control  <?php if (session('errors.password')) : ?>is-invalid<?php endif ?>" placeholder="<?= lang('Auth.password') ?>">
+                                    <input type="password" name="password" class="form-control  <?php if (session('errors.password')) : ?>is-invalid<?php endif ?>" placeholder="">
                                     <div class="invalid-feedback">
                                         <?= session('errors.password') ?>
                                     </div>

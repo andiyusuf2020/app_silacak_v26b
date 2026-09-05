@@ -15,25 +15,25 @@ $routes->get('pilihakses', 'Silacak\Home::pilihakses');
 
 /*---  ROUTE SILACAK LRFK OPD TUBA --------------------- */
 $routes->group('rfkopd', ['filter' => 'role:useropdrfk'], function ($routes) {
-    $routes->get('', 'SilacakRfk\HomeRfk::index');
+    $routes->get('', 'Silacak\HomeRfk::index');
     // $routes->get('', 'Home::adbang');
-    $routes->get('datarfk', 'SilacakRfk\HomeRfk::datarfk');
-    $routes->get('cetak', 'SilacakRfk\HomeRfk::cetak');
-    $routes->post('simpanrfk', 'SilacakRfk\HomeRfk::simpanprfk');
-    $routes->get('profile', 'SilacakRfk\HomeRfk::profile');
-    $routes->post('simpanprofile', 'SilacakRfk\HomeRfk::simpanprofile');
+    $routes->get('datarfk', 'Silacak\HomeRfk::datarfk');
+    $routes->get('cetak', 'Silacak\HomeRfk::cetak');
+    $routes->post('simpanrfk', 'Silacak\HomeRfk::simpanprfk');
+    $routes->get('profile', 'Silacak\HomeRfk::profile');
+    $routes->post('simpanprofile', 'Silacak\HomeRfk::simpanprofile');
 });
 /*---  ROUTE PORTAL LRFK ADMIN --------------------- */
-$routes->group('superadmin', ['filter' => 'role:superadmin'], function ($routes) {
+$routes->group('superadmin', ['filter' => 'role:useropdrfk'], function ($routes) {
     //$routes->group('lrfkadmin',  function ($routes) {
     // $routes->get('', 'Home::maintenis');
 
-    $routes->get('', 'SilacakRfk\SuperadminController::index');
-    $routes->get('jadwal', 'LrfkController\AdminLrfkController::index');
-    $routes->get('jadwaladmin', 'LrfkController\AdminLrfkController::jadwal');
+    $routes->get('', 'Silacak\SuperadminController::index');
+    // $routes->get('jadwal', 'LrfkController\AdminLrfkController::index');
+    // $routes->get('jadwaladmin', 'LrfkController\AdminLrfkController::jadwal');
 
     //Manajemen User Sitapis Admin Adbang
-    $routes->get('usersitapis', 'UserController\UserSitapisController::index');
+    $routes->get('usersilacak', 'UserController\UserSitapisController::index');
     $routes->get('manajemenuser', 'UserController\UserSitapisController::user');
     $routes->post('setpassword', 'UserController\UserSitapisController::setPassword');
     $routes->post('groupset', 'UserController\UserSitapisController::changeGroup');
