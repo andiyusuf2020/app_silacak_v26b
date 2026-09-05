@@ -1,0 +1,24 @@
+                data: [<?php
+                        foreach ($kdagenda as $key => $row) {
+                            $qdindi = $this->db->table('td_opd_aku')
+                                ->select('format((real_target_aku / vol_target_aku),2) as isi')
+                                ->where('kd_agenda', $row['kd_agenda'])
+                                ->where('delete_at', 0)
+                                ->where('real_target_aku <>', 0)
+                                ->get()->getResultArray();
+                            $da = $qdindi;
+                            //(int)$da;
+
+                            $mul = 1;
+                            foreach ($da as $i => $na)
+                                $mul = $i == 0 ? $na['isi'] : $mul * $na['isi'];
+                            if (count($da) == 0) {
+                                echo " 0  %";
+                            } else {
+                                $croopd = pow((float)$mul, 1 / count($da)) * 100;
+                                //$cro = (int)$dat;
+                                echo   number_format($croopd, 2, ".", ",") . ",";                                                      //echo geometric_average($da); 
+                                // echo number_format((int)$mul, 2, ",", ".") . "//" .  count($da);
+                            }
+                        }
+                        ?>],
