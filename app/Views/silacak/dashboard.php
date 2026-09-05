@@ -444,20 +444,26 @@
                     <h3 class="info-title">Tubaba Q Sehat</h3>
                     <!-- <div class="info-value">98.5%</div> -->
                     <p style="font-size: 14px; color: #a0a0a0;">
-                        Program prioritas pertama ini berfokus pada bidang kesehatan.
-                        Tujuannya adalah memberikan pelayanan kesehatan langsung secara optimal untuk meningkatkan kesadaran hidup sehat di tengah masyarakat.
-                        Salah satu bentuk dukungannya meliputi bantuan seperti program jamban sehat dan lainnya.</p>
+                        "Tubaba Q Sehat" hadir sebagai bentuk
+                        komitmen pemerintah daerah untuk memastikan bahwa setiap warga
+                        memiliki akses yang memadai dan berkulitas terhadap layanan kesehatan,
+                        sehingga dapat meningkatkan kualitas hidup dan kesejahteraan masyarakat secara keseluruhan.</p>
+                    </p>
                 </div>
                 <div class="info-card">
                     <div class="info-icon">📱</div>
                     <h3 class="info-title">Tubaba Q Cerdas</h3>
                     <p style="font-size: 14px; color: #a0a0a0;">
-                        Membangun generasi berkarakter unggul melalui 5 pilar pendidikan karakter
+                        Dengan target angka putus sekolah 0% Pemerintah Kabupaten Tulang Bawang Barat
+                        berkomitmen untuk menciptakan generasi muda yang cerdas, kreatif, dan inovatif serta
+                        membangun generasi berkarakter unggul melalui 5 pilar pendidikan karakter
                         (Cinta Tuhan, Disiplin, Sopan santun, Kerja sama, serta Cinta tanah air dan lingkungan)</p>
                 </div>
                 <div class="info-card">
                     <div class="info-icon">🌍</div>
-                    <h3 class="info-title">Tubaba Q Berdaya (KUR Super Mikro)</h3>
+                    <h3 class="info-title">Tubaba Q Berdaya (KUR Super Mikro)<br>
+                        "UMKM Tumbuh,ekonomi berdaya"
+                    </h3>
                     <p style="font-size: 14px; color: #a0a0a0;">
                         Program pemberdayaan ekonomi rakyat ini menyasar para pelaku UMKM, usaha kecil,
                         hingga peternak lokal. Melalui fasilitas Kredit Usaha Rakyat (KUR) Super Mikro
@@ -466,19 +472,23 @@
                 </div>
                 <div class="info-card">
                     <div class="info-icon">🚀</div>
-                    <h3 class="info-title">Bank Sampah Bergerak</h3>
+                    <h3 class="info-title">Bank Sampah Bergerak <br>
+                        "Dari sampah menjadi berkah"</h3>
+                    </h3>
                     <p style="font-size: 14px; color: #a0a0a0;">
                         Merupakan inovasi unggulan di bidang lingkungan hidup. Program ini telah dibentuk di seluruh tiyuh (kampung)
                         di Tubaba untuk membersihkan lingkungan
-                        sekaligus mengubah sampah menjadi barang yang memiliki nilai ekonomi tinggi, seperti pupuk cair</p>
+                        sekaligus mengubah sampah menjadi barang yang memiliki nilai ekonomi tinggi</p>
                 </div>
                 <div class="info-card">
                     <div class="info-icon">⚡</div>
-                    <h3 class="info-title">Penguatan Infrastruktur dan Digitalisasi Tata Kelola Pemerintahan</h3>
+                    <h3 class="info-title">Penguatan Infrastruktur <br>
+                        "Infrastruktur berkualitas, Lancar Konektifitas"</h3>
                     <p style="font-size: 14px; color: #a0a0a0;">
-                        Program prioritas kelima ini difokuskan pada pembangunan fisik yang merata serta penerapan
-                        digitalisasi untuk menciptakan tata kelola pemerintahan yang kolaboratif,
-                        transparan, dan efisien</p>
+                        Pembangunan/pemeliharaan infrastruktur dalam bentuk sinergitas program
+                        dilaksanakan dalam skema sinkronisasi kebutuhan program di bidang infrastruktur
+                        yang dapat dibiayai oleh APBD Pemkab Tubaba; APBD Pemprov Lampung hingga
+                        APBN Pemerintah Pusat.</p>
                 </div>
             </div>
         </div>
