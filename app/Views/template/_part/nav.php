@@ -17,7 +17,7 @@
                     <li class="nav-item d-none d-md-block">
                         <a href="<?= base_url() ?>" class="nav-link">
                             <i class="bi bi-grid-1x2 me-1" aria-hidden="true"></i>
-                            HOME SiTAPIS
+                            HOME SILACAK
                         </a>
                     </li>
                     <li class="nav-item d-none d-md-block">
@@ -105,7 +105,7 @@
                                 src="<?= base_url('dist_v4/assets/img/user2-160x160.jpg') ?>"
                                 class="user-image rounded-circle shadow"
                                 alt="User Image" />
-                            <span class="d-none d-md-inline">User SiTAPIS</span>
+                            <span class="d-none d-md-inline"><?= esc($groupmenu) ?></span>
                         </a>
 
                     </li>

@@ -85,7 +85,7 @@ $this->tausermodel = new TaUserModel();
             loading.show();
 
             $.ajax({
-                url: '<?= base_url('lrfkadmin/usersitapis') ?>',
+                url: '<?= base_url('superadmin/usersitapis') ?>',
                 type: 'GET',
                 data: {
                     keyword: keyword
@@ -120,7 +120,7 @@ $this->tausermodel = new TaUserModel();
                                     // echo dd($user);
                                     ?>
                                         <a href="<?= hash_url(
-                                                        'lrfkadmin/manajemenuser/',
+                                                        'superadmin/manajemenuser/',
                                                         [
                                                             'idUser' => $rw['id'],
                                                             'action' => 'akftivasi',
@@ -132,15 +132,15 @@ $this->tausermodel = new TaUserModel();
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="<?= hash_url('lrfkadmin/manajemenuser/', ['idUser' => $rw['id'], 'action' => 'pass']);
+                                        <a href="<?= hash_url('superadmin/manajemenuser/', ['idUser' => $rw['id'], 'action' => 'pass']);
                                                     ?>"
                                             <i class="nav-icon bi bi-star-half">Ubah Password</i>
                                         </a><br>
-                                        <a href="<?= hash_url('lrfkadmin/manajemenuser/', ['idUser' => $rw['id'], 'action' => 'ubahgroup']);
+                                        <a href="<?= hash_url('superadmin/manajemenuser/', ['idUser' => $rw['id'], 'action' => 'ubahgroup']);
                                                     ?>" class="btn btn-success btn-circle btn-sm btn-change-group">
                                             <i class="mdi mdi-google-circles-group">Ubah Rule User</i>
                                         </a><br>
-                                        <a href="<?= hash_url('lrfkadmin/manajemenuser/', ['idUser' => $rw['id'], 'action' => 'ubahperangkatdaerah']);
+                                        <a href="<?= hash_url('superadmin/manajemenuser/', ['idUser' => $rw['id'], 'action' => 'ubahperangkatdaerah']);
                                                     ?>" class="btn btn-success btn-circle btn-sm btn-change-group">
                                             <i class="mdi mdi-google-circles-group">Ubah Perangkat Daerah (Prov)</i>
                                         </a>

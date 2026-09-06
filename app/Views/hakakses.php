@@ -1,5 +1,5 @@
 <div class="flex flex-col items-center justify-center w-screen h-screen gap-12 py-8 ">
-    <svg
+    <!-- <svg
         class="h-[50vh] aspect-video"
         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
         <g id="freepik--background-simple--inject-3">
@@ -98,14 +98,18 @@
             <line x1="387.81" y1="422.37" x2="389.09" y2="429.82" style="fill:#3B82F6;stroke:#263238;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.166343341900884px"></line>
             <line x1="373.22" y1="337.62" x2="386.2" y2="413" style="fill:#3B82F6;stroke:#263238;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.166343341900884px"></line>
         </g>
-    </svg>
+    </svg> -->
     <div class="flex flex-col items-center gap-4">
         <h1 class="text-3xl font-medium text-center">
-            You are not authorized
+            Anda tidak memiliki hak akses untuk halaman ini
         </h1>
-        <p class="text-xl text-center ">
-            You tried to access a page you did not have prior
-            authorization for.
+        <p class="text-x2 text-center ">
+            Anda mencoba mengakses halaman yang tidak diizinkan, silakan hubungi administrator atau
+            <a href="<?= esc(base_url('logout')) ?>" class="text-blue-500 hover:underline">logout</a> dari akun Anda.
+            Jika Anda yakin ini adalah kesalahan, silakan hubungi tim dukungan kami untuk bantuan lebih lanjut.
         </p>
+        <h1 class="text-3xl font-medium text-center">
+            <a href="<?= esc(base_url('logout')) ?>" class="text-blue-500 hover:underline">logout</a>
+        </h1>
     </div>
 </div>

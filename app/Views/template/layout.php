@@ -4,7 +4,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Biro Administrasi Pembangunan | SiTAPIS v26</title>
+    <title>Bagian Administrasi Pembangunan | SILACAK v26</title>
     <!--begin::Theme Init (prevents flash of incorrect theme on load, #6043)-->
 
     <script>
@@ -56,19 +56,19 @@
     <!--end::Accessibility Meta Tags-->
 
     <!--begin::Primary Meta Tags-->
-    <meta name="title" content="Biro Administrasi Pembangunan | SiTAPIS v26" />
+    <meta name="title" content="Bagian Administrasi Pembangunan | SILACAK v26" />
     <meta name="author" content="ColorlibHQ" />
     <meta
         name="description"
         content="
-        SiTAPIS Adalah sistem informasi terintegrasi untuk pengelolaan data pembangunan dan aktifitas perangkat daerah
-        di Provinsi Lampung, 
-        yang dikelola oleh Biro Administrasi Pembangunan Setda Provinsi Lampung sejak tahun 2021." />
+        SILACAK Adalah sistem informasi terintegrasi untuk pengelolaan data pembangunan dan aktifitas perangkat daerah
+        di Kabupaten Tulang Bawang Barat, 
+        yang dikelola oleh Bagian Administrasi Pembangunan Setda Kabupaten Tulang Bawang Barat sejak tahun 2021." />
     <meta
         name="keywords"
-        content="SiTAPIS, Biro Adbang, Biro Administrasi Pembangunan, 
-        Sekretariat Daerah Provinsi Lampung, Sekretariat Daerah Provinsi, 
-        Administrasi Pembangunan, Biro Provinsi Lampung, 
+        content="SILACAK, Bagian Adbang, Bagian Administrasi Pembangunan, 
+        Sekretariat Daerah Kabupaten Tulang Bawang Barat, Sekretariat Daerah Provinsi, 
+        Administrasi Pembangunan, Biro Kabupaten Tulang Bawang Barat, 
         Laporan Administrasi Pembangunan, Laporan Aktifitas Perangkat Daerah, 
         Laporan Realisasi Fisik Anggaran, Capaian Kinerja Perangkat Daerah, 
         Capkin, LRFK" />
@@ -220,7 +220,7 @@
         if ($groupuser == 'adminprogkerja') {
             echo view('template/_part/menuadmin');
         }
-        if ($groupmenu == 'useropdrfk') {
+        if ($groupmenu == 'superadmin') {
             echo view('template/_part/menusuperadmin');
         }
         if ($groupmenu == 'userdesakumaju') {
@@ -279,12 +279,12 @@
         <!--begin::Footer-->
         <footer class="app-footer">
             <!--begin::To the end-->
-            <div class="float-end d-none d-sm-inline">v26b-SiTAPIS</div>
+            <div class="float-end d-none d-sm-inline">v26b-SILACAK</div>
             <!--end::To the end-->
             <!--begin::Copyright-->
             <strong>
                 Copyright &copy; <?php echo date('Y'); ?>&nbsp;
-                <a href="https://adbang.lampungprov.go.id/e-tapis" class="text-decoration-none">Biro Administrasi Pembangunan Setda Provinsi Lampung</a>.
+                <a href="https://adbang.lampungprov.go.id/kabtbb/" class="text-decoration-none">Bagian Administrasi Pembangunan Setda Kabupaten Tulang Bawang Barat</a>.
             </strong>
             <!--end::Copyright-->
         </footer>

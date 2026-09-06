@@ -10,7 +10,7 @@
     <!-- /.card-header -->
     <!-- form start -->
     <!-- form start -->
-    <?= form_open_multipart('lrfkadmin/groupset', 'class="form-horizontal'); ?>
+    <?= form_open_multipart('superadmin/groupset', 'class="form-horizontal'); ?>
     <?= csrf_field(); ?>
     <div class="card-body">
         <div class="form-group row">

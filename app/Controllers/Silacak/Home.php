@@ -31,9 +31,9 @@ class Home extends BaseController
             session()->set('tglaktif', $tgldata['tanggal']);
         }
         // session()->set('tglaktif', $tgldata['tanggal']);
-
-        if ($groupmenu == 'userlrfkprov') {
-            return redirect()->to(base_url('lrfkopd'));
+        // echo dd($tahun . ' - ' . session()->get('tglaktif') . ' - ' . $groupmenu);
+        if ($groupmenu == 'superadmin') {
+            return redirect()->to(base_url('superadmin'));
         }
         // if ($groupmenu == 'usercapkinprov') {
         //     return redirect()->to(base_url('capkin'));

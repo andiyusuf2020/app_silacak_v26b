@@ -12,7 +12,7 @@
     </div>
 <?php } ?>
 
-<?= form_open_multipart('lrfkadmin/setpassword'); ?>
+<?= form_open_multipart('superadmin/setpassword'); ?>
 <?= csrf_field(); ?>
 <input type="hidden" name="id" class="id" value="<?= $id; ?>">
 <div class="form-group row">

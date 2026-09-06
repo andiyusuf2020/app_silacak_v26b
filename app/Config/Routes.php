@@ -12,7 +12,7 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'Silacak\Home::index');
 $routes->get('dashboard', 'Silacak\Home::dashboard');
 $routes->get('pilihakses', 'Silacak\Home::pilihakses');
-$routes->post('simpantahunsilacak', 'Silacak\Home::simpantahun');
+$routes->post('simpantahunsilacak', 'Silacak\Home::simpantahunsilacak');
 $routes->get('user', 'Silacak\Home::dilarang');
 
 /*---  ROUTE SILACAK LRFK OPD TUBA --------------------- */
@@ -31,15 +31,19 @@ $routes->group('superadmin', ['filter' => 'role:superadmin'], function ($routes)
     // $routes->get('', 'Home::maintenis');
 
     $routes->get('', 'Silacak\SuperadminController::index');
-    // $routes->get('jadwal', 'LrfkController\AdminLrfkController::index');
-    // $routes->get('jadwaladmin', 'LrfkController\AdminLrfkController::jadwal');
+    $routes->get('jadwal', 'LrfkController\AdminLrfkController::index');
+    $routes->get('jadwaladmin', 'LrfkController\AdminLrfkController::jadwal');
 
     //Manajemen User Sitapis Admin Adbang
-    $routes->get('usersilacak', 'UserController\UserSitapisController::index');
+    $routes->get('daftaruser', 'UserController\UserSitapisController::index');
     $routes->get('manajemenuser', 'UserController\UserSitapisController::user');
     $routes->post('setpassword', 'UserController\UserSitapisController::setPassword');
     $routes->post('groupset', 'UserController\UserSitapisController::changeGroup');
     $routes->post('ubahopdprov', 'UserController\UserSitapisController::simpanubahopd');
+
+    //manajemen data master
+    $routes->get('uploadapbd', 'AdminAdbang\ExcelUploadRApbd::index');
+    $routes->post('uploadapbd/upload', 'AdminAdbang\ExcelUploadRApbd::upload');
 });
 $routes->group('adminprov', ['filter' => 'role:adminprov'], function ($routes) {
     $routes->get('', 'AdminAdbang\adminadbang::index');

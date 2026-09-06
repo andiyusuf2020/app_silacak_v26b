@@ -22,7 +22,7 @@ class SuperadminController extends BaseController
             $namagroup = $row['name'];
         }
         // }
-        $data['titlepage'] = 'Selamat Data di e-TAPIS Laporan Realisasi Fisik Anggaran Program Kegiatan Perangkat Daerah Provinsi Lampung';
+        $data['titlepage'] = 'Selamat Data di halaman Superadmin - SILACAK Kabupaten Tulang Bawang Barat';
         $data['groupuser'] = $namagroup;
         $data['groupmenu'] = $namagroup;
         $tahun = session()->get('tahun');
@@ -38,7 +38,7 @@ class SuperadminController extends BaseController
         }
         // echo dd($data['groupmenu']);
         // echo dd($tahun . '-'  . $tgldataaktif);
-        return view('silacak/superadmin/dashboard', $data);
+        return view('silacak/superadmin/apexchart', $data);
     }
     public function dashboard()
     {

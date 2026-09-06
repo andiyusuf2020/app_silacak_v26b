@@ -41,11 +41,11 @@ class ExcelUploadRApbd extends BaseController
         // $data['groupmenu'] = $namagroup;
 
         $data = [
-            'titlepage' => 'Selamat Data di e-TAPIS Laporan Realisasi Fisik Anggaran Program Kegiatan Perangkat Daerah Provinsi Lampung',
+            'titlepage' => 'Selamat Data di Halaman Upload Realisasi APBD dari Data excel SIPD',
             'groupuser' => $namagroup,
             'groupmenu' => $namagroup,
 
-            'title' => 'Upload Realisasi APBD',
+            'title' => 'Upload File data Realisasi dari SIPD',
             'status' => 'apbd',
             'validation' => \Config\Services::validation()
         ];
@@ -171,7 +171,7 @@ class ExcelUploadRApbd extends BaseController
             // Hapus file setelah diproses
             unlink($filePath);
 
-            return redirect()->to('adminprov/uploadapbd')->with('success', 'Data berhasil diupload: ' . count($dataToInsert) . ' record');
+            return redirect()->to('superadmin/uploadapbd')->with('success', 'Data berhasil diupload: ' . count($dataToInsert) . ' record');
         } catch (\Exception $e) {
             // Hapus file jika terjadi error
             if (file_exists($filePath)) {

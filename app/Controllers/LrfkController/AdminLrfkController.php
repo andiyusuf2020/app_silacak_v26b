@@ -61,7 +61,7 @@ class AdminLrfkController extends BaseController
         $data['tglapbd'] = $this->realapbdmodel->tgldata();
         $data['tglapbdaktif'] = $this->tglapbdmodel->tgldataaktif();
         // echo dd($data['tglapbd']);
-        return view('lrfk/admin/v_jadwal', $data);
+        return view('silacak/superadmin/v_jadwal', $data);
     }
     public function jadwal()
     {
@@ -106,7 +106,7 @@ class AdminLrfkController extends BaseController
 
         if ($action == 'ganti') {
             $this->saveCurrentUrl();
-            return view('lrfk/admin/v_listjadwal', $data);
+            return view('silacak/superadmin/v_listjadwal', $data);
             //echo dd($data['jadwal']);
         }
         if ($action == 'edit') {
@@ -129,7 +129,7 @@ class AdminLrfkController extends BaseController
             ];
             $ubahygaktf = $this->lrfkmodel->save($aktifbln);
             $ubahygaktf = $this->lrfkmodel->save($nonaktifbln);
-            return redirect()->to(base_url('lrfkadmin/jadwal'));
+            return redirect()->to(base_url('superadmin/jadwal'));
         }
     }
 }

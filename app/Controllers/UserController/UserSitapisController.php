@@ -125,7 +125,7 @@ class UserSitapisController extends BaseController
             ];
 
             $this->tausermodel->update($idUser, $data);
-            return redirect()->to(base_url('lrfkadmin/usersitapis'));
+            return redirect()->to(base_url('superadmin/daftaruser'));
         }
         if ($action == 'pass') {
 
@@ -133,10 +133,10 @@ class UserSitapisController extends BaseController
                 'groupuser' => $namagroup,
                 'groupmenu' => $namagroup,
                 'datauser' => $this->tausermodel->listuser($user->id),
-                'titlepage' => 'Halaman Aktivasi User SiTAPIS Perangkat Daerah',
+                'titlepage' => 'Halaman Aktivasi User SILACAK  ',
                 'id' => $idUser,
                 'title' => 'Update Password',
-                'titlepage' => 'Halaman UBAH PASSWORD User SiTAPIS Perangkat Daerah',
+                'titlepage' => 'Halaman UBAH PASSWORD User SILACAK  ',
             ];
             $data['listuser'] = $this->tausermodel->listuser($idUser);
             // echo dd($data['listuser']);
@@ -150,7 +150,7 @@ class UserSitapisController extends BaseController
                 'groupuser' => $namagroup,
                 'groupmenu' => $namagroup,
 
-                'titlepage' => 'Halaman UBAH RULE GROUP User SiTAPIS Perangkat Daerah',
+                'titlepage' => 'Halaman UBAH RULE GROUP User SILACAK  ',
                 'menu' => 'adminlrfk',
                 'listuser' => $this->tausermodel->listuser($idUser),
             ];
@@ -165,7 +165,7 @@ class UserSitapisController extends BaseController
                 'listopd' => $this->realapbdmodel->listopd(),
                 'groupuser' => $namagroup,
                 'groupmenu' => $namagroup,
-                'titlepage' => 'Halaman Ubah Perangkat Daerah User SiTAPIS Perangkat Daerah Provinsi Lampung',
+                'titlepage' => 'Halaman Ubah   User SILACAK   Provinsi Lampung',
                 'menu' => 'adminlrfk',
                 'listuser' => $this->tausermodel->listuser($idUser),
             ];
@@ -187,7 +187,7 @@ class UserSitapisController extends BaseController
         ];
         // echo dd($data);
         $this->tausermodel->update($id, $data);
-        return redirect()->to(base_url('lrfkadmin/usersitapis'));
+        return redirect()->to(base_url('superadmin/daftaruser'));
     }
     public function changeGroup()
     {
@@ -201,21 +201,21 @@ class UserSitapisController extends BaseController
 
         //echo $userId . ":" . $groupId;
 
-        return redirect()->to(base_url('lrfkadmin/usersitapis'));
+        return redirect()->to(base_url('superadmin/daftaruser'));
     }
-    public function changePassword($id = null)
-    {
-        if ($id == null) {
-            return redirect()->to(base_url('kabkotaviews/vdetail/user'));
-        } else {
-            $data = [
-                'id' => $id,
-                'title' => 'Update Password',
-            ];
-            //   return view('users/set_password', $data);
-            return view('kabkotaviews/vdetail/set_password', $data);
-        }
-    }
+    // public function changePassword($id = null)
+    // {
+    //     if ($id == null) {
+    //         return redirect()->to(base_url('kabkotaviews/vdetail/user'));
+    //     } else {
+    //         $data = [
+    //             'id' => $id,
+    //             'title' => 'Update Password',
+    //         ];
+    //         //   return view('users/set_password', $data);
+    //         return view('kabkotaviews/vdetail/set_password', $data);
+    //     }
+    // }
     public function setPassword()
     {
         if (logged_in()) {
@@ -235,7 +235,7 @@ class UserSitapisController extends BaseController
         ];
         if (!$this->validate($rules)) {
             $data = [
-                'titlepage' => 'Halaman Aktivasi User SiTAPIS Perangkat Daerah',
+                'titlepage' => 'Halaman Aktivasi User SILACAK  ',
                 // 'menu' => 'adminlrfk',
                 'groupuser' => $namagroup,
                 'groupmenu' => $namagroup,
@@ -248,7 +248,7 @@ class UserSitapisController extends BaseController
             $data = [];
             $userModel = new UserModel();
             $data = [
-                'titlepage' => 'Halaman Aktivasi User SiTAPIS Perangkat Daerah',
+                'titlepage' => 'Halaman Aktivasi User SILACAK  ',
                 // 'menu' => 'adminlrfk',
                 'groupuser' => $namagroup,
                 'groupmenu' => $namagroup,
@@ -259,7 +259,7 @@ class UserSitapisController extends BaseController
                 'reset_expires' => null,
             ];
             $userModel->update($this->request->getVar('id'), $data);
-            return redirect()->to(base_url('lrfkadmin/usersitapis'));
+            return redirect()->to(base_url('superadmin/daftaruser'));
         }
     }
     public function profile($id = Null)
@@ -300,7 +300,7 @@ class UserSitapisController extends BaseController
         } else {
             $id = $this->request->getPost('id');
             $this->tausermodel->UpdateUserProfile($id, $dataprofile);
-            session()->setFlashdata('success', 'Perubahan Data Perangkat Daerah,Berhasil');
+            session()->setFlashdata('success', 'Perubahan Data  ,Berhasil');
             $url = session()->get('urla');
             return redirect()->to(base_url($url));
         }
