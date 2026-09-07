@@ -45,6 +45,9 @@ $routes->group('superadmin', ['filter' => 'role:superadmin'], function ($routes)
     //manajemen data master
     $routes->get('uploadapbd', 'AdminAdbang\ExcelUploadRApbd::index');
     $routes->post('uploadapbd/upload', 'AdminAdbang\ExcelUploadRApbd::upload');
+
+    //manajemen data apbd opd
+    $routes->get('apbdopd', 'AdminAdbang\adminadbang26::index');
 });
 $routes->group('adminprov', ['filter' => 'role:adminprov'], function ($routes) {
     $routes->get('', 'AdminAdbang\adminadbang::index');

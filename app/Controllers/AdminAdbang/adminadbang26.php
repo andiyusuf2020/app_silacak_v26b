@@ -2,25 +2,25 @@
 
 namespace App\Controllers\AdminAdbang;
 
-use App\Models\DataApbdModel\AngkasModel;
-use App\Models\DataApbdModel\PendApbdModel;
+// use App\Models\DataApbdModel\AngkasModel;
+// use App\Models\DataApbdModel\PendApbdModel;
 use \Myth\Auth\Authorization\GroupModel;
 use App\Models\LrfkProvModel\JadwalModel;
 use App\Models\UserModel\TaUserModel;
 
 use App\Models\RupModel\RealRupModel;
-use App\Models\RupModel\SirupModel;
-use App\Models\CapkinModel\TaMProgPrioritasModel;
+// use App\Models\RupModel\SirupModel;
+// use App\Models\CapkinModel\TaMProgPrioritasModel;
 
 use App\Models\CapkinModel\TaProgUnggulan;
-use App\Models\CapkinModel\TaKegPokokCapkinModel;
-use App\Models\CapkinModel\TaSubKegCapkin2026;
+// use App\Models\CapkinModel\TaKegPokokCapkinModel;
+// use App\Models\CapkinModel\TaSubKegCapkin2026;
 
 use App\Models\DataApbdModel\RealApbdModel;
 use App\Models\DataApbdModel\TglApbdModel;
 use App\Models\ExcelRSipdModel;
-use App\Models\CapkinModel\TaKategoriModel;
-use App\Models\CapkinModel\TaRKegPokokCapkinModel;
+// use App\Models\CapkinModel\TaKategoriModel;
+// use App\Models\CapkinModel\TaRKegPokokCapkinModel;
 
 use App\Libraries\PdfLibrary;
 use App\Controllers\BaseController;
@@ -62,19 +62,19 @@ class adminadbang26 extends BaseController
         $this->tausermodel = new TaUserModel();
         $this->jadwalmodel = new JadwalModel();
         $this->realrupmodel = new RealRupModel();
-        $this->sirupmodel = new SirupModel();
+        // $this->sirupmodel = new SirupModel();
         $this->realapbdmodel = new RealApbdModel();
-        $this->pendapbdmodel = new PendApbdModel();
+        // $this->pendapbdmodel = new PendApbdModel();
         $this->tglapbdmodel = new TglApbdModel();
-        $this->angkapbdmodel = new AngkasModel();
+        // $this->angkapbdmodel = new AngkasModel();
         $this->sipdmodel = new ExcelRSipdModel();
 
-        $this->kategorimodel = new TaKategoriModel();
-        $this->rdkegpokokmodal = new TaRKegPokokCapkinModel();
+        // $this->kategorimodel = new TaKategoriModel();
+        // $this->rdkegpokokmodal = new TaRKegPokokCapkinModel();
 
-        $this->progprioritas = new TaMProgPrioritasModel();
-        $this->kegpokokmodal = new TaKegPokokCapkinModel();
-        $this->subkegcapkin2026model = new TaSubKegCapkin2026();
+        // $this->progprioritas = new TaMProgPrioritasModel();
+        // $this->kegpokokmodal = new TaKegPokokCapkinModel();
+        // $this->subkegcapkin2026model = new TaSubKegCapkin2026();
 
         $this->tcpdfConfig = new \Config\Tcpdf();
         helper(['form', 'url', 'filesystem']);
@@ -201,7 +201,7 @@ class adminadbang26 extends BaseController
         $groupname = session()->get('groupuser');
         $data = [
             'groupuser' => $namagroup,
-            'groupmenu' => 'adminprov',
+            'groupmenu' => $namagroup,
             'titlepage' => 'Selamat Datang di Administrator SiTAPIS Provinsi Lampung',
             'datauser'  => $this->tausermodel->listuser($user->id),
             'tahunaktif'     => $tahunaktif,
@@ -212,7 +212,7 @@ class adminadbang26 extends BaseController
             'kdSU' => $kdSU,
             'nama_opd' => $nmSU,
             'dataopd' => $this->realapbdmodel->listopdadmin($tglaktif, $nmSU),
-            'kategoriList' => $this->kategorimodel->listkategori(), //$this->lokasiModel->getKategori(),
+            // 'kategoriList' => $this->kategorimodel->listkategori(), //$this->lokasiModel->getKategori(),
 
         ];
         $data['tglapbd'] = $this->realapbdmodel->tgldata();

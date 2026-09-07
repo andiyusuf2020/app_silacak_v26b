@@ -40,7 +40,7 @@
                                     <td>
                                         <!-- <input type="checkbox" class="form-check-input" id="exampleCheck1" checked />
                                         <label class="form-check-label" for="exampleCheck1"> -->
-                                        <a href="<?= hash_url('adminprov/apbdopd/', [
+                                        <a href="<?= hash_url('superadmin/apbdopd/', [
                                                         'tgldata' => $tgl['CREATE_AT'],
                                                     ]);
                                                     ?>">

@@ -48,7 +48,7 @@
                         <li class="nav-item">
                             <a href="<?= base_url('superadmin/daftaruser') ?>" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
-                                <p>User SILACAK</p>
+                                <p>Daftar User</p>
                             </a>
                         </li>
                     </ul>
@@ -97,7 +97,7 @@
                     </ul>
                     <ul class="nav nav-treeview">
                         <li class="nav-item"> <a
-                                href="<?= base_url('superadmin/laporanapbdopd');
+                                href="<?= base_url('superadmin/apbdopd');
                                         ?>" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
                                 <p>Laporan RFK <br> Perangkat Daerah</p>
