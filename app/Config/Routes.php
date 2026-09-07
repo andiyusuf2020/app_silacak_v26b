@@ -15,6 +15,7 @@ $routes->get('pilihakses', 'Silacak\Home::pilihakses');
 $routes->post('simpantahunsilacak', 'Silacak\Home::simpantahunsilacak');
 $routes->get('user', 'Silacak\Home::dilarang');
 
+
 /*---  ROUTE SILACAK LRFK OPD TUBA --------------------- */
 $routes->group('rfkopd', ['filter' => 'role:superadmin'], function ($routes) {
     $routes->get('', 'Silacak\HomeRfk::index');
