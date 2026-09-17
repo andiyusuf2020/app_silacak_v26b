@@ -9,11 +9,11 @@ use CodeIgniter\Router\RouteCollection;
 
 // Routes for the application SILACAK.
 
-$routes->get('/', 'Silacak\Home::index');
-$routes->get('dashboard', 'Silacak\Home::dashboard');
-$routes->get('pilihakses', 'Silacak\Home::pilihakses');
-$routes->post('simpantahunsilacak', 'Silacak\Home::simpantahunsilacak');
-$routes->get('user', 'Silacak\Home::dilarang');
+$routes->get('/', 'Sipkabkota\Home::index');
+$routes->get('dashboard', 'Sipkabkota\Home::dashboard');
+$routes->get('pilihakses', 'Sipkabkota\Home::pilihakses');
+$routes->post('simpantahunsilacak', 'Sipkabkota\Home::simpantahunsilacak');
+$routes->get('user', 'Sipkabkota\Home::dilarang');
 
 
 /*---  ROUTE SILACAK LRFK OPD TUBA --------------------- */
