@@ -467,11 +467,13 @@
                                     </th>
                                     <th>Capaian Realisasi Anggaran (SIPD)<br>%</th>
                                     <th>Jumlah Aktivitas Belanja</th>
+                                    <th>Capaian Kinerja Anggaran Perangkat Daerah</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php foreach ($dataopdadmin['data'] as $key => $value) { ?>
-                                    <tr align="center">
+                                    <tr>
                                         <td><?= esc($key + 1) ?> </td>
                                         <td>
                                             <?= esc($value['KODE_UNIT_SKPD']) ?><br>
@@ -483,13 +485,14 @@
                                         <td style="text-align: right;">
                                             <?= number_format(esc($value['TotalRealisasi']), 0, ',', '.') ?>
                                         </td>
-                                        <td style="text-align: right;">
+                                        <td style="text-align: center;">
                                             <?= number_format(esc($value['PersentaseRealisasi']), 2, ',', '.') ?>
                                         </td>
-                                        <td style="text-align: right;">
+                                        <td style="text-align: center;">
                                             <?= number_format(esc($value['JumlahBelanja']), 0, ',', '.') ?>
                                         </td>
-
+                                        <td>*Kepgub Lampung Nomor G/755/B.06/HK/2023</td>
+                                        <td>Detail</td>
                                     </tr>
                                 <?php } ?>
                             </tbody>
