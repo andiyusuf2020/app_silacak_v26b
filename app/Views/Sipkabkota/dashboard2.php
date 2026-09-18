@@ -424,7 +424,10 @@
             </div>
         </div>
         <div class="dashboard-container">
-            <h2 class="section-title">Dashboard Realisasi Anggaran</h2>
+            <h2 class="section-title">Dashboard Realisasi Anggaran dan capaian aktivitas belanja yang merupakan
+                output barang/jasa pada
+                perangkat daerah
+            </h2>
             <!-- Stats Cards -->
 
             <!-- Key Metrics Overview -->
@@ -457,7 +460,12 @@
 
 
                     <div class="metric-item stat-card">
+                        <div class="metric-label">Capaian Anggaran</div>
+
                         <div class="metric-value"><?= number_format(esc($value['PersentaseRealisasi']), 2, ',', '.') ?>%</div>
+                        <div class="metric-label">Capaian Aktivitas Belanja</div>
+                        <div class="metric-value"><?= number_format(esc($value['JumlahBelanja']), 0, ',', '.') ?></div>
+
                         <div class="metric-label"><?= esc($value['NAMA_UNIT_SKPD']) ?></div>
                     </div>
                 <?php } ?>
