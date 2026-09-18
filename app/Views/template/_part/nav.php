@@ -17,7 +17,7 @@
                     <li class="nav-item d-none d-md-block">
                         <a href="<?= base_url() ?>" class="nav-link">
                             <i class="bi bi-grid-1x2 me-1" aria-hidden="true"></i>
-                            HOME SILACAK
+                            HOME SiTAPIS-KAB
                         </a>
                     </li>
                     <li class="nav-item d-none d-md-block">

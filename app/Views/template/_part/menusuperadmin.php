@@ -5,7 +5,7 @@
         <a href="<?= base_url() ?>" class="brand-link">
             <!--begin::Brand Image-->
             <img
-                src="<?= base_url() ?>cssportal/img_home/silacak3a.png"
+                src="<?= base_url() ?>cssportal/img_home/sitapis-kab-2.png"
                 alt=""
                 class="brand-image opacity-75 shadow" />
             <!--end::Brand Image-->

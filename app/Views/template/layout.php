@@ -4,7 +4,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Bagian Administrasi Pembangunan | SILACAK v26</title>
+    <title>Bagian Administrasi Pembangunan | SiTAPIS-KAB v26</title>
     <!--begin::Theme Init (prevents flash of incorrect theme on load, #6043)-->
 
     <script>
@@ -56,12 +56,12 @@
     <!--end::Accessibility Meta Tags-->
 
     <!--begin::Primary Meta Tags-->
-    <meta name="title" content="Bagian Administrasi Pembangunan | SILACAK v26" />
+    <meta name="title" content="Bagian Administrasi Pembangunan | SiTAPIS-KAB v26" />
     <meta name="author" content="ColorlibHQ" />
     <meta
         name="description"
         content="
-        SILACAK Adalah sistem informasi terintegrasi untuk pengelolaan data pembangunan dan aktifitas perangkat daerah
+        SiTAPIS-KAB Adalah sistem informasi terintegrasi untuk pengelolaan data pembangunan dan aktifitas perangkat daerah
         di Kabupaten Tulang Bawang Barat, 
         yang dikelola oleh Bagian Administrasi Pembangunan Setda Kabupaten Tulang Bawang Barat sejak tahun 2021." />
     <meta
@@ -279,12 +279,12 @@
         <!--begin::Footer-->
         <footer class="app-footer">
             <!--begin::To the end-->
-            <div class="float-end d-none d-sm-inline">v26b-SILACAK</div>
+            <div class="float-end d-none d-sm-inline">v26b-SiTAPIS-KAB</div>
             <!--end::To the end-->
             <!--begin::Copyright-->
             <strong>
                 Copyright &copy; <?php echo date('Y'); ?>&nbsp;
-                <a href="https://adbang.lampungprov.go.id/kabtbb/" class="text-decoration-none">Bagian Administrasi Pembangunan Setda Kabupaten Tulang Bawang Barat</a>.
+                <a href="https://adbang.lampungprov.go.id/e-tapis/" class="text-decoration-none">Bagian Administrasi Pembangunan Setda Kabupaten ......</a>.
             </strong>
             <!--end::Copyright-->
         </footer>

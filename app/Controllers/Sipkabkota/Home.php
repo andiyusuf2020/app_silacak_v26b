@@ -53,7 +53,8 @@ class Home extends BaseController
     public function index()
     {
         // return view('Sipkabkota/home');
-        return view('index');
+        // return view('index');
+        return view('Sipkabkota/dashboard');
     }
     public function dashboard()
     {

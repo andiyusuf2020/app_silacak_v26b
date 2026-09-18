@@ -232,9 +232,10 @@ class adminadbang26 extends BaseController
             $this->ValidasiHash($req);
 
             $data['tgldata'] = $tgldata;
-            $data['dataopdadmin'] = $this->realapbdmodel->listopdadmin($tgldata);
+            // $data['dataopdadmin'] = $this->realapbdmodel->listopdadmin($tgldata);
+            $data['dataopdadmin'] = $this->realapbdmodel->getCapaianKinerjaDenganGeometri($tgldata);
             // echo dd($data['dataopdadmin']);
-            return view('superadmin/2026/listopdapbd', $data);
+            return view('Sipkabkota/superadmin/2026/listopdapbd', $data);
         }
         if ($hal == 'rekapcapkin' && $action == 'persasaran') {
             $this->ValidasiHash($req);

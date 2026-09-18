@@ -31,7 +31,7 @@ $routes->group('superadmin', ['filter' => 'role:superadmin'], function ($routes)
     //$routes->group('lrfkadmin',  function ($routes) {
     // $routes->get('', 'Home::maintenis');
 
-    $routes->get('', 'Silacak\SuperadminController::index');
+    $routes->get('', 'Sipkabkota\SuperadminController::index');
     $routes->get('jadwal', 'LrfkController\AdminLrfkController::index');
     $routes->get('jadwaladmin', 'LrfkController\AdminLrfkController::jadwal');
 

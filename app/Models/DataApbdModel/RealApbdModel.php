@@ -64,6 +64,106 @@ class RealApbdModel extends Model
             ->getResultArray();
         return $q;
     }
+    public function getCapaianKinerjaperopd($tglaktif, $kdsu)
+    {
+        $builder = $this->db->table($this->table);
+
+        // Hitung total anggaran keseluruhan
+        $totalAnggaranKeseluruhan = $builder->selectSum('TOTAL_ANGGARAN')
+            ->where('KODE_UNIT_SKPD', $kdsu)
+            ->get()->getRow()->TOTAL_ANGGARAN;
+
+        // Query utama
+        $builder->select('KODE_UNIT_SKPD, NAMA_UNIT_SKPD,KODE_PROGRAM');
+        $builder->selectSum('TOTAL_ANGGARAN', 'TotalAnggaran');
+        $builder->selectSum('TOTAL_REALISASI', 'TotalRealisasi');
+        $builder->where('KODE_UNIT_SKPD', $kdsu);
+        $builder->where('tahun', session()->get('tahun'));
+        $builder->where('CREATE_AT', $tglaktif);
+        $builder->groupBy('NAMA_PROGRAM');
+
+        $result = $builder->get()->getResultArray();
+        $persentaseList = [];
+
+        foreach ($result as &$row) {
+            if ($row['TotalRealisasi'] > 0) { // hanya dihitung jika realisasi > 0
+                $row['PersentaseRealisasi'] = ($row['TotalRealisasi'] / $row['TotalAnggaran']) * 100;
+                $row['BobotAnggaran'] = ($row['TotalAnggaran'] / $totalAnggaranKeseluruhan) * 100;
+                $row['SkorCapaian'] = $row['PersentaseRealisasi'] * $row['BobotAnggaran'];
+
+                $persentaseList[] = $row['PersentaseRealisasi'];
+            } else {
+                $row['PersentaseRealisasi'] = 0;
+                $row['BobotAnggaran'] = 0;
+                $row['SkorCapaian'] = 0;
+            }
+        }
+
+        // Hitung rata-rata geometri hanya dari persentase > 0
+        $n = count($persentaseList);
+        $product = $n > 0 ? array_product($persentaseList) : 0;
+        $geometricMean = $n > 0 ? pow($product, 1 / $n) : 0;
+        //hitung total realisasi keseluruhan
+        $totalRealisasiKeseluruhan = $builder->selectSum('TOTAL_REALISASI')->get()->getRow()->TOTAL_REALISASI;
+        $persentaseRealisasiKeseluruhan = $totalAnggaranKeseluruhan > 0 ? ($totalRealisasiKeseluruhan / $totalAnggaranKeseluruhan) * 100 : 0;
+
+        return [
+            'data' => $result,
+            'geometric_mean' => $geometricMean,
+            'total_realisasi_keseluruhan' => $totalRealisasiKeseluruhan,
+            'total_anggaran_keseluruhan' => $totalAnggaranKeseluruhan,
+            'persentase_realisasi_keseluruhan' => $persentaseRealisasiKeseluruhan
+        ];
+    }
+    public function getCapaianKinerjaDenganGeometri($tglaktif)
+    {
+        $builder = $this->db->table($this->table);
+
+        // Hitung total anggaran keseluruhan
+        $totalAnggaranKeseluruhan = $builder->selectSum('TOTAL_ANGGARAN')->get()->getRow()->TOTAL_ANGGARAN;
+
+        // Query utama
+        $builder->select('KODE_UNIT_SKPD, NAMA_UNIT_SKPD');
+        $builder->selectSum('TOTAL_ANGGARAN', 'TotalAnggaran');
+        $builder->selectSum('TOTAL_REALISASI', 'TotalRealisasi');
+        $builder->where('tahun', session()->get('tahun'));
+        $builder->where('CREATE_AT', $tglaktif);
+        $builder->groupBy('NAMA_UNIT_SKPD');
+        $builder->orderBy('TOTAL_REALISASI', 'ASC');
+        $result = $builder->get()->getResultArray();
+
+        $persentaseList = [];
+
+        foreach ($result as &$row) {
+            if ($row['TotalRealisasi'] > 0) { // hanya dihitung jika realisasi > 0
+                $row['PersentaseRealisasi'] = ($row['TotalRealisasi'] / $row['TotalAnggaran']) * 100;
+                $row['BobotAnggaran'] = ($row['TotalAnggaran'] / $totalAnggaranKeseluruhan) * 100;
+                $row['SkorCapaian'] = $row['PersentaseRealisasi'] * $row['BobotAnggaran'];
+
+                $persentaseList[] = $row['PersentaseRealisasi'];
+            } else {
+                $row['PersentaseRealisasi'] = 0;
+                $row['BobotAnggaran'] = 0;
+                $row['SkorCapaian'] = 0;
+            }
+        }
+
+        // Hitung rata-rata geometri hanya dari persentase > 0
+        $n = count($persentaseList);
+        $product = $n > 0 ? array_product($persentaseList) : 0;
+        $geometricMean = $n > 0 ? pow($product, 1 / $n) : 0;
+        //hitung total realisasi keseluruhan
+        $totalRealisasiKeseluruhan = $builder->selectSum('TOTAL_REALISASI')->get()->getRow()->TOTAL_REALISASI;
+        $persentaseRealisasiKeseluruhan = $totalAnggaranKeseluruhan > 0 ? ($totalRealisasiKeseluruhan / $totalAnggaranKeseluruhan) * 100 : 0;
+
+        return [
+            'data' => $result,
+            'geometric_mean' => $geometricMean,
+            'total_realisasi_keseluruhan' => $totalRealisasiKeseluruhan,
+            'total_anggaran_keseluruhan' => $totalAnggaranKeseluruhan,
+            'persentase_realisasi_keseluruhan' => $persentaseRealisasiKeseluruhan
+        ];
+    }
     public function listopdadmin($tglaktif, $nm_opd = null)
     {
         if ($nm_opd == null) {
@@ -76,6 +176,10 @@ class RealApbdModel extends Model
                 ->where('CREATE_AT', $tglaktif)
                 // ->where('TOTAL_ANGGARAN <>', 0)
                 // ->where('TOTAL_REALISASI <>', 0)
+                // // ->select('kode_skpd, nama_skpd, total_anggaran, realisasi')
+                // // ->select('(realisasi / total_anggaran * 100) as persentase_realisasi')
+                // ->select('(total_anggaran / (SELECT SUM(total_anggaran) FROM apbd) * 100) as bobot_anggaran')
+                // ->select('((realisasi / total_anggaran * 100) * (total_anggaran / (SELECT SUM(total_anggaran) FROM apbd) * 100)) as skor_capaian')
                 ->groupBy('NAMA_UNIT_SKPD')
                 ->get()
                 ->getResultArray();

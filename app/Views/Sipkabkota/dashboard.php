@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard SIPDal - ...,</title>
+    <title>Dashboard SiTAPIS - KAB,</title>
     <link rel="icon" href="<?php echo base_url(); ?>/favicon.ico" type="image/gif">
 
     <link rel="stylesheet" href="<?php echo base_url('cssportal/templatemo-graph-page.css'); ?>">
@@ -27,13 +27,13 @@
                         <path d="M3 13h2v8H3zm4-8h2v13H7zm4-2h2v15h-2zm4 4h2v11h-2zm4-2h2v13h-2z" />
                     </svg>
                 </div>
-                <span class="logo-text">Dashboard SIPDal</span>
+                <span class="logo-text">Dashboard SiTAPIS-KAB</span>
             </a>
             <ul class="nav-links">
                 <li><a href="<?= base_url() ?>" class="active">Home</a></li>
                 <li><a href="#dashboard">Dashboard Pembangunan</a></li>
                 <li><a href="#analytics">Capaian Kinerja Anggaran</a></li>
-                <li><a href="#reports">Capaian Program Unggulan</a></li>
+                <li><a href="#reports">Program Unggulan Daerah</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
             <!-- <a href="https://www.google.com/search" target="_blank" rel="noopener" title="Search">
@@ -52,7 +52,7 @@
             <li><a href="<?= base_url() ?>" class="active">Home</a></li>
             <li><a href="#dashboard">Dashboard Pembangunan</a></li>
             <li><a href="#analytics">Capaian Kinerja Anggaran</a></li>
-            <li><a href="#reports">Capaian Program Unggulan</a></li>
+            <li><a href="#reports">Program Unggulan Daerah</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
     </nav>
@@ -73,11 +73,15 @@
 
         <div class="hero-content">
             <div class="hero-text">
-                <img src="<?= base_url() ?>cssportal/img_home/..png" width="20%" alt="Logo Kabupaten/Kota" />
+                <img src="<?= base_url() ?>cssportal/img_home/sitapis-kab.png" width="40%" alt="Logo Kabupaten/Kota" />
+                <h1>SiTAPIS-KAB<br>Dashboard</h1>
+                <p>
+                    Penyampaian Resume Data Administrasi Pembangunan .... yang
+                    selaras antara Pemerintah Pusat, Provinsi, dan Kabupaten/Kota melalui
+                    <strong>SiTAPIS-KAB</strong> (Sistem Data Pengendalian dan Informasi - Kabupaten/Kota)
+                </p>
 
-                <h1>SIPDal<br>Executive Dashboard</h1>
-                <p>Penyampaian Resume Data Administrasi Pembangunan .... melalui Sistem Informasi dan Pengendalian (SIPDal)</p>
-                <a href="<?= base_url('pilihakses') ?>" class="cta-button">MASUK</a>
+                <a href="<?= base_url('pilihakses') ?>" class="cta-button">LOGIN</a>
 
             </div>
             <div class="hero-visual">
