@@ -63,7 +63,7 @@ class Home extends BaseController
         $data['dataopdadmin'] = $this->realapbdmodel->getCapaianKinerjaDenganGeometri($tgldata);
         // echo dd($tahun . '-'  . $tgldata);
         // echo dd($data['dataopdadmin']);
-        return view('Sipkabkota/dashboard', $data);
+        return view('Sipkabkota/dashboard2', $data);
     }
     public function dashboard()
     {
