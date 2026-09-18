@@ -56,11 +56,11 @@
                 </div>
             <?php endif; ?>
             <div class="card-header">
-                <img src="<?= base_url() ?>/cssportal/img_home/silacak3a.png" class="img-preview"
+                <img src="<?= base_url() ?>/cssportal/img_home/sitapis-kab.png" class="img-preview"
                     style="max-width: 300px; justify-content: center; align-items: center;">
             </div>
             <div class="card-body login-card-body">
-                <p class="login-box-msg">Bagian Administrasi Pembangunan Setda Kabupaten Tulang Bawang Baraat</p>
+                <p class="login-box-msg">Bagian Administrasi Pembangunan Setda Kabupaten.....</p>
                 <?= form_open_multipart('simpantahunsilacak'); ?>
                 <?= csrf_field(); ?>
                 <div class="input-group mb-1">

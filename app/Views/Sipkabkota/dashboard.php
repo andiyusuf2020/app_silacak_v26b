@@ -231,11 +231,11 @@
                 <div class="chart-card">
                     <div class="chart-header">
                         <h3 class="chart-title">📈 Tren Realisasi Belanja APBD Bulanan</h3>
-                        <div class="chart-options">
+                        <!-- <div class="chart-options">
                             <span class="chart-option active">2024</span>
                             <span class="chart-option">2023</span>
                             <span class="chart-option">2022</span>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="chart-container">
                         <div class="bar-chart" id="barChart">
@@ -423,7 +423,105 @@
                 </div>
             </div>
         </div>
+        <div class="dashboard-container">
+            <h2 class="section-title">Dashboard Realisasi Anggaran</h2>
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-title">Sasaran Pembangunan</div>
+                    </div>
+                    <?php
+
+                    use App\Models\DataApbdModel\RealApbdModel;
+
+                    $this->realapbd = new RealApbdModel();
+
+                    use App\Models\DataApbdModel\PendApbdModel;
+                    use App\Models\DataApbdModel\RealPendApbdModel;
+
+                    $this->pendapbd = new PendApbdModel();
+                    $this->realpendapbd = new RealPendApbdModel();
+
+                    use App\Models\CapkinModel\TaSubKegCapkin2026;
+
+                    $this->subkegcapkin2026model = new TaSubKegCapkin2026();
+
+                    use App\Models\CapkinModel\TaKegPokokCapkinModel;
+
+                    $this->kegpokokmodal = new TaKegPokokCapkinModel();
+
+                    use App\Models\CapkinModel\TaRKegPokokCapkinModel;
+
+                    $this->rdkegpokokmodal = new TaRKegPokokCapkinModel();
+                    ?>
+                    <div class="card-body table-responsive p-0">
+                        <table class="table  table-head-fixed table-success table-striped text-wrap " border="1">
+                            <thead>
+                                <tr class="align-middle">
+                                    <th style="width: 10px">#</th>
+                                    <th>Kode Perangkat Daerah/Nama Perangkat Daerah</th>
+                                    <th>Pagu Anggaran<br>Rp.</th>
+                                    <th>Realisasi Anggaran (SIPD)<br>Rp.
+                                    </th>
+                                    <th>Capaian Realisasi Anggaran (SIPD)<br>%</th>
+                                    <th>Jumlah Aktivitas Belanja</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($dataopdadmin['data'] as $key => $value) { ?>
+                                    <tr align="center">
+                                        <td><?= esc($key + 1) ?> </td>
+                                        <td>
+                                            <?= esc($value['KODE_UNIT_SKPD']) ?><br>
+                                            <?= esc($value['NAMA_UNIT_SKPD']) ?>
+                                        </td>
+                                        <td style="text-align: right;">
+                                            <?= number_format(esc($value['TotalAnggaran']), 0, ',', '.') ?>
+                                        </td>
+                                        <td style="text-align: right;">
+                                            <?= number_format(esc($value['TotalRealisasi']), 0, ',', '.') ?>
+                                        </td>
+                                        <td style="text-align: right;">
+                                            <?= number_format(esc($value['PersentaseRealisasi']), 2, ',', '.') ?>
+                                        </td>
+                                        <td style="text-align: right;">
+                                            <?= number_format(esc($value['JumlahBelanja']), 0, ',', '.') ?>
+                                        </td>
+
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                            <tfoot>
+                                <tr class="align-middle">
+                                    <th style="width: 10px" colspan="2">JUMLAH</th>
+                                    <th>
+                                        <?= esc($dataopdadmin['total_anggaran_keseluruhan']) ?>
+                                    </th>
+                                    <th>
+                                        <?= esc($dataopdadmin['total_realisasi_keseluruhan']) ?>
+                                    </th>
+                                    <th>
+                                        <?= esc($dataopdadmin['persentase_realisasi_keseluruhan']) ?>
+                                    </th>
+
+                                </tr>
+                                <tr>
+                                    <td colspan="8">
+                                        <i class=" bi bi-info-circle-fill font-size-10"></i>Data realisasi anggaran Perangkat Daerah se-Provinsi Lampung ini
+                                        berdasarkan <br>https://adbang.lampungprov.go.id/e-tapis/lrfkadmin/ dan <br>
+                                        https://sipd-ri.kemendagri.go.id </span>
+
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
+
     </section>
 
     <!-- Reports Section -->

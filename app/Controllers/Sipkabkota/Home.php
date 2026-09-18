@@ -4,15 +4,17 @@ namespace App\Controllers\Sipkabkota;
 
 use App\Controllers\BaseController;
 use App\Models\DataApbdModel\TglApbdModel;
+use App\Models\DataApbdModel\RealApbdModel;
 
 class Home extends BaseController
 {
     protected $tglapbdmodel;
-
+    protected $realapbdmodel;
     public function __construct()
     {
         helper(['form', 'url', 'filesystem']);
         $this->tglapbdmodel = new TglApbdModel();
+        $this->realapbdmodel = new RealApbdModel();
     }
     public function simpantahunsilacak()
     {
@@ -52,9 +54,16 @@ class Home extends BaseController
 
     public function index()
     {
-        // return view('Sipkabkota/home');
-        // return view('index');
-        return view('Sipkabkota/dashboard');
+        session()->set('tahun', date('Y'));
+
+        $tgldata = $this->tglapbdmodel->tgldataaktif();
+        session()->set('tglaktif', $tgldata['tanggal']);
+        $tahun = session()->get('tahun');
+        $tgldata = session()->get('tglaktif');
+        $data['dataopdadmin'] = $this->realapbdmodel->getCapaianKinerjaDenganGeometri($tgldata);
+        // echo dd($tahun . '-'  . $tgldata);
+        // echo dd($data['dataopdadmin']);
+        return view('Sipkabkota/dashboard', $data);
     }
     public function dashboard()
     {

@@ -104,6 +104,15 @@
                             </a>
                         </li>
                     </ul>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item"> <a
+                                href="<?= base_url('superadmin/angkasapbd');
+                                        ?>" class="nav-link">
+                                <i class="nav-icon bi bi-circle"></i>
+                                <p>Anggaran Kas Opd <br> Perangkat Daerah</p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
                 <li class="nav-item">

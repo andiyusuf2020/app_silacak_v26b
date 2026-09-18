@@ -4,12 +4,16 @@ namespace App\Controllers\Sipkabkota;
 
 use App\Controllers\BaseController;
 use \Myth\Auth\Authorization\GroupModel;
+use App\Models\DataApbdModel\RealApbdModel;
 
 class SuperadminController extends BaseController
 {
+    protected $realapbdmodel;
+
     public function __construct()
     {
         helper(['form', 'url', 'filesystem']);
+        $this->realapbdmodel = new RealApbdModel();
     }
 
     public function index()
@@ -42,7 +46,10 @@ class SuperadminController extends BaseController
     }
     public function dashboard()
     {
-        return view('sipkabkota/dashboard');
+        $tgldata = session()->get('tglaktif');
+        $data['dataopdadmin'] = $this->realapbdmodel->getCapaianKinerjaDenganGeometri($tgldata);
+
+        return view('sipkabkota/dashboard', $data);
     }
     public function pilihakses()
     {

@@ -6,15 +6,13 @@ use CodeIgniter\Model;
 
 class AngkasModel extends Model
 {
-    protected $table = 'ta_angkasapbd';
+    protected $table = 'ta_angkasapbdopd';
     protected $primaryKey = 'Id_angkas';
     protected $returnType     = 'array'; // Tipe data yang dikembalikan
     protected $allowedFields = [
         'TAHUN',
         'KODE_UNIT_SKPD',
         'NAMA_UNIT_SKPD',
-        'KODE_SUB_GIAT',
-        'NAMA_SUB_GIAT',
         'TOTAL_ANGGARAN',
         'BULAN_ANGKAS',
         'ANGKAS',

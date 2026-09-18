@@ -2,7 +2,7 @@
 
 namespace App\Controllers\AdminAdbang;
 
-// use App\Models\DataApbdModel\AngkasModel;
+use App\Models\DataApbdModel\AngkasModel;
 // use App\Models\DataApbdModel\PendApbdModel;
 use \Myth\Auth\Authorization\GroupModel;
 use App\Models\LrfkProvModel\JadwalModel;
@@ -66,7 +66,7 @@ class adminadbang26 extends BaseController
         $this->realapbdmodel = new RealApbdModel();
         // $this->pendapbdmodel = new PendApbdModel();
         $this->tglapbdmodel = new TglApbdModel();
-        // $this->angkapbdmodel = new AngkasModel();
+        $this->angkapbdmodel = new AngkasModel();
         $this->sipdmodel = new ExcelRSipdModel();
 
         // $this->kategorimodel = new TaKategoriModel();
@@ -613,7 +613,7 @@ class adminadbang26 extends BaseController
 
         if (!$receivedParams) {
             // echo dd($data['listopdangkasapbd']);
-            return view('superadmin/2026/listangkasopd', $data);
+            return view('Sipkabkota/superadmin/2026/listangkasopd', $data);
         }
         if ($hal == 'angkasopd') {
             $this->ValidasiHash($req);

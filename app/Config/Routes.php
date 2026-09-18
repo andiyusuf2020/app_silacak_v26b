@@ -48,6 +48,7 @@ $routes->group('superadmin', ['filter' => 'role:superadmin'], function ($routes)
 
     //manajemen data apbd opd
     $routes->get('apbdopd', 'AdminAdbang\adminadbang26::index');
+    $routes->get('angkasapbd', 'AdminAdbang\adminadbang26::angkasapbd');
 });
 $routes->group('adminprov', ['filter' => 'role:adminprov'], function ($routes) {
     $routes->get('', 'AdminAdbang\adminadbang::index');
