@@ -70,6 +70,7 @@ class RealApbdModel extends Model
 
         // Hitung total anggaran keseluruhan
         $totalAnggaranKeseluruhan = $builder->selectSum('TOTAL_ANGGARAN')
+            ->selectcount('KODE_UNIT_SKPD', 'JumlahBelanja')
             ->where('KODE_UNIT_SKPD', $kdsu)
             ->get()->getRow()->TOTAL_ANGGARAN;
 
@@ -126,6 +127,7 @@ class RealApbdModel extends Model
         $builder->select('KODE_UNIT_SKPD, NAMA_UNIT_SKPD');
         $builder->selectSum('TOTAL_ANGGARAN', 'TotalAnggaran');
         $builder->selectSum('TOTAL_REALISASI', 'TotalRealisasi');
+        $builder->selectCount('TOTAL_ANGGARAN', 'JumlahBelanja');
         $builder->where('tahun', session()->get('tahun'));
         $builder->where('CREATE_AT', $tglaktif);
         $builder->groupBy('NAMA_UNIT_SKPD');

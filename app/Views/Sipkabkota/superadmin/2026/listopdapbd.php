@@ -52,7 +52,7 @@ $this->realapbd = new RealApbdModel();
                             <tr>
                                 <td><?= esc($key + 1) ?></td>
                                 <td>
-                                    <?= esc($value['KODE_UNIT_SKPD']) ?><br>
+                                    <?= esc($value['JumlahBelanja']) ?><br>
                                     <?= esc($value['NAMA_UNIT_SKPD']) ?>
                                 </td>
                                 <td style="text-align: right;">
