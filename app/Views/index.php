@@ -166,8 +166,17 @@
         <div class="row justify-content-md-center">
             <div class="col-md-6 col-sm-12 text-center">
                 <div role="alert">
+                    <img class="img-fluid" style="max-height: 200px;" src="<?php echo base_url('cssportal/img_home'); ?>/lampung.png" alt data-pagespeed-url-hash="2410369107" onload="pagespeed.CriticalImages.checkImageForCriticality(this);">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-md-center">
+            <div class="col-md-6 col-sm-12 text-center">
+                <div role="alert">
                     <a class="alert-link" href="#">
-                        <img class="img-fluid" style="max-height: 200px;" src="<?php echo base_url('cssportal/img_home'); ?>/lampung.png" alt data-pagespeed-url-hash="2622387745" onload="pagespeed.CriticalImages.checkImageForCriticality(this);">
+                        <img class="img-fluid" style="max-height: 200px;" src="<?php echo base_url('cssportal/img_home'); ?>/gub_rmd2.png" alt data-pagespeed-url-hash="2622387745" onload="pagespeed.CriticalImages.checkImageForCriticality(this);">
 
                     </a>
                 </div>
@@ -175,7 +184,7 @@
             <div class="col-md-6 col-sm-12 text-center">
                 <div role="alert">
                     <a class="alert-link" href="#">
-                        <img class="img-fluid" style="max-height: 200px;" src="<?php echo base_url('cssportal/img_home'); ?>/gublpg2024.jpg" alt data-pagespeed-url-hash="2410369107" onload="pagespeed.CriticalImages.checkImageForCriticality(this);">
+                        <img class="img-fluid" style="max-height: 200px;" src="<?php echo base_url('cssportal/img_home'); ?>/wagubJihan.png" alt data-pagespeed-url-hash="2410369107" onload="pagespeed.CriticalImages.checkImageForCriticality(this);">
 
                     </a>
                 </div>
@@ -184,11 +193,18 @@
         <div class="row justify-content-md-center">
             <div class="col-md-6 col-sm-12 text-center">
                 <div role="alert">
+                    <img class="img-fluid" style="max-height: 200px;" src="<?php echo base_url('cssportal/img_home'); ?>/sitapis-kab.png" alt data-pagespeed-url-hash="2410369107" onload="pagespeed.CriticalImages.checkImageForCriticality(this);">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-md-center">
+            <div class="col-md-6 col-sm-12 text-center">
+                <div role="alert">
                     <a class="alert-link" href="<?php echo base_url(); ?>" <img class="img-fluid" style="max-height: 175px;" src="<?php echo base_url('admin/dist'); ?>/img/logositapis.png" alt>
                         <h3 class="header-title">
                             <font color="yellow">
-                                <p> Sistem Data Pengendalian Dan Informasi
-                                <p> BIRO ADMINISTRASI PEMBANGUNAN SETDA PROVINSI LAMPUNG
                                 <p> SILAKAN PILIH WILAYAH ANDA
                             </font>
                         </h3>
@@ -196,25 +212,13 @@
                 </div>
             </div>
         </div>
-        <div class="row justify-content-md-center">
-            <div class="center">
-                <li>
-                    <a class="normal" style="cursor: pointer;" href="<?php echo base_url('appprov'); ?>">
-                        <img src="<?php echo base_url('cssportal/img_home'); ?>/lampung.png" alt>
-                        <div class="caption">PROVINSI LAMPUNG</div>
-                    </a>
-                </li>
-            </div>
-        </div>
-
-        <br>
         <!--    /row-->
         <div class="row mt-2" id="kotakkategori">
             <div class="col">
                 <!-- contenrow -->
                 <ul class="d-flex justify-content-center flex-wrap">
                     <li onclick="showModals()">
-                        <a class="normal" style="cursor: pointer;" href="<?php echo base_url('kabkota/lambar'); ?>">
+                        <a class="normal" style="cursor: pointer;" href="<?= hash_url('/', ['wilayah' => 'lambar']) ?>">
                             <img src="<?php echo base_url('cssportal/img_home'); ?>/lambar.png" alt>
                             <div class="caption">LAMPUNG BARAT</div>
                             <div class="info">
@@ -222,7 +226,7 @@
                         </a>
                     </li>
                     <li onclick="showModals()">
-                        <a class="normal" style="cursor: pointer; " href="<?php echo base_url('kabkota/lamsel'); ?>">
+                        <a class="normal" style="cursor: pointer; " href="<?= hash_url('/', ['wilayah' => 'lampungselatan']) ?>">
                             <img src="<?php echo base_url('cssportal/img_home'); ?>/lamsel.png" alt>
                             <div class="caption">LAMPUNG SELATAN</div>
                             <div class="info">
@@ -230,7 +234,7 @@
                         </a>
                     </li>
                     <li onclick="showModals()">
-                        <a class="normal" style="cursor: pointer;" href="<?php echo base_url('kabkota/admin'); ?>">
+                        <a class="normal" style="cursor: pointer;" href="<?= hash_url('/', ['wilayah' => 'lampungtengah']) ?>">
                             <img src="<?php echo base_url('cssportal/img_home'); ?>/lamteng.png" alt>
                             <div class="caption">LAMPUNG TENGAH</div>
                             <div class="info">
@@ -238,7 +242,7 @@
                         </a>
                     </li>
                     <li onclick="showModals()">
-                        <a class="normal" style="cursor: pointer;" href="<?php echo base_url('kabkota/admin'); ?>">
+                        <a class="normal" style="cursor: pointer;" href="<?= hash_url('/', ['wilayah' => 'lampungtimur']) ?>">
                             <img src="<?php echo base_url('cssportal/img_home'); ?>/lamtim.png" alt>
                             <div class="caption">LAMPUNG TIMUR</div>
                             <div class="info">
@@ -246,7 +250,7 @@
                         </a>
                     </li>
                     <li onclick="showModals()">
-                        <a class="normal" style="cursor: pointer;" href="<?php echo base_url('kabkota/admin'); ?>">
+                        <a class="normal" style="cursor: pointer;" href="<?= hash_url('/', ['wilayah' => 'lampungutara']) ?>">
                             <img src="<?php echo base_url('cssportal/img_home'); ?>/lamut.png" alt>
                             <div class="caption">LAMPUNG UTARA</div>
                             <div class="info">
@@ -254,7 +258,7 @@
                         </a>
                     </li>
                     <li onclick="showModals()">
-                        <a class="normal" style="cursor: pointer;" href="<?php echo base_url('kabkota/admin'); ?>">
+                        <a class="normal" style="cursor: pointer;" href="<?= hash_url('/', ['wilayah' => 'mesuji']) ?>">
                             <img src="<?php echo base_url('cssportal/img_home'); ?>/mesuji.png" alt>
                             <div class="caption">MESUJI</div>
                             <div class="info">
@@ -262,7 +266,7 @@
                         </a>
                     </li>
                     <li>
-                        <a class="normal" style="cursor: pointer;" href="<?php echo base_url('kabkota/admin'); ?>">
+                        <a class="normal" style="cursor: pointer;" href="<?= hash_url('/', ['wilayah' => 'pesawaran']) ?>">
                             <img src="<?php echo base_url('cssportal/img_home'); ?>/PESAWARAN.png" alt>
                             <div class="caption">PESAWARAN</div>
                             <div class="info">
@@ -270,7 +274,7 @@
                         </a>
                     </li>
                     <li onclick="showModals()">
-                        <a class="normal" style="cursor: pointer;" href="<?php echo base_url('kabkota/admin'); ?>">
+                        <a class="normal" style="cursor: pointer;" href="<?= hash_url('/', ['wilayah' => 'pesisirbarat']) ?>">
                             <img src="<?php echo base_url('cssportal/img_home'); ?>/pesibar.png" alt>
                             <div class="caption">PESISIR BARAT</div>
                             <div class="info">
@@ -278,7 +282,7 @@
                         </a>
                     </li>
                     <li onclick="showModals()">
-                        <a class="normal" style="cursor: pointer;" href="<?php echo base_url('kabkota/admin'); ?>">
+                        <a class="normal" style="cursor: pointer;" href="<?= hash_url('/', ['wilayah' => 'pringsewu']) ?>">
                             <img src="<?php echo base_url('cssportal/img_home'); ?>/pringsewu.png" alt>
                             <div class="caption">PRINGSEWU</div>
                             <div class="info">
@@ -286,7 +290,7 @@
                         </a>
                     </li>
                     <li onclick="showModals()">
-                        <a class="normal" style="cursor: pointer;" href="<?php echo base_url('kabkota/admin'); ?>">
+                        <a class="normal" style="cursor: pointer;" href="<?= hash_url('/', ['wilayah' => 'tanggamus']) ?>">
                             <img src="<?php echo base_url('cssportal/img_home'); ?>/tanggamus.png" alt>
                             <div class="caption">TANGGAMUS</div>
                             <div class="info">
@@ -294,7 +298,7 @@
                         </a>
                     </li>
                     <li onclick="showModals()">
-                        <a class="normal" style="cursor: pointer;" href="<?php echo base_url('kabkota/admin'); ?>">
+                        <a class="normal" style="cursor: pointer;" href="<?= hash_url('/', ['wilayah' => 'tulangbawang']) ?>">
                             <img src="<?php echo base_url('cssportal/img_home'); ?>/tulangbawang.png" alt>
                             <div class="caption">TULANG BAWANG</div>
                             <div class="info">
@@ -302,7 +306,7 @@
                         </a>
                     </li>
                     <li onclick="showModals()">
-                        <a class="normal" style="cursor: pointer;" href="<?php echo base_url('kabkota/admin'); ?>">
+                        <a class="normal" style="cursor: pointer;" href="<?= hash_url('/', ['wilayah' => 'tulangbawangkabupaten']) ?>">
                             <img src="<?php echo base_url('cssportal/img_home'); ?>/tbb.png" alt>
                             <div class="caption">TULANG BAWANG BARAT</div>
                             <div class="info">
@@ -310,7 +314,7 @@
                         </a>
                     </li>
                     <li onclick="showModals()">
-                        <a class="normal" style="cursor: pointer;" href="<?php echo base_url('kabkota/admin'); ?>">
+                        <a class="normal" style="cursor: pointer;" href="<?= hash_url('/', ['wilayah' => 'waykanan']) ?>">
                             <img src="<?php echo base_url('cssportal/img_home'); ?>/waykanan.png" alt>
                             <div class="caption">WAY KANAN</div>
                             <div class="info">
@@ -318,7 +322,7 @@
                         </a>
                     </li>
                     <li onclick="showModals()">
-                        <a class="normal" style="cursor: pointer;" href="<?php echo base_url('kabkota/admin'); ?>">
+                        <a class="normal" style="cursor: pointer;" href="<?= hash_url('/', ['wilayah' => 'bandarlampung']) ?>">
                             <img src="<?php echo base_url('cssportal/img_home'); ?>/balam.png" alt>
                             <div class="caption">KOTA BANDAR LAMPUNG</div>
                             <div class="info">
@@ -326,7 +330,7 @@
                         </a>
                     </li>
                     <li onclick="showModals()">
-                        <a class="normal" style="cursor: pointer;" href="<?php echo base_url('kabkota/admin'); ?>">
+                        <a class="normal" style="cursor: pointer;" href="<?= hash_url('/', ['wilayah' => 'metro']) ?>">
                             <img src="<?php echo base_url('cssportal/img_home'); ?>/metro.png" alt>
                             <div class="caption">KOTA METRO</div>
                             <div class="info">
@@ -340,7 +344,7 @@
     </div>
     <!--end of container-->
     <video id="intro-video" playsinline autoplay muted loop poster="#">
-        <source src="https://adbang.lampungprov.go.id/sitapis/uploads/lampung(1).mp4" type="video/mp4">
+        <source src="https://adbang.lampungprov.go.id/uploads/lampung(1).mp4" type="video/mp4">
     </video>
 
     <!-- #content end -->
@@ -351,7 +355,7 @@
     -->
 
     <center><audio controls autoplay loop>
-            <source src="https://adbang.lampungprov.go.id/sitapis/uploads/tunggal_lampung(1).mp3" type="audio/ogg">
+            <source src="https://adbang.lampungprov.go.id/uploads/tunggal_lampung(1).mp3" type="audio/ogg">
         </audio></center>
 
 </html>

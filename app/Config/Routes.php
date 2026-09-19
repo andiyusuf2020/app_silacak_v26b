@@ -7,9 +7,23 @@ use CodeIgniter\Router\RouteCollection;
  */
 // $routes->get('/', 'Home::maintenis');
 
-// Routes for the application SILACAK.
+// Routes for the application SiTAPIS-KAB.
+$routes->get('/', 'HomeKabController::index');
 
-$routes->get('/', 'Sipkabkota\Home::index');
+// Routes for the wilayah.
+$routes->get('lambar', 'HomeKabController::lambar');
+$routes->get('lampungselatan', 'HomeKabController::lampungselatan');
+$routes->get('lampungtimur', 'HomeKabController::lampungtimur');
+$routes->get('lampungtengah', 'HomeKabController::lampungtengah');
+$routes->get('lampungutara', 'KablampuraController\HomeController::dashboard');
+$routes->get('mesuji', 'HomeKabController::mesuji');
+$routes->get('pesawaran', 'HomeKabController::pesawaran');
+$routes->get('pringsewu', 'HomeKabController::pringsewu');
+$routes->get('tanggamus', 'HomeKabController::tanggamus');
+$routes->get('tulangbawang', 'HomeKabController::tulangbawang');
+$routes->get('tulangbawangbarat', 'HomeKabController::tulangbawangbarat');
+
+// $routes->get('/', 'Sipkabkota\Home::index');
 $routes->get('dashboard', 'Sipkabkota\Home::dashboard');
 $routes->get('pilihakses', 'Sipkabkota\Home::pilihakses');
 $routes->post('simpantahunsilacak', 'Sipkabkota\Home::simpantahunsilacak');
