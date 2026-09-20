@@ -20,13 +20,13 @@ class HomeController extends BaseController
 
     public function dashboard()
     {
-        session()->set('tahun', date('Y'));
+        // session()->set('tahun', date('Y'));
 
         $tgldata = $this->tglapbdmodel->tgldataaktif();
         session()->set('tglaktif', $tgldata['tanggal']);
-        $tahun = session()->get('tahun');
+        $tahun = date('Y');
         $tgldata = session()->get('tglaktif');
-        $data['dataopdadmin'] = $this->realapbdmodel->getCapaianKinerjaDenganGeometri($tgldata);
+        $data['dataopdadmin'] = $this->realapbdmodel->getCapaianKinerjaDenganGeometri($tahun, $tgldata);
         // echo dd($tahun . '-'  . $tgldata);
         // echo dd($data['dataopdadmin']);
         return view('Kablampuraviews/dashboard', $data);

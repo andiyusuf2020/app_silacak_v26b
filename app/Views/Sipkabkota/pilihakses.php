@@ -206,8 +206,7 @@
                     </a>
                 </li>
                 <li>
-                    <a class="normal" style="cursor: pointer;" href="<?php echo base_url('superadmin');
-                                                                        ?>">
+                    <a class="normal" style="cursor: pointer;" href="<?php echo base_url($wilayah . '/superadmin'); ?>">
                         <img src="<?php echo base_url('cssportal/img_home');
                                     ?>/sitapis-kab-2.png" alt>
                         <div class="caption"><strong>ADMIN ADBANG</strong> </div>

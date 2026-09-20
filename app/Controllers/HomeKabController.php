@@ -14,6 +14,8 @@ class HomeKabController extends BaseController
         if (!$receivedParams) {
             return view('index');
         }
+        $this->ValidasiHash($req);
+
         if ($wilayah == 'lambar') {
             session()->set('wilayah', 'lambar');
             return redirect()->to(base_url('lambar'));
@@ -52,5 +54,26 @@ class HomeKabController extends BaseController
             // You can choose to show an error page or redirect to a default page
             return view('index'); // Redirect to the index page as a fallback
         }
+    }
+    public function pilihakses()
+    {
+        $wilayah = session()->get('wilayah');
+        if (!$wilayah) {
+            return redirect()->to(base_url());
+        }
+        $data =
+            [
+                'wilayah' => $wilayah
+            ];
+        // echo dd($data);
+        return view('Sipkabkota/pilihakses', $data);
+    }
+    public function simpantahun()
+    {
+        $tahun = $this->request->getPost('tahun');
+
+        // simpan tahun di session
+        session()->set('tahun', $tahun);
+        return redirect()->back();
     }
 }

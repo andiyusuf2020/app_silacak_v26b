@@ -116,7 +116,7 @@ class RealApbdModel extends Model
             'persentase_realisasi_keseluruhan' => $persentaseRealisasiKeseluruhan
         ];
     }
-    public function getCapaianKinerjaDenganGeometri($tglaktif)
+    public function getCapaianKinerjaDenganGeometri($tahun, $tglaktif)
     {
         $builder = $this->db->table($this->table);
 
@@ -128,7 +128,7 @@ class RealApbdModel extends Model
         $builder->selectSum('TOTAL_ANGGARAN', 'TotalAnggaran');
         $builder->selectSum('TOTAL_REALISASI', 'TotalRealisasi');
         $builder->selectCount('TOTAL_ANGGARAN', 'JumlahBelanja');
-        $builder->where('tahun', session()->get('tahun'));
+        $builder->where('tahun', $tahun);
         $builder->where('CREATE_AT', $tglaktif);
         $builder->groupBy('NAMA_UNIT_SKPD');
         $builder->orderBy('TOTAL_REALISASI', 'ASC');

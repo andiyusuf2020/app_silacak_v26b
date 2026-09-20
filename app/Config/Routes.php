@@ -9,6 +9,8 @@ use CodeIgniter\Router\RouteCollection;
 
 // Routes for the application SiTAPIS-KAB.
 $routes->get('/', 'HomeKabController::index');
+$routes->get('pilihakses', 'HomeKabController::pilihakses');
+$routes->post('simpantahun', 'HomeKabController::simpantahun');
 
 // Routes for the wilayah.
 $routes->get('lambar', 'HomeKabController::lambar');
@@ -16,6 +18,13 @@ $routes->get('lampungselatan', 'HomeKabController::lampungselatan');
 $routes->get('lampungtimur', 'HomeKabController::lampungtimur');
 $routes->get('lampungtengah', 'HomeKabController::lampungtengah');
 $routes->get('lampungutara', 'KablampuraController\HomeController::dashboard');
+$routes->group('lampungutara/superadmin', ['filter' => 'role:superadmin'], function ($routes) {
+    $routes->get('', 'KablampuraController\AdminAdbangController::index');
+    $routes->get('daftaruser', 'UserController\UserKabController\UserController::index');
+    $routes->get('cetak', 'Silacak\HomeRfk::cetak');
+    $routes->get('profile', 'Silacak\HomeRfk::profile');
+    $routes->post('simpanprofile', 'Silacak\HomeRfk::simpanprofile');
+});
 $routes->get('mesuji', 'HomeKabController::mesuji');
 $routes->get('pesawaran', 'HomeKabController::pesawaran');
 $routes->get('pringsewu', 'HomeKabController::pringsewu');
@@ -25,7 +34,7 @@ $routes->get('tulangbawangbarat', 'HomeKabController::tulangbawangbarat');
 
 // $routes->get('/', 'Sipkabkota\Home::index');
 $routes->get('dashboard', 'Sipkabkota\Home::dashboard');
-$routes->get('pilihakses', 'Sipkabkota\Home::pilihakses');
+// $routes->get('pilihakses', 'Sipkabkota\Home::pilihakses');
 $routes->post('simpantahunsilacak', 'Sipkabkota\Home::simpantahunsilacak');
 $routes->get('user', 'Sipkabkota\Home::dilarang');
 

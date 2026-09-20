@@ -52,7 +52,7 @@ class Home extends BaseController
         return view('hakakses');
     }
 
-    public function index()
+    public function indexX()
     {
         session()->set('tahun', date('Y'));
 

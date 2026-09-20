@@ -49,7 +49,29 @@ class TaUserModel extends Model
             return $this->where('id', $id)->get()->getRowArray();
         }
     }
+    public function listuser2($id = null)
+    {
+        //return $this->get()->getResultArray();
+        if ($id == null) {
+            return $this
+                ->select('users.id,sub_unit,email,username,active,created_at')
+                ->select("users.link='" . base_url('lrfkadmin/manajemenuser/') . "' as linka")
+                ->select('auth_groups.name as group_name')
 
+                ->join('auth_groups_users', 'users.id=auth_groups_users.user_id')
+                ->join('auth_groups', 'auth_groups.id=auth_groups_users.group_id')
+
+                ->where('deleted_at', null)->get()->getResultArray();
+            // ->select('users.*,auth_groups.*,auth_groups_users.*')
+            // ->join('auth_groups_users', 'users.id=auth_groups_users.user_id')
+            // ->join('auth_groups', 'auth_groups.id=auth_groups_users.group_id')
+            // ->get()->getResultArray(); //where('deleted_at=', 0)->get()->
+            //findAll(); //where('deleted_at=', 0)->get()->getResultArray(); //findAll();
+        }
+        if ($id) {
+            return $this->where('id', $id)->get()->getRowArray();
+        }
+    }
     public function getDataUser($name)
     {
         return $this->select('*')->where('username', $name)->orWhere('email', $name)->get();

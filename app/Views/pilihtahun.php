@@ -61,13 +61,13 @@
             </div>
             <div class="card-body login-card-body">
                 <p class="login-box-msg">Bagian Administrasi Pembangunan Setda Kabupaten.....</p>
-                <?= form_open_multipart('simpantahunsilacak'); ?>
+                <?= form_open_multipart('simpantahun'); ?>
                 <?= csrf_field(); ?>
                 <div class="input-group mb-1">
                     <select name="tahun" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
                         <option selected>Pilih Tahun</option>
-                        <option value="2025">2025</option>
                         <option value="2026">2026</option>
+                        <option value="2027">2027</option>
                         <!-- <option value="2027">2027</option> -->
                     </select>
                 </div>

@@ -28,7 +28,7 @@
                 role="menu"
                 data-accordion="false">
                 <li class="nav-item menu-open">
-                    <a href="<?= base_url('superadmin') ?>" class="nav-link active">
+                    <a href="<?= base_url(' ' . $wilayah . '/' . $groupuser . '') ?>" class="nav-link active">
                         <i class="nav-icon bi bi-speedometer"></i>
                         <p>
                             Dashboard
@@ -46,7 +46,7 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="<?= base_url('superadmin/daftaruser') ?>" class="nav-link">
+                            <a href="<?= base_url(' ' . $wilayah . '/' . $groupuser . '/daftaruser') ?>" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
                                 <p>Daftar User</p>
                             </a>
