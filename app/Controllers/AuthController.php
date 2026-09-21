@@ -150,11 +150,14 @@ class AuthController extends Controller
 
         // Validate basics first since some password rules rely on these fields
         $rules = config('Validation')->registrationRules ?? [
+            'sub_unit' => 'required|alpha_numeric_space|min_length[3]|max_length[50]',
+            'wilayah' => 'required|alpha_numeric_space|min_length[3]|max_length[30]',
             'username' => 'required|alpha_numeric_space|min_length[3]|max_length[30]|is_unique[users.username]',
             'email'    => 'required|valid_email|is_unique[users.email]',
         ];
 
         if (! $this->validate($rules)) {
+            // echo dd($rules);
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
@@ -163,7 +166,6 @@ class AuthController extends Controller
             'password'     => 'required|strong_password',
             'pass_confirm' => 'required|matches[password]',
         ];
-        echo dd($this->request->getPost());
         if (! $this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
@@ -196,6 +198,7 @@ class AuthController extends Controller
         }
 
         // Success!
+
         return redirect()->route('login')->with('message', lang('Auth.registerSuccess'));
     }
 

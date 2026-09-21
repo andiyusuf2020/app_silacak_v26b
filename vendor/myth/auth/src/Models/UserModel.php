@@ -17,6 +17,7 @@ class UserModel extends Model
     protected $returnType     = User::class;
     protected $useSoftDeletes = true;
     protected $allowedFields  = [
+        'sub_unit',
         'wilayah',
         'email',
         'username',
@@ -34,7 +35,8 @@ class UserModel extends Model
     ];
     protected $useTimestamps   = true;
     protected $validationRules = [
-        'wilayah'     => 'required',
+        'sub_unit'      => 'required|alpha_numeric_space|min_length[3]|max_length[50]',
+        'wilayah'       => 'required|alpha_numeric_space|min_length[3]|max_length[30]',
         'email'         => 'required|valid_email|is_unique[users.email,id,{id}]',
         'username'      => 'required|alpha_numeric_punct|min_length[3]|max_length[30]|is_unique[users.username,id,{id}]',
         'password_hash' => 'required',

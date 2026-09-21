@@ -35,61 +35,18 @@ class UserController extends BaseController
     {
         if (logged_in()) {
             $user = user();
-            $groupModel = new GroupModel();
-            $groupuser = $groupModel->getGroupsForUser($user->id);
-            foreach ($groupuser as $row) {
-                $namagroup = $row['name'];
-            }
-
             $useraktif =  $user->email;
         }
-        $keyword = $this->request->getVar('keyword');
-        //$keyword = 'and';
-
-        if ($keyword) {
-            $datauser = $this->tausermodel->searchRealTime($keyword);
-            return $this->response->setJSON($datauser);
-            // echo dd($datacari);
-
-            // $datausera = $this->tausermodel->searchRealTime($keyword);
-        } else {
-            $datausera[] = null;
-            $datauser = $this->tausermodel->listuser();
-        }
-        // $dataprogram = $this->Programkerjamodel->ProgKerjaAll();
-
-        // $userdata = $datauser->paginate(10, 'users');
-
         $data = [
             'titlepage' => 'Selamat datang ' . $useraktif . ' di Halaman Manajemen User Sistem Pelaporan SiTAPIS',
             'wilayah' =>  session()->get('wilayah'),
             'groupmenu' => session()->get('groupmenu'),
-            'listuser' =>  $datauser,
-            'usercari' => $datausera,
-            'useraktif' => $useraktif,
-            'keyword' => $keyword,
             'groupuser' => session()->get('groupuser'),
             'listuser2' => $this->tausermodel->listuser2(session()->get('wilayah'), null),
         ];
-        // echo dd($data['listuser']);
-        $groupModel = new GroupModel();
-
-        foreach ($data['listuser'] as $row) {
-            $dataRow['group'] = $groupModel->getGroupsForUser($row['id']);
-            $dataRow['row'] = $row;
-            $data['row' . $row['id']] = view('user/row', $dataRow);
-        }
-
-        //     $data['groups'] = $groupModel->findAll();
-        //     $data['title'] = 'Users';
-        // echo dd($datauser);
-
-        // echo dd($dataRow['group']);
         $datauserx = json_encode($data['listuser2']);
         $data['datajson'] = preg_replace('/"([^"]+)"\s*:/', '$1:', $datauserx);
-        // echo dd($data['datajson']);
-        // return view('user/user', $data);
-        return view('superadmin/2026/listusersuperadmin', $data);
+        return view('Kablampuraviews/Adminadbang/listusersuperadmin', $data);
     }
     public function user()
     {

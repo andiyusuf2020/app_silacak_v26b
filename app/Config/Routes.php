@@ -21,6 +21,7 @@ $routes->get('lampungutara', 'KablampuraController\HomeController::dashboard');
 $routes->group('lampungutara/superadmin', ['filter' => 'role:superadmin'], function ($routes) {
     $routes->get('', 'KablampuraController\AdminAdbangController::index');
     $routes->get('daftaruser', 'UserController\UserKabController\UserController::index');
+    $routes->get('daftaruser/(:any)', 'UserController\UserKabController\UserController::user/$1');
     $routes->get('cetak', 'Silacak\HomeRfk::cetak');
     $routes->get('profile', 'Silacak\HomeRfk::profile');
     $routes->post('simpanprofile', 'Silacak\HomeRfk::simpanprofile');
@@ -168,6 +169,8 @@ $routes->group('adbang', function ($routes) {
 /*---  AKHIR ROUTE PORTAL PROGRAM PRIORITAS --------------------- */
 $routes->get('login', 'AuthController::login');
 $routes->get('register', 'AuthController::register');
+$routes->post('registerX', 'AuthController::registerX');
+
 $routes->get('logout', 'AuthController::logout');
 
 

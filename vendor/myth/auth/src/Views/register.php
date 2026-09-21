@@ -33,10 +33,6 @@
                             <label for="pass_confirm"><?= lang('Auth.repeatPassword') ?></label>
                             <input type="password" name="pass_confirm" class="form-control <?php if (session('errors.pass_confirm')) : ?>is-invalid<?php endif ?>" placeholder="<?= lang('Auth.repeatPassword') ?>" autocomplete="off">
                         </div>
-                        <?php
-                        $wilayah = session()->get('wilayah'); ?>
-                        <input type="hidden" name="wilayah" value="<?= esc($wilayah) ?>">
-                        ?>
                         <br>
                         <button type="submit" class="btn btn-primary btn-block"><?= lang('Auth.register') ?></button>
                     </form>

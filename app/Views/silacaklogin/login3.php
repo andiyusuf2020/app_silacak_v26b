@@ -64,6 +64,10 @@
                             </div> -->
                             <div class="form-group">
                                 <!-- <input type="password" name="password" required="required"> -->
+                                <?php
+                                $wilayah = session()->get('wilayah');
+                                // echo $wilayah;
+                                ?>
                                 <input id="password-field" type="password" class="form-control" name="password" placeholder="Password" required>
                                 <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
                             </div>

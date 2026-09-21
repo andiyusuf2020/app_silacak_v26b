@@ -166,6 +166,20 @@ class RealApbdModel extends Model
             'persentase_realisasi_keseluruhan' => $persentaseRealisasiKeseluruhan
         ];
     }
+    public function listopduserreg($tglaktif)
+    {
+        $q = $this
+            ->select('NAMA_UNIT_SKPD')
+            ->selectSum('TOTAL_REALISASI', 'realisasi')
+            ->selectSum('TOTAL_ANGGARAN', 'anggaran')
+            ->selectSum('REALISASI_SPJ', 'realisasi_spj')
+            ->where('tahun', date('Y'))
+            ->where('CREATE_AT', $tglaktif)
+            ->groupBy('NAMA_UNIT_SKPD')
+            ->get()
+            ->getResultArray();
+        return $q;
+    }
     public function listopdadmin($tglaktif, $nm_opd = null)
     {
         if ($nm_opd == null) {
