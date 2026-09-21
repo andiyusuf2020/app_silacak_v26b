@@ -63,7 +63,7 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="<?= base_url('superadmin/jadwal') ?>" class="nav-link">
+                            <a href="<?= hash_url(' ' . $wilayah . '/' . $groupuser, ['hal' => 'jadwal']) ?>" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
                                 <p>Jadwal Input LRFK</p>
                             </a>
@@ -71,7 +71,7 @@
                     </ul>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="<?= base_url('superadmin/uploadapbd') ?>" class="nav-link">
+                            <a href="<?= hash_url(' ' . $wilayah . '/' . $groupuser, ['hal' => 'uploadapbd']) ?>" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
                                 <p>Upload Data SIPD</p>
                             </a>
@@ -88,7 +88,7 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="<?= base_url('superadmin/pendapatan');
+                            <a href="<?= hash_url(' ' . $wilayah . '/' . $groupuser, ['hal' => 'lrabpkad']);
                                         ?>" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
                                 <p>Laporan LRA <br> BPKAD</p>
@@ -97,7 +97,7 @@
                     </ul>
                     <ul class="nav nav-treeview">
                         <li class="nav-item"> <a
-                                href="<?= base_url('superadmin/apbdopd');
+                                href="<?= hash_url(' ' . $wilayah . '/' . $groupuser, ['hal' => 'apbdopd']);
                                         ?>" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
                                 <p>Laporan RFK <br> Perangkat Daerah</p>
@@ -106,7 +106,7 @@
                     </ul>
                     <ul class="nav nav-treeview">
                         <li class="nav-item"> <a
-                                href="<?= base_url('superadmin/angkasapbd');
+                                href="<?= hash_url(' ' . $wilayah . '/' . $groupuser, ['hal' => 'angkasopd']);
                                         ?>" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
                                 <p>Anggaran Kas Opd <br> Perangkat Daerah</p>
@@ -125,7 +125,7 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="<?= base_url('adminprov/realpbj');
+                            <a href="<?= hash_url(' ' . $wilayah . '/' . $groupuser, ['hal' => 'datapbj']);
                                         ?>" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
                                 <p>Data Realisasi PBJ</p>

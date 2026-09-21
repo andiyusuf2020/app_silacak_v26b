@@ -124,7 +124,7 @@ class RealApbdModel extends Model
         $totalAnggaranKeseluruhan = $builder->selectSum('TOTAL_ANGGARAN')->get()->getRow()->TOTAL_ANGGARAN;
 
         // Query utama
-        $builder->select('KODE_UNIT_SKPD, NAMA_UNIT_SKPD');
+        $builder->select('*');
         $builder->selectSum('TOTAL_ANGGARAN', 'TotalAnggaran');
         $builder->selectSum('TOTAL_REALISASI', 'TotalRealisasi');
         $builder->selectCount('TOTAL_ANGGARAN', 'JumlahBelanja');

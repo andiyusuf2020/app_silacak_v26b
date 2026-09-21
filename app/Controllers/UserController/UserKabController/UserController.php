@@ -50,6 +50,17 @@ class UserController extends BaseController
     }
     public function updateuser($id)
     {
+        $c = $this->request->getGet('token'); // ambil token dari URL
+        $prefix = "updateuser/"; // prefix asli
+
+        // Buat hash SHA-256 dari prefix
+        $expectedToken = hash('sha256', $prefix);
+
+        // Validasi token
+        if ($c !== $expectedToken) {
+            return $this->response->setStatusCode(403)
+                ->setBody("Unauthorized: Invalid token");
+        }
         $groupModel = new GroupModel();
         $data['groups'] = $groupModel->findAll();
         $data = [
