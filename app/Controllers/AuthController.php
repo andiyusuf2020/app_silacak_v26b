@@ -122,6 +122,7 @@ class AuthController extends Controller
      */
     public function register()
     {
+
         // check if already logged in.
         if ($this->auth->check()) {
             return redirect()->back();
@@ -162,7 +163,7 @@ class AuthController extends Controller
             'password'     => 'required|strong_password',
             'pass_confirm' => 'required|matches[password]',
         ];
-
+        echo dd($this->request->getPost());
         if (! $this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }

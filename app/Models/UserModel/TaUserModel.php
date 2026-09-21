@@ -49,7 +49,7 @@ class TaUserModel extends Model
             return $this->where('id', $id)->get()->getRowArray();
         }
     }
-    public function listuser2($id = null)
+    public function listuser2($wilayah, $id = null)
     {
         //return $this->get()->getResultArray();
         if ($id == null) {
@@ -60,7 +60,7 @@ class TaUserModel extends Model
 
                 ->join('auth_groups_users', 'users.id=auth_groups_users.user_id')
                 ->join('auth_groups', 'auth_groups.id=auth_groups_users.group_id')
-
+                ->where('wilayah', $wilayah)
                 ->where('deleted_at', null)->get()->getResultArray();
             // ->select('users.*,auth_groups.*,auth_groups_users.*')
             // ->join('auth_groups_users', 'users.id=auth_groups_users.user_id')
@@ -69,7 +69,8 @@ class TaUserModel extends Model
             //findAll(); //where('deleted_at=', 0)->get()->getResultArray(); //findAll();
         }
         if ($id) {
-            return $this->where('id', $id)->get()->getRowArray();
+            return $this->where('id', $id)->where('wilayah', $wilayah)
+                ->get()->getRowArray();
         }
     }
     public function getDataUser($name)

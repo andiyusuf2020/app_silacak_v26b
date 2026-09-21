@@ -69,7 +69,7 @@ class UserController extends BaseController
             'useraktif' => $useraktif,
             'keyword' => $keyword,
             'groupuser' => session()->get('groupuser'),
-            'listuser2' => $this->tausermodel->listuser2(),
+            'listuser2' => $this->tausermodel->listuser2(session()->get('wilayah'), null),
         ];
         // echo dd($data['listuser']);
         $groupModel = new GroupModel();

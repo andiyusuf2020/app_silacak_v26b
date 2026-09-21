@@ -503,12 +503,12 @@
                     },
                     {
                         title: 'Actions',
-                        link: 'id',
+                        field: 'id',
                         formatter: 'link',
                         formatterParams: {
                             label: 'Update',
-                            urlPrefix: '<?= esc($wilayah) ?>/<?= esc($groupmenu) ?>',
-                            target: '_blank'
+                            urlPrefix: 'updateuser/',
+                            // target: '_blank'
                         },
                         width: 100,
                         hozAlign: 'center',
