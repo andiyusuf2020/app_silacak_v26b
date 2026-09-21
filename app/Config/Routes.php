@@ -22,6 +22,7 @@ $routes->group('lampungutara/superadmin', ['filter' => 'role:superadmin'], funct
     $routes->get('', 'KablampuraController\AdminAdbangController::index');
     $routes->get('daftaruser', 'UserController\UserKabController\UserController::index');
     $routes->get('updateuser/(:num)', 'UserController\UserKabController\UserController::updateuser/$1');
+    $routes->post('uploadapbd', 'KablampuraController\AdminAdbangController::uploadapbd');
     $routes->get('cetak', 'Silacak\HomeRfk::cetak');
     $routes->get('profile', 'Silacak\HomeRfk::profile');
     $routes->post('simpanprofile', 'Silacak\HomeRfk::simpanprofile');
