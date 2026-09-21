@@ -50,7 +50,7 @@ class UserController extends BaseController
     }
     public function updateuser($id)
     {
-        $c = $this->request->getGet('token'); // ambil token dari URL
+        $c = $this->request->getGet('c'); // ambil token dari URL
         $prefix = "updateuser/"; // prefix asli
 
         // Buat hash SHA-256 dari prefix
