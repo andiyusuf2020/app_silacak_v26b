@@ -48,6 +48,21 @@ class UserController extends BaseController
         $data['datajson'] = preg_replace('/"([^"]+)"\s*:/', '$1:', $datauserx);
         return view('Kablampuraviews/Adminadbang/listusersuperadmin', $data);
     }
+    public function userupdate($id = null)
+    {
+        $groupModel = new GroupModel();
+        $data['groups'] = $groupModel->findAll();
+        $data = [
+            'groups' => $groupModel->findAll(),
+            'groupuser' => session()->get('groupuser'),
+            'groupmenu' => session()->get('groupuser'),
+
+            'titlepage' => 'Halaman UBAH RULE GROUP User SiTAPIS Perangkat Daerah',
+            'menu' => 'adminlrfk',
+            'listuser' => $this->tausermodel->listuser($id),
+        ];
+        return view('user/set_group', $data);
+    }
     public function user()
     {
         $req = $this->request;

@@ -503,7 +503,7 @@
                     },
                     {
                         title: 'Actions',
-                        field: 'email',
+                        field: 'id',
                         formatter: 'link',
                         formatterParams: {
                             label: 'Update',
