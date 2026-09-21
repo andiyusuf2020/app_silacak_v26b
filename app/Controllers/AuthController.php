@@ -128,7 +128,7 @@ class AuthController extends Controller
             return redirect()->back();
         }
 
-        // Check if registration is allowed
+        // Check if registration is alloweda
         if (! $this->config->allowRegistration) {
             return redirect()->back()->withInput()->with('error', lang('Auth.registerDisabled'));
         }
