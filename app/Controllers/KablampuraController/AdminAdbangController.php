@@ -3,27 +3,32 @@
 namespace App\Controllers\KablampuraController;
 
 use \Myth\Auth\Authorization\GroupModel;
-use App\Models\DataApbdModel\RealApbdModel;
+use App\Models\KablampuraModel\RealApbdModel;
 
 use App\Models\DataApbdModel\TglApbdModel;
-use App\Models\ExcelRSipdModel;
+use App\Models\KablampuraModel\ExcelApbdModel;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 use App\Controllers\BaseController;
+use App\Libraries\CryptoUrl;
 
 class AdminAdbangController extends BaseController
 {
     protected $realapbdmodel;
     protected $tglapbdmodel;
-    protected $model;
+    protected $excelmodel;
     protected $helpers = ['form', 'url'];
     protected $security;
 
     public function __construct()
     {
         helper(['form', 'url', 'filesystem']);
+        // Load library security untuk sanitasi
+        $this->security = \Config\Services::security();
+
         $this->realapbdmodel = new RealApbdModel();
         $this->tglapbdmodel = new TglApbdModel();
-        $this->model = new ExcelRSipdModel();
+        $this->excelmodel = new ExcelApbdModel();
     }
 
     public function index()
@@ -56,7 +61,11 @@ class AdminAdbangController extends BaseController
                 'kdSK' => $kdSK,
                 'tgldataopd' => $tgldataopd,
                 'tglapbd' => $this->realapbdmodel->tgldata(),
-                'tglapbdaktif' => $this->tglapbdmodel->tgldataaktif()
+                'tglapbdaktif' => $this->tglapbdmodel->tgldataaktif(),
+                'status' => 'apbd',
+                'title' => 'Upload Realisasi APBD dari Data excel SIPD',
+                'validation' => \Config\Services::validation()
+
             ];
         // $data['tglapbd'] = $this->realapbdmodel->tgldata();
         // $data['tglapbdaktif'] = $this->tglapbdmodel->tgldataaktif();
@@ -64,6 +73,12 @@ class AdminAdbangController extends BaseController
 
         if (!$receivedParams) {
             // echo dd($data);
+            if (!$data['groupuser']) {
+                return redirect()->to(base_url());
+            }
+            if (!$data['wilayah']) {
+                return redirect()->to(base_url());
+            }
             if (!$data['tahun']) {
                 session()->set('groupuser', $data['groupuser']);
                 session()->set('groupmenu', $data['groupuser']);
@@ -91,9 +106,9 @@ class AdminAdbangController extends BaseController
             // $data['dataopdadmin'] = $this->realapbdmodel->getCapaianKinerjaDenganGeometri($tgldata);
             // return view('Kablampuraviews/Adminadbang/apbdopd', $data);
         } elseif ($hal == 'uploadapbd') {
-            $data['status'] = 'apbd';
-            $data['title'] = 'Upload Realisasi APBD dari Data excel SIPD';
-            $data['validation'] = \Config\Services::validation();
+            // $data['status'] = 'apbd';
+            // $data['title'] = 'Upload Realisasi APBD dari Data excel SIPD';
+            // $data['validation'] = \Config\Services::validation();
             return view('Kablampuraviews/Adminadbang/upload_form', $data);
         } elseif ($hal == 'angkasopd') {
             $data['dataopdadmin'] = $this->realapbdmodel->getCapaianKinerjaDenganGeometri($data['tahun'], $data['tglaktif']);
@@ -103,8 +118,23 @@ class AdminAdbangController extends BaseController
             return view('Kablampuraviews/Adminadbang/datapbj', $data);
         }
         if ($tgldata) {
-            $data['dataopdadmin'] = $this->realapbdmodel->getCapaianKinerjaDenganGeometri($data['tahun'], $tgldata);
-            return view('Kablampuraviews/Adminadbang/listopdapbd', $data);
+            $dataopdadmin = $this->realapbdmodel->getCapaianKinerjaDenganGeometri($data['tahun'], $tgldata);
+            // $dataapbdopd = $dataopdadmin['data'];
+            $data['dataopdadmin'] = $this->realapbdmodel->listopdadmin($tgldata);
+
+            // Hanya enkripsi 'id' dan 'name'
+            $dataopdapbds = array_map(function ($dataopdapbd) {
+                $dataopdapbd['update_token'] = CryptoUrl::encrypt([
+                    'kdSU'   => $dataopdapbd['NAMA_UNIT_SKPD'],
+                    'blndata' => $dataopdapbd['BULAN']
+                ]);
+                return $dataopdapbd;
+            }, $data['dataopdadmin']);
+            $datauserx = json_encode($dataopdapbds);
+            $data['datajson'] = preg_replace('/"([^"]+)"\s*:/', '$1:', $datauserx);
+
+            // echo dd($data['datajson']);
+            return view('Kablampuraviews/Adminadbang/listopdapbd2', $data);
         }
         // $data['tgldata'] = $tgldata;
         // $data['dataopdadmin'] = $this->realapbdmodel->listopdadmin($tgldata);
@@ -170,27 +200,6 @@ class AdminAdbangController extends BaseController
                     $headerSkipped = true;
                     continue;
                 }
-
-                // Sanitasi data sebelum diproses
-                // $name = $this->security->sanitizeFilename($row[0] ?? '');
-                // $email = filter_var($row[1] ?? '', FILTER_SANITIZE_EMAIL);
-                // $phone = preg_replace('/[^0-9]/', '', $row[2] ?? '');
-                // $address = $this->security->sanitizeFilename($row[3] ?? '');
-
-                // // Validasi data
-                // $validationData = [
-                //     'name' => $name,
-                //     'email' => $email,
-                //     'phone' => $phone,
-                //     'address' => $address
-                // ];
-
-                // if (!$this->model->validate($validationData)) {
-                //     continue; // Skip data yang tidak valid
-                // }
-
-                // $dataToInsert[] = $validationData;
-
                 $dataToInsert[] = [
                     'TAHUN' => $this->security->sanitizeFilename($row[0] ?? ''),
                     'BULAN' => $this->security->sanitizeFilename($row[1] ?? ''),
@@ -231,13 +240,31 @@ class AdminAdbangController extends BaseController
 
             // Insert ke database dalam batch
             if (!empty($dataToInsert)) {
-                $this->model->insertBatchData($dataToInsert);
+                $this->excelmodel->insertBatchData($dataToInsert);
             }
 
             // Hapus file setelah diproses
             unlink($filePath);
+            $user = user();
+            $groupModel = new GroupModel();
+            $groupuser = $groupModel->getGroupsForUser($user->id);
 
-            return redirect()->to('superadmin/uploadapbd')->with('success', 'Data berhasil diupload: ' . count($dataToInsert) . ' record');
+            $data =
+                [
+                    'wilayah' => session()->get('wilayah'),
+                    'groupuser' => $groupuser[0]['name'],
+                    'groupmenu' => $groupuser[0]['name'],
+                    'tahun' => session()->get('tahun'),
+                    'titlepage' => 'halaman Admin Adbang ',
+                    'datauser' => $user->sub_unit,
+                    'tglaktif' => session()->get('tglaktif'),
+                    'status' => 'apbd',
+                    'title' => 'Upload Realisasi APBD dari Data excel SIPD',
+                    'validation' => \Config\Services::validation()
+
+                ];
+
+            return redirect()->to(hash_url(' ' . $data['wilayah'] . './' . $data['groupuser'] . '', ['hal' => 'uploadapbd']))->with('success', 'Data berhasil diupload: ' . count($dataToInsert) . ' record');
         } catch (\Exception $e) {
             // Hapus file jika terjadi error
             if (file_exists($filePath)) {

@@ -460,19 +460,10 @@
                 const msgBuffer = new TextEncoder().encode(message);
                 const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
                 const hashArray = Array.from(new Uint8Array(hashBuffer));
-                const hashHex = hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
-                return hashHex;
+                return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
             }
 
-            // Prefix asli
             const prefix = "updateuser/";
-
-            // Simpan versi terenkripsi & hash
-            const encryptedPrefix = encryptUrl(prefix);
-            let hashedPrefix = "";
-            hashSHA256(prefix).then(hash => {
-                hashedPrefix = hash;
-            });
             const table = new Tabulator('#users-table', {
                 data: data,
                 layout: 'fitColumns',
@@ -531,29 +522,17 @@
                         width: 130
                     },
                     {
-                        // title: 'Actions',
-                        // field: 'id',
-                        // formatter: 'link',
-                        // formatterParams: {
-                        //     label: 'Update',
-                        //     urlPrefix: 'updateuser/',
-                        //     // target: '_blank'
-                        // },
-                        // width: 100,
-                        // hozAlign: 'center',
                         title: 'Actions',
                         field: 'id',
                         hozAlign: 'center',
                         width: 180,
                         formatter: function(cell) {
-                            const id = cell.getValue();
-                            const prefixDecoded = decryptUrl(encryptedPrefix); // decode Base64
-                            // Sertakan hashedPrefix sebagai token otorisasi
+                            const rowData = cell.getRow().getData();
+
                             return `
-                                <a href="${prefixDecoded}${id}?c=${hashedPrefix}" 
-                                class="btn btn-sm btn-primary">Update</a>
-                                <a href="deleteuser/${id}" class="btn btn-sm btn-danger">Delete</a>
-                            `;
+                    <a href="updateuser?token=${rowData.update_token}" class="btn btn-sm btn-primary">Update</a>
+                    <a href="deleteuser/${rowData.id}" class="btn btn-sm btn-danger">Delete</a>
+                `;
                         }
                     }
                 ],

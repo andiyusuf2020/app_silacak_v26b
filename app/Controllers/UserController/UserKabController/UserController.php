@@ -3,7 +3,7 @@
 namespace App\Controllers\UserController\UserKabController;
 
 use App\Controllers\BaseController;
-
+use App\Libraries\CryptoUrl;
 use \Myth\Auth\Authorization\GroupModel;
 use App\Models\UserModel;
 use \Myth\Auth\Password;
@@ -44,23 +44,37 @@ class UserController extends BaseController
             'groupuser' => session()->get('groupuser'),
             'listuser2' => $this->tausermodel->listuser2(session()->get('wilayah'), null),
         ];
-        $datauserx = json_encode($data['listuser2']);
+        // Hanya enkripsi 'id' dan 'name'
+        $users = array_map(function ($user) {
+            $user['update_token'] = CryptoUrl::encrypt([
+                'id'   => $user['id'],
+                'name' => $user['username']
+            ]);
+            return $user;
+        }, $data['listuser2']);
+        $datauserx = json_encode($users);
         $data['datajson'] = preg_replace('/"([^"]+)"\s*:/', '$1:', $datauserx);
         return view('Kablampuraviews/Adminadbang/listusersuperadmin', $data);
     }
-    public function updateuser($id)
+    public function updateuser()
     {
-        $c = $this->request->getGet('c'); // ambil token dari URL
-        $prefix = "updateuser/"; // prefix asli
 
-        // Buat hash SHA-256 dari prefix
-        $expectedToken = hash('sha256', $prefix);
+        $token = $this->request->getGet('token');
 
-        // Validasi token
-        if ($c !== $expectedToken) {
-            return $this->response->setStatusCode(403)
-                ->setBody("Unauthorized: Invalid token");
+        if (empty($token)) {
+            return redirect()->back()->with('error', 'Token URL tidak ditemukan.');
         }
+
+        // Dekripsi & Validasi Token (Maksimal 15 menit)
+        $payload = CryptoUrl::decrypt($token, 900);
+
+        if (!$payload) {
+            return redirect()->back()->with('error', 'Akses ditolak: Token tidak valid atau telah kadaluwarsa.');
+        }
+
+        // Ekstrak data hasil dekripsi (hanya ID dan Name)
+        $userId   = $payload['id'];
+        $userName = $payload['name'];
         $groupModel = new GroupModel();
         $data['groups'] = $groupModel->findAll();
         $data = [
@@ -69,7 +83,7 @@ class UserController extends BaseController
             'groupmenu' => session()->get('groupuser'),
             'wilayah' =>  session()->get('wilayah'),
             'titlepage' => 'Halaman UBAH RULE GROUP User SiTAPIS Perangkat Daerah',
-            'listuser' => $this->tausermodel->listuser($id),
+            'listuser' => $this->tausermodel->listuser($userId),
         ];
         return view('user/set_group', $data);
     }

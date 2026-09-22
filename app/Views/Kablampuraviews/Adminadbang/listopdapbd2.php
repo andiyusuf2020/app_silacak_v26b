@@ -480,15 +480,17 @@
                 paginationSize: 10,
                 paginationSizeSelector: [10, 25, 50, 100],
                 movableColumns: true,
+                textwarp: true,
                 columns: [{
                         title: '#',
-                        field: 'id',
+                        field: 'NO',
                         width: 60,
                         headerSort: true
                     },
                     {
+                        textwarp: true,
                         title: 'Name',
-                        field: 'username',
+                        field: 'NAMA_UNIT_SKPD',
                         headerFilter: 'input'
                     },
                     {

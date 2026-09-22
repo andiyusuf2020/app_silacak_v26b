@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\KablampuraModel;
 
 use CodeIgniter\Model;
 
+
 class ExcelApbdModel extends Model
 {
-    protected $table = 'ta_realisasi_apbd';
+    protected $table = 'ta_sipd_lampungutara';
     protected $primaryKey = 'NO';
     protected $returnType     = 'array'; // Tipe data yang dikembalikan
     protected $allowedFields = [
