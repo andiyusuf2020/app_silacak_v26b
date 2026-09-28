@@ -32,7 +32,14 @@ $routes->group('lampungutara/superadmin', ['filter' => 'role:superadmin'], funct
 $routes->get('mesuji', 'HomeKabController::mesuji');
 $routes->get('pesawaran', 'HomeKabController::pesawaran');
 $routes->get('pringsewu', 'HomeKabController::pringsewu');
-$routes->get('tanggamus', 'HomeKabController::tanggamus');
+$routes->get('tanggamus', 'KabtanggamusController\HomeController::dashboard');
+$routes->group('tanggamus/superadmin', ['filter' => 'role:superadmin'], function ($routes) {
+    $routes->get('', 'KabtanggamusController\AdminAdbangController::index');
+    $routes->get('dataperopd', 'KabtanggamusController\AdminAdbangController::dataperopd');
+    $routes->get('daftaruser', 'UserController\UserKabController\UserController::index');
+    $routes->get('updateuser', 'UserController\UserKabController\UserController::updateuser');
+    $routes->post('uploadapbd', 'KabtanggamusController\AdminAdbangController::uploadapbd');
+});
 $routes->get('tulangbawang', 'HomeKabController::tulangbawang');
 $routes->get('tulangbawangbarat', 'HomeKabController::tulangbawangbarat');
 

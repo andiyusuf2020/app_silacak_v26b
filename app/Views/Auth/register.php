@@ -23,24 +23,24 @@
 
                         <div class="form-group">
                             <?php
+                            $wilayah = session()->get('wilayah');
 
-                            use App\Models\DataApbdModel\RealApbdModel;
-                            use App\Models\DataApbdModel\TglApbdModel;
+                            use App\Models\KabtanggamusModel\RealApbdModel as sipdtanggamus;
+                            use App\Models\KabtanggamusModel\TglApbdModel as  tglapbdtanggamus;
 
-                            $this->realapbdmodel = new RealApbdModel();
-                            $this->tglapbdmodel = new TglApbdModel();
-
-                            $tgldata = $this->tglapbdmodel->tgldataaktif();
-                            // session()->set('tglaktif', $tgldata['tanggal']);
-
-                            $listopdadmin = $this->realapbdmodel->listopduserreg($tgldata['tanggal']);
+                            $this->sipdtanggamus = new sipdtanggamus();
+                            $this->tglapbdtanggamus = new tglapbdtanggamus();
+                            if ($wilayah == 'tanggamus') {
+                                $tgldata = $this->tglapbdtanggamus->tgldataaktif();
+                                $listopdadmin = $this->sipdtanggamus->listopduserreg($tgldata['tanggal']);
+                            }
                             echo '<select name="sub_unit" class="form-control">';
                             echo '<option value=" " >pilih sub unit</option>';
                             foreach ($listopdadmin as $row) {
                                 $selected = ($row['NAMA_UNIT_SKPD'] == session()->get('wilayah')) ? 'selected' : '';
                                 echo '<option value="' . $row['NAMA_UNIT_SKPD'] . '" ' . $selected . '>' . $row['NAMA_UNIT_SKPD'] . '</option>';
                             }
-                            $wilayah = session()->get('wilayah'); ?>
+                            ?>
                             <input type="hidden" name="wilayah" value="<?= esc($wilayah) ?>">
                             <label for="username"><?= lang('Auth.username') ?></label>
                             <input type="text" class="form-control <?php if (session('errors.username')) : ?>is-invalid<?php endif ?>" name="username" placeholder="<?= lang('Auth.username') ?>" value="<?= old('username') ?>">
