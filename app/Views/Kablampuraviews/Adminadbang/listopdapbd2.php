@@ -303,7 +303,7 @@
                                     Print
                                 </button>
                             </div>
-                            <div id="users-table"></div>
+                            <div id="listopdadmin-table"></div>
                         </div>
                         <div class="card-footer text-secondary small">
                             Powered by
@@ -465,7 +465,7 @@
             }
 
             // Prefix asli
-            const prefix = "updateuser/";
+            const prefix = "superadmin/dataperopd/";
 
             // Simpan versi terenkripsi & hash
             const encryptedPrefix = encryptUrl(prefix);
@@ -473,7 +473,7 @@
             hashSHA256(prefix).then(hash => {
                 hashedPrefix = hash;
             });
-            const table = new Tabulator('#users-table', {
+            const table = new Tabulator('#listopdadmin-table', {
                 data: data,
                 layout: 'fitColumns',
                 pagination: true,
@@ -482,82 +482,78 @@
                 movableColumns: true,
                 textwarp: true,
                 columns: [{
-                        title: '#',
-                        field: 'NO',
-                        width: 60,
+                        title: 'KODE SKPD',
+                        field: 'KODE_SKPD',
+                        width: 100,
                         headerSort: true
                     },
                     {
                         textwarp: true,
-                        title: 'Name',
+                        title: 'NAMA_UNIT_SKPD',
                         field: 'NAMA_UNIT_SKPD',
+                        width: 300,
                         headerFilter: 'input'
                     },
                     {
-                        title: 'Email',
-                        field: 'email',
-                        headerFilter: 'input'
-                    },
-                    {
-                        title: 'Role',
-                        field: 'group_name',
-                        headerFilter: 'list',
-                        headerFilterParams: {
-                            values: ['', 'Admin', 'Editor', 'Viewer']
-                        },
-                        width: 120,
-                    },
-                    {
-                        title: 'Status',
-                        field: 'active',
+                        title: 'PAGU ANGGARAN',
+                        field: 'total_anggaran',
+                        headerFilter: 'input',
+                        width: 150,
                         formatter: function(cell) {
-                            const value = cell.getValue();
-                            // Jika nilai 1 atau "1" => Aktif, jika 0 atau "0" => NonAktif
-                            if (value == 1) {
-                                return '<span class="badge bg-success">Aktif</span>';
-                            } else {
-                                return '<span class="badge bg-danger">NonAktif</span>';
-                            }
-                        },
-                        headerFilter: 'list',
-                        headerFilterParams: {
-                            values: [' ', 'Aktif', 'NonAktif']
-                        },
-                        width: 130,
-                        hozAlign: 'center',
+                            var value = cell.getValue();
+                            if (value === null || value === undefined || value === '') return 'Rp 0';
+
+                            return new Intl.NumberFormat('id-ID', {
+                                style: 'currency',
+                                currency: 'IDR',
+                                maximumFractionDigits: 0 // Ubah ke 2 jika ingin menampilkan desimal
+                            }).format(value);
+                        }
                     },
                     {
-                        title: 'Joined',
-                        field: 'created_at',
-                        sorter: 'date',
+                        title: 'REALISASI <br>ANGGARAN',
+                        field: 'total_realisasi',
+                        headerFilter: 'input',
+                        width: 150,
+                        formatter: function(cell) {
+                            var value = cell.getValue();
+                            if (value === null || value === undefined || value === '') return 'Rp 0';
+                            return new Intl.NumberFormat('id-ID', {
+                                style: 'currency',
+                                currency: 'IDR',
+                                maximumFractionDigits: 0 // Ubah ke 2 jika ingin menampilkan desimal
+                            }).format(value);
+                        }
+
+                    },
+
+
+                    {
+                        title: 'Total <br>Aktivitas<br> Belanja (',
+                        field: 'jumlah_item_sro',
+                        headerFilter: 'input',
                         width: 130
                     },
                     {
-                        // title: 'Actions',
-                        // field: 'id',
-                        // formatter: 'link',
-                        // formatterParams: {
-                        //     label: 'Update',
-                        //     urlPrefix: 'updateuser/',
-                        //     // target: '_blank'
-                        // },
-                        // width: 100,
-                        // hozAlign: 'center',
+                        title: 'Total <br>Aktivitas<br> Belanja <br>Terlaksana(',
+                        field: 'jumlah_item_sro_terealisasi',
+                        headerFilter: 'input',
+                        width: 130
+                    },
+                    {
                         title: 'Actions',
-                        field: 'id',
+                        field: 'KODE_SKPD',
                         hozAlign: 'center',
                         width: 180,
                         formatter: function(cell) {
-                            const id = cell.getValue();
-                            const prefixDecoded = decryptUrl(encryptedPrefix); // decode Base64
-                            // Sertakan hashedPrefix sebagai token otorisasi
+                            const rowData = cell.getRow().getData();
+
                             return `
-                                <a href="${prefixDecoded}${id}?c=${hashedPrefix}" 
-                                class="btn btn-sm btn-primary">Update</a>
-                                <a href="deleteuser/${id}" class="btn btn-sm btn-danger">Delete</a>
-                            `;
+                    <a href="superadmin/dataperopd?token=${rowData.update_token}" class="btn btn-sm btn-primary">detail</a>
+                `;
                         }
                     }
+
                 ],
             });
 
@@ -581,6 +577,9 @@
                     table.clearFilter();
                 }
             });
+            document
+                .getElementById('export-xls')
+                .addEventListener('click', () => table.download('xls', 'users.xls'));
 
             document
                 .getElementById('export-csv')

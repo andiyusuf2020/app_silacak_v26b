@@ -74,7 +74,10 @@ class Auth extends \Myth\Auth\Config\Auth
      */
     public $views = [
         // 'login'           => 'App\Views\login',
-        'login'           => 'App\Views\silacaklogin\login3',
+        // 'login'           => 'App\Views\silacaklogin\login',
+        // 'login'           => 'App\Views\silacaklogin\login2',
+        'login'           => 'App\Views\silacaklogin\login3x',
+        // 'login'        => 'App\Views\Auth\login',
 
         'register'        => 'App\Views\Auth\register',
         'forgot'          => 'App\Views\Auth\forgot',

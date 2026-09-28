@@ -20,6 +20,8 @@ $routes->get('lampungtengah', 'HomeKabController::lampungtengah');
 $routes->get('lampungutara', 'KablampuraController\HomeController::dashboard');
 $routes->group('lampungutara/superadmin', ['filter' => 'role:superadmin'], function ($routes) {
     $routes->get('', 'KablampuraController\AdminAdbangController::index');
+    $routes->get('dataperopd', 'KablampuraController\AdminAdbangController::dataperopd');
+
     $routes->get('daftaruser', 'UserController\UserKabController\UserController::index');
     $routes->get('updateuser', 'UserController\UserKabController\UserController::updateuser');
     $routes->post('uploadapbd', 'KablampuraController\AdminAdbangController::uploadapbd');
