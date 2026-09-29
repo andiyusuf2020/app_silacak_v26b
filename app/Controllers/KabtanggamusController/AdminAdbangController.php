@@ -94,11 +94,14 @@ class AdminAdbangController extends BaseController
         $kdSK = $receivedParams['kdSK'] ?? null;
         $tgldataopd = $receivedParams['tgldataopd'] ?? null;
         $tgldata = $receivedParams['tgldata'] ?? null;
+        $id = $receivedParams['id'] ?? null;
+
 
         $user = user();
         $groupModel = new GroupModel();
         $groupuser = $groupModel->getGroupsForUser($user->id);
         $jadwalaktif = $this->jadwalmodel->jadwalaktifskrg();
+        // $data['jadwalaktif'] = $this->jadwalmodel->jadwalaktifskrg();
 
         $data =
             [
@@ -118,6 +121,7 @@ class AdminAdbangController extends BaseController
                 'status' => 'apbd',
                 'title' => 'Upload Realisasi APBD dari Data excel SIPD',
                 'bulan' => $jadwalaktif['bulan'],
+                'jadwal' => $this->jadwalmodel->jadwal(),
                 'validation' => \Config\Services::validation()
 
             ];
@@ -180,12 +184,50 @@ class AdminAdbangController extends BaseController
             return view('KabtanggamusViews/Adminadbang/v_jadwal', $data);
         }
         if ($hal == 'gantibulanaktif') {
-            $data['jadwalaktif'] = $this->jadwalmodel->jadwalaktifskrg();
-            $data['jadwal'] = $this->jadwalmodel->jadwal();
 
             return view('KabtanggamusViews/Adminadbang/v_listjadwal', $data);
             //echo dd($data['jadwal']);
         }
+        if ($hal == 'editbulanaktif') {
+            // $idAwal = $data['jadwalaktif']['id'] ?? null;
+            // $tahun = $data['jadwalaktif']['tahun'] ?? null;
+            // $bulan = $data['jadwalaktif']['bulan'] ?? null;
+            $idAwal = $jadwalaktif['id'] ?? null;
+            $tahun = $jadwalaktif['tahun'] ?? null;
+            $bulan = $jadwalaktif['bulan'] ?? null;
+            //   echo $idUbah;
+            $nonaktifbln = [
+                'id' => $idAwal,
+                'tahun' => $tahun,
+                'bulan' => $bulan,
+                'status' => '0'
+            ];
+            $dataubah = $this->jadwalmodel->jdwlygdiaktifkan($id);
+            $aktifbln = [
+                'id' => $id,
+                'tahun' => $dataubah['tahun'],
+                'bulan' => $dataubah['bulan'],
+                'status' => '1'
+            ];
+            // echo dd($nonaktifbln);
+            $aktifasi = $this->jadwalmodel->save($aktifbln);
+            $nonaktifasi = $this->jadwalmodel->save($nonaktifbln);
+            if (!$aktifasi && !$nonaktifasi) {
+                echo "Terjadi kesalahan";
+            } else {
+                return redirect()->to(hash_url('' . $data['wilayah'] . '/' . $data['groupuser'] . '/', ['hal' => 'jadwal']));
+            }
+        }
+        if ($hal == 'gantitglaktif') {
+            $updateAktif = $this->tglapbdmodel->updatetgl(1, $data['tahun'], $id);
+
+            if (!$updateAktif) {
+                session()->setFlashdata('message', 'Tanggal Data APBD berhasil diaktifkan');
+            }
+            // return redirect()->to(base_url('lrfkadmin/jadwal')->withInput()->with('message', 'Tanggal Data APBD berhasil diaktifkan'));
+            return redirect()->to(hash_url('' . $data['wilayah'] . '/' . $data['groupuser'] . '/', ['hal' => 'jadwal']))->withInput()->with('message', 'Tanggal Data APBD berhasil diaktifkan');
+        }
+
 
         if ($tgldata) {
             $dataopdadmin = $this->realapbdmodel->getCapaianKinerjaDenganGeometri($data['tahun'], $tgldata);

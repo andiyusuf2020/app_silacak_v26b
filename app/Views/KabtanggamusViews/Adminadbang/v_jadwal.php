@@ -76,7 +76,7 @@
                             <?php foreach ($tglapbd as $tgl) : ?>
                                 <tr>
                                     <td>1.</td>
-                                    <td><?= $tahunaktif ?? null;  ?></td>
+                                    <td><?= $tahun ?? null;  ?></td>
                                     <td>
                                         <?= $tgl['BULAN'] ?? null; ?>
                                     </td>
@@ -87,9 +87,9 @@
                                         <input type="checkbox" class="form-check-input" id="exampleCheck1" checked />
                                         <label class="form-check-label" for="exampleCheck1">
                                             <a
-                                                href="<?= hash_url('superadmin/jadwaladmin/', [
-                                                            'action' => 'aktifasitgl',
-                                                            'tglpilih' => $tgl['CREATE_AT']
+                                                href="<?= hash_url('' . $wilayah . '/' . $groupuser . '', [
+                                                            'hal' => 'gantitglaktif',
+                                                            'id' => $tgl['CREATE_AT']
                                                         ]); ?>"
                                                 rel="noopener noreferrer"
                                                 class="callout-link">

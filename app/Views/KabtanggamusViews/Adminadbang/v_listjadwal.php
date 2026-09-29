@@ -28,7 +28,7 @@ app/Views/silacak/superadmin/v_listjadwal.php<?= $this->extend('template/layout'
                                     </td>
                                     <td>
                                         <a
-                                            href="<?= hash_url('superadmin/jadwaladmin/', ['idUbah' => $value['id'], 'action' => 'edit']);
+                                            href="<?= hash_url('' . $wilayah . '/' . $groupuser . '/', ['hal' => 'editbulanaktif', 'id' => $value['id']]);
                                                     ?>">
                                             <?= $value['bulan'];  ?>
                                         </a>

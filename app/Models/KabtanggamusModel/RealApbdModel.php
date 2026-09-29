@@ -54,6 +54,7 @@ class RealApbdModel extends Model
     protected $createdField = 'CREATE_AT';
     protected $updatedField = 'UPDATE_AT';
 
+
     public function getRekapLengkapPerTingkatAman($bulan, $kdSU)
     {
         // 1. Query mengambil data hingga level SRO

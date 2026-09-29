@@ -1,7 +1,6 @@
 <?= $this->extend('template/layout') ?>
 <?= $this->section('content') ?>
 <!-- AdminLTE v4 / Bootstrap 5 Custom CSS Styling -->
-<!-- AdminLTE v4 / Bootstrap 5 Custom CSS Styling -->
 <style>
     /* Var Warna Level Hirarki (disesuaikan dengan palette AdminLTE v4) */
     :root {
@@ -31,8 +30,8 @@
         text-transform: uppercase;
         font-size: 0.725rem;
         letter-spacing: 0.05em;
-        background-color: var(--bs-dark) !important;
-        color: var(--bs-white) !important;
+        background-color: var(--bs-dark);
+        color: var(--bs-white);
         border-color: rgba(255, 255, 255, 0.1);
         padding: 12px 10px;
     }
@@ -130,96 +129,21 @@
         background: #cbd5e1;
         color: #0f172a;
     }
-
-    /* =======================================================
-       STYLES KHUSUS CETAK PDF / PRINT (HANYA MENCETAK TABEL)
-       ======================================================= */
-    @media print {
-
-        /* Sembunyikan semua elemen di luar tabel */
-        body * {
-            visibility: hidden !important;
-        }
-
-        /* Tampilkan HANYA area tabel */
-        #printableTableArea,
-        #printableTableArea * {
-            visibility: visible !important;
-        }
-
-        /* Posisi tabel berada di paling atas kertas cetak */
-        #printableTableArea {
-            position: absolute !important;
-            left: 0 !important;
-            top: 0 !important;
-            width: 100% !important;
-            margin: 0 !important;
-            padding: 0 !important;
-        }
-
-        /* Sembunyikan icon panah collapse saat dicetak */
-        .toggle-icon {
-            display: none !important;
-        }
-
-        /* Reset border dan shadow card */
-        .card {
-            border: none !important;
-            box-shadow: none !important;
-            background: transparent !important;
-        }
-
-        .table-responsive {
-            overflow: visible !important;
-        }
-
-        .table-rekap {
-            width: 100% !important;
-            border-collapse: collapse !important;
-            font-size: 9pt !important;
-        }
-
-        /* Memastikan warna background hirarki tetap muncul di hasil cetak PDF */
-        tr {
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-        }
-
-        /* Pengaturan ukuran halaman kertas PDF (Landscape) */
-        @page {
-            size: A4 landscape;
-            margin: 1cm;
-        }
-    }
 </style>
-
-<!-- Load SheetJS untuk Export Excel -->
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <!-- Content Header (Page header AdminLTE v4) -->
 <div class="app-content-header">
     <div class="container-fluid">
         <div class="row align-items-center">
-            <div class="col-sm-5">
+            <div class="col-sm-6">
                 <h3 class="mb-0 fw-bold">
                     <i class="bi bi-diagram-3-fill text-primary me-2"></i>Rekapitulasi Realisasi Bertingkat
                 </h3>
                 <p class="text-muted small mb-0">Monitoring Laporan Anggaran, Realisasi, dan Sub-Rincian Output (SRO)</p>
             </div>
-            <div class="col-sm-7 text-end">
-                <div class="d-flex justify-content-end gap-2 flex-wrap">
-                    <!-- Tombol Export Excel & PDF -->
-                    <button type="button" class="btn btn-success btn-sm rounded-pill px-3" onclick="exportToExcel()">
-                        <i class="bi bi-file-earmark-excel me-1"></i> Excel
-                    </button>
-                    <button type="button" class="btn btn-danger btn-sm rounded-pill px-3" onclick="printPDF()">
-                        <i class="bi bi-file-earmark-pdf me-1"></i> Cetak / PDF
-                    </button>
-
-                    <div class="vr mx-1"></div>
-
-                    <!-- Tombol Buka/Tutup Tree -->
-                    <button type="button" class="btn btn-outline-primary btn-sm rounded-pill" onclick="expandAll()">
+            <div class="col-sm-6 text-end">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-outline-primary btn-sm rounded-pill me-2" onclick="expandAll()">
                         <i class="bi bi-folder2-open me-1"></i> Buka Semua
                     </button>
                     <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill" onclick="collapseAll()">
@@ -236,7 +160,7 @@
     <div class="container-fluid">
 
         <!-- Search Bar Card -->
-        <div class="card shadow-sm mb-3" id="searchInputCard">
+        <div class="card shadow-sm mb-3">
             <div class="card-body p-3">
                 <div class="row align-items-center">
                     <div class="col-md-6 col-lg-4">
@@ -257,8 +181,7 @@
             </div>
         </div>
 
-        <!-- AREA YANG DI-PRINT KE PDF (MENGGUNAKAN ID #printableTableArea) -->
-        <div class="card card-outline card-primary shadow-sm" id="printableTableArea">
+        <div class="card card-outline card-primary shadow-sm">
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <table class="table table-bordered table-rekap align-middle" id="rekapTable">
@@ -422,7 +345,7 @@ function renderBadgeCapaian($persen)
 }
 ?>
 
-<!-- Script JS Interaktif Tree Table, Live Search, PDF & Excel Export -->
+<!-- Script JS Interaktif Tree Table + Live Search -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Default collapse saat halaman di-load
@@ -504,8 +427,10 @@ function renderBadgeCapaian($persen)
 
         const allRows = document.querySelectorAll('.table-rekap tbody tr:not(#noSearchResultRow)');
 
+        // Tampilkan/sembunyikan tombol clear (x)
         btnClear.style.display = filter.length > 0 ? 'block' : 'none';
 
+        // Jika pencarian kosong, kembalikan ke kondisi default (Collapse All)
         if (filter === '') {
             collapseAll();
             noResultRow.style.display = 'none';
@@ -515,10 +440,12 @@ function renderBadgeCapaian($persen)
 
         let matchCount = 0;
 
+        // 1. Sembunyikan semua baris terlebih dahulu
         allRows.forEach(row => {
             row.style.display = 'none';
         });
 
+        // 2. Cari text yang sesuai dan buka induknya (parent)
         allRows.forEach(row => {
             const codeTag = row.querySelector('.code-tag')?.innerText.toLowerCase() || '';
             const searchableText = row.querySelector('.searchable-text')?.innerText.toLowerCase() || '';
@@ -526,10 +453,13 @@ function renderBadgeCapaian($persen)
             if (codeTag.includes(filter) || searchableText.includes(filter)) {
                 row.style.display = '';
                 matchCount++;
+
+                // Tampilkan semua Parent ke atas (Ancestor)
                 showAncestors(row);
             }
         });
 
+        // 3. Tampilkan pesan jika tidak ada hasil
         if (matchCount === 0) {
             noResultRow.style.display = '';
             resultInfo.innerText = 'Hasil pencarian: 0 ditemukan';
@@ -540,7 +470,7 @@ function renderBadgeCapaian($persen)
     }
 
     /**
-     * Tampilkan seluruh parent/ancestor
+     * Fungsi pembantu untuk menampilkan seluruh parent/ancestor dari baris yang dicari
      */
     function showAncestors(row) {
         const parentId = row.getAttribute('data-parent');
@@ -549,57 +479,26 @@ function renderBadgeCapaian($persen)
             if (parentRow) {
                 parentRow.style.display = '';
 
+                // Buka icon collapse pada parent
                 const toggleBtn = parentRow.querySelector('.toggle-icon');
                 if (toggleBtn) {
                     toggleBtn.classList.remove('collapsed');
                 }
 
+                // Jalankan rekursif ke atas
                 showAncestors(parentRow);
             }
         }
     }
 
     /**
-     * Clear Search
+     * Reset / Clear Search Box
      */
     function clearSearch() {
         const input = document.getElementById('searchInput');
         input.value = '';
         filterTreeTable();
         input.focus();
-    }
-
-    /**
-     * CETAK HANYA TABEL KE PDF
-     */
-    function printPDF() {
-        window.print();
-    }
-
-    /**
-     * EXPORT EXCEL SESUAI TAMPILAN TABEL AKTIF (SheetJS)
-     */
-    function exportToExcel() {
-        const originalTable = document.getElementById('rekapTable');
-        const clonedTable = originalTable.cloneNode(true);
-
-        const rows = clonedTable.querySelectorAll('tbody tr');
-        rows.forEach(row => {
-            if (row.style.display === 'none') {
-                row.remove();
-            } else {
-                const toggleIcon = row.querySelector('.toggle-icon');
-                if (toggleIcon) toggleIcon.remove();
-            }
-        });
-
-        const wb = XLSX.utils.table_to_book(clonedTable, {
-            sheet: "Rekap Realisasi"
-        });
-        const today = new Date().toISOString().slice(0, 10);
-        const fileName = `Rekap_Realisasi_Bertingkat_${today}.xlsx`;
-
-        XLSX.writeFile(wb, fileName);
     }
 </script>
 <?= $this->endSection() ?>
