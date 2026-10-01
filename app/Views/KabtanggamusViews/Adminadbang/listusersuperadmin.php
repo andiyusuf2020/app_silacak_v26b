@@ -78,8 +78,8 @@
     <!--end::Accessibility Meta Tags-->
 
     <!--begin::Primary Meta Tags-->
-    <meta name="title" content="AdminLTE 4 | Data Tables" />
-    <meta name="author" content="ColorlibHQ" />
+    <meta name="title" content="SiTAPIS-KAB | Data User" />
+    <meta name="Adbang" content="SiTAPIS-KAB" />
     <meta
         name="description"
         content="AdminLTE is a free Bootstrap 5 admin dashboard template with almost 50 example pages, built with vanilla JS and designed with accessibility in mind." />
@@ -244,6 +244,7 @@
         if ($wilayah == 'tanggamus' && $groupuser == 'superadmin') {
             echo view('template/_part/menukabtanggamus/menusuperadmin');
         }
+
         ?>
         <!--end::Sidebar-->
         <main class="app-main">

@@ -65,6 +65,7 @@ class UserController extends BaseController
         }, $data['listuser2']);
         $datauserx = json_encode($users);
         $data['datajson'] = preg_replace('/"([^"]+)"\s*:/', '$1:', $datauserx);
+        echo dd($data['groupuser'] . '//' . $data['wilayah'] . '//' . $data['groupmenu']);
         return view('user/listusersuperadmin', $data);
     }
     public function updateuser()
@@ -105,6 +106,7 @@ class UserController extends BaseController
             return redirect()->to(base_url('' . $data['wilayah'] . '/' . $data['groupuser'] . '/daftaruser'));
         }
         if ($active == null) {
+            echo dd($data['groupuser']);
             return view('user/set_group', $data);
         } else {
             if ($active == 0) {
@@ -190,6 +192,7 @@ class UserController extends BaseController
                 'menu' => 'adminlrfk',
                 'listuser' => $this->tausermodel->listuser($idUser),
             ];
+            echo dd($data['groupuser']);
             return view('user/set_group', $data);
         }
         if ($action == 'ubahperangkatdaerah') {
