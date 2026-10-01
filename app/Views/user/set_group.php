@@ -10,7 +10,7 @@
     <!-- /.card-header -->
     <!-- form start -->
     <!-- form start -->
-    <?= form_open_multipart('superadmin/groupset', 'class="form-horizontal'); ?>
+    <?= form_open_multipart('' . $wilayah . '/' . $groupuser . '/groupset', 'class="form-horizontal'); ?>
     <?= csrf_field(); ?>
     <div class="card-body">
         <div class="form-group row">
@@ -32,7 +32,7 @@
                     <?php
                     foreach ($groups as $key => $row) {
                     ?>
-                        <option value="<?= $row->id; ?>"><?= $row->name; ?></option>
+                        <option value="<?= $row['id']; ?>"><?= $row['name']; ?></option>
                     <?php
                     }
                     echo form_hidden('id', $listuser['id'])

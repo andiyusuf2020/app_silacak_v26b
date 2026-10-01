@@ -175,7 +175,10 @@
         <div class="row justify-content-md-center">
             <div class="col-md-6 col-sm-12 text-center">
                 <div role="alert">
-                    <img class="img-fluid" style="max-height: 200px;" src="<?php echo base_url('cssportal/img_home'); ?>/gub_rmd2.png" alt data-pagespeed-url-hash="2622387745" onload="pagespeed.CriticalImages.checkImageForCriticality(this);">
+                    <a class="normal" style="cursor: pointer;" href="<?php echo base_url($wilayah . '/superadmin'); ?>">
+                        <img class="img-fluid" style="max-height: 200px;" src="<?php echo base_url('cssportal/img_home'); ?>/gub_rmd2.png" alt data-pagespeed-url-hash="2622387745" onload="pagespeed.CriticalImages.checkImageForCriticality(this);">
+                    </a>
+
                 </div>
             </div>
             <div class="col-md-6 col-sm-12 text-center">
@@ -206,7 +209,7 @@
                     </a>
                 </li>
                 <li>
-                    <a class="normal" style="cursor: pointer;" href="<?php echo base_url($wilayah . '/superadmin'); ?>">
+                    <a class="normal" style="cursor: pointer;" href="<?php echo base_url($wilayah . '/Adminadbang'); ?>">
                         <img src="<?php echo base_url('cssportal/img_home');
                                     ?>/sitapis-kab-2.png" alt>
                         <div class="caption"><strong>ADMIN ADBANG</strong> </div>

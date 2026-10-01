@@ -5,6 +5,7 @@ namespace App\Controllers\KablampuraController;
 use \Myth\Auth\Authorization\GroupModel;
 use App\Models\KablampuraModel\RealApbdModel;
 use App\Models\LrfkProvModel\JadwalModel;
+use App\Models\UserModel\TaUserModel;
 
 use App\Models\DataApbdModel\TglApbdModel;
 use App\Models\KablampuraModel\ExcelApbdModel;
@@ -12,6 +13,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 
 use App\Controllers\BaseController;
 use App\Libraries\CryptoUrl;
+use GuzzleHttp\RetryMiddleware;
 
 class AdminAdbangController extends BaseController
 {
@@ -21,6 +23,7 @@ class AdminAdbangController extends BaseController
     protected $helpers = ['form', 'url'];
     protected $security;
     protected $jadwalmodel;
+    protected $tausermodel;
 
     public function __construct()
     {
@@ -28,11 +31,28 @@ class AdminAdbangController extends BaseController
         // Load library security untuk sanitasi
         $this->security = \Config\Services::security();
         $this->jadwalmodel = new JadwalModel();
-
+        $this->tausermodel = new TaUserModel();
         $this->realapbdmodel = new RealApbdModel();
         $this->tglapbdmodel = new TglApbdModel();
         $this->excelmodel = new ExcelApbdModel();
     }
+
+    private function cekhakwilayah($url, $w, $id)
+    {
+        // $user = user();
+        // $url = explode('/', $url)[0];
+        $wil = session()->get('wilayah');
+
+        if ($url <> $wil) {
+            false;
+        } else {
+            return redirect()->to(base_url('user'));
+        }
+        if ($id == 1) {
+            return;
+        }
+    }
+
     public function dataperopd()
     {
         $token = $this->request->getGet('token');
@@ -100,6 +120,7 @@ class AdminAdbangController extends BaseController
         $groupuser = $groupModel->getGroupsForUser($user->id);
         $jadwalaktif = $this->jadwalmodel->jadwalaktifskrg();
 
+        // echo dd($req->getPath());
         $data =
             [
                 'wilayah' => session()->get('wilayah'),
@@ -147,7 +168,16 @@ class AdminAdbangController extends BaseController
             // echo dd($tahun . '-'  . $tglaktif);
             // echo dd($data['dataopdadmin']);
             // echo dd($data);
-            return view('Kablampuraviews/Adminadbang/index', $data);
+            // echo dd($data['wilayah'] . '/' . $user->id);
+            // $this->cekhakwilayah($req->getPath(), $data['wilayah'], $user->id);
+            $urlasli = $req->getPath();
+            $url = isset($parts[2]) ? $parts[2] : ''; //explode('/', $urlasli)[0];
+            if ($url !== $data['wilayah']) {
+                return redirect()->to(base_url('user'));
+            }
+            // echo dd($url);
+            // $cekurl = $this->cekhakwilayah($data['wilayah'], $user->id);
+            return view('KablampuraViews/Adminadbang/index', $data);
         }
         $wilayah = session()->get('wilayah');
         if (!$wilayah) {

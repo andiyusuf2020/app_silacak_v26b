@@ -24,6 +24,10 @@
                         <div class="form-group">
                             <?php
                             $wilayah = session()->get('wilayah');
+                            if ($wilayah == null) {
+                                return redirect()->to(base_url());
+                                // return redirect()->to(base_url());
+                            }
 
                             use App\Models\KabtanggamusModel\RealApbdModel as sipdtanggamus;
                             use App\Models\KabtanggamusModel\TglApbdModel as  tglapbdtanggamus;

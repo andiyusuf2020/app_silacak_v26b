@@ -204,28 +204,44 @@
         <?php echo view('template/_part/nav'); ?>
         <!--begin::Sidebar-->
         <?php
-        if ($groupuser == 'forbiddenopd') {
+        $wilayah = session()->get('wilayah');
+        $groupuser = session()->get('groupuser');
+        $groupmenu = session()->get('groupmenu');
+        if (!($wilayah != null || $groupuser != null || $groupmenu != null)) {
+            return redirect()->to(base_url('logout'));
         }
-        if ($groupuser == 'user') {
+        /*
+        * Menu untuk kabupaten tanggamus===========================
+        */
+        if ($wilayah == 'tanggamus' && $groupuser == 'superadmin') {
+            echo view('template/_part/menukabtanggamus/menusuperadmin');
         }
-        // if ($groupmenu == 'tahunkosong') {
-        // }
 
-        if ($groupmenu == 'usercapkinprov') {
-            echo view('template/_part/menuusercapkinopd');
-        }
-        if ($groupmenu == 'userlrfkprov') {
-            echo view('template/_part/menulrfkprov');
-        }
-        if ($groupuser == 'adminprogkerja') {
-            echo view('template/_part/menuadmin');
-        }
-        if ($groupmenu == 'superadmin') {
-            echo view('template/_part/menusuperadmin');
-        }
-        if ($groupmenu == 'userdesakumaju') {
-            echo view('template/_part/menudesakuopd');
-        }
+
+        // if ($groupuser == 'forbiddenopd') {
+        //     echo view('template/_part/menuforbiddenopd');
+        // }
+        // if ($groupuser == 'user') {
+        //     echo view('template/_part/menuuser');
+        // }
+        // // if ($groupmenu == 'tahunkosong') {
+        // // }
+
+        // if ($groupmenu == 'usercapkinprov') {
+        //     echo view('template/_part/menuusercapkinopd');
+        // }
+        // if ($groupmenu == 'userlrfkprov') {
+        //     echo view('template/_part/menulrfkprov');
+        // }
+        // if ($groupuser == 'adminprogkerja') {
+        //     echo view('template/_part/menuadmin');
+        // }
+        // if ($groupmenu == 'superadmin') {
+        //     echo view('template/_part/menusuperadmin');
+        // }
+        // if ($groupmenu == 'userdesakumaju') {
+        //     echo view('template/_part/menudesakuopd');
+        // }
         ?>
 
         <!--end::Sidebar-->

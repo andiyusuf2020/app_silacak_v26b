@@ -7,6 +7,21 @@ use CodeIgniter\Router\RouteCollection;
  */
 // $routes->get('/', 'Home::maintenis');
 
+
+/*
+ROUTE FOR AUTHENTICATION LOGIN==============================================
+*/
+$routes->get('login', 'AuthController::login');
+$routes->get('register', 'AuthController::register');
+$routes->post('registerX', 'AuthController::registerX');
+$routes->get('logout', 'AuthController::logout');
+
+//=====akses forbidden user ==========================================
+$routes->get('user', 'HomeKabController::dilarang');
+
+
+//=================================================end route for login=========
+
 // Routes for the application SiTAPIS-KAB.
 $routes->get('/', 'HomeKabController::index');
 $routes->get('pilihakses', 'HomeKabController::pilihakses');
@@ -21,7 +36,6 @@ $routes->get('lampungutara', 'KablampuraController\HomeController::dashboard');
 $routes->group('lampungutara/superadmin', ['filter' => 'role:superadmin'], function ($routes) {
     $routes->get('', 'KablampuraController\AdminAdbangController::index');
     $routes->get('dataperopd', 'KablampuraController\AdminAdbangController::dataperopd');
-
     $routes->get('daftaruser', 'UserController\UserKabController\UserController::index');
     $routes->get('updateuser', 'UserController\UserKabController\UserController::updateuser');
     $routes->post('uploadapbd', 'KablampuraController\AdminAdbangController::uploadapbd');
@@ -33,13 +47,40 @@ $routes->get('mesuji', 'HomeKabController::mesuji');
 $routes->get('pesawaran', 'HomeKabController::pesawaran');
 $routes->get('pringsewu', 'HomeKabController::pringsewu');
 $routes->get('tanggamus', 'KabtanggamusController\HomeController::dashboard');
+
+/*
+Route for Kab Tanggamus SiTAPIS-KAB tahun 2026 ===============================================
+*/
+///====for user superadmin
 $routes->group('tanggamus/superadmin', ['filter' => 'role:superadmin'], function ($routes) {
     $routes->get('', 'KabtanggamusController\AdminAdbangController::index');
     $routes->get('dataperopd', 'KabtanggamusController\AdminAdbangController::dataperopd');
     $routes->get('daftaruser', 'UserController\UserKabController\UserController::index');
     $routes->get('updateuser', 'UserController\UserKabController\UserController::updateuser');
+    $routes->post('groupset', 'UserController\UserKabController\UserController::changeGroup');
+
     $routes->post('uploadapbd', 'KabtanggamusController\AdminAdbangController::uploadapbd');
+    $routes->get('exportExcel', 'KabtanggamusController\AdminAdbangController::exportExcel');
 });
+
+///====for user adminadbang
+$routes->group('tanggamus/Adminadbang', ['filter' => 'role:Adminadbang'], function ($routes) {
+    $routes->get('', 'KabtanggamusController\AdminAdbangController::index');
+    $routes->get('dataperopd', 'KabtanggamusController\AdminAdbangController::dataperopd');
+    $routes->get('daftaruser', 'UserController\UserKabController\UserController::index');
+    $routes->get('updateuser', 'UserController\UserKabController\UserController::updateuser');
+    // $routes->post('uploadapbd', 'KabtanggamusController\AdminAdbangController::uploadapbd');
+    $routes->get('exportExcel', 'KabtanggamusController\AdminAdbangController::exportExcel');
+});
+
+
+
+
+
+/*
+End of Route for Kab Tanggamus SiTAPIS-KAB tahun 2026==========================================
+*/
+
 $routes->get('tulangbawang', 'HomeKabController::tulangbawang');
 $routes->get('tulangbawangbarat', 'HomeKabController::tulangbawangbarat');
 
@@ -47,7 +88,6 @@ $routes->get('tulangbawangbarat', 'HomeKabController::tulangbawangbarat');
 $routes->get('dashboard', 'Sipkabkota\Home::dashboard');
 // $routes->get('pilihakses', 'Sipkabkota\Home::pilihakses');
 $routes->post('simpantahunsilacak', 'Sipkabkota\Home::simpantahunsilacak');
-$routes->get('user', 'Sipkabkota\Home::dilarang');
 
 
 /*---  ROUTE SILACAK LRFK OPD TUBA --------------------- */
@@ -177,11 +217,6 @@ $routes->group('adbang', function ($routes) {
 });
 
 /*---  AKHIR ROUTE PORTAL PROGRAM PRIORITAS --------------------- */
-$routes->get('login', 'AuthController::login');
-$routes->get('register', 'AuthController::register');
-$routes->post('registerX', 'AuthController::registerX');
-
-$routes->get('logout', 'AuthController::logout');
 
 
 /*---  ROUTE PORTAL LRFK ADMIN --------------------- */

@@ -8,6 +8,7 @@ use \Myth\Auth\Authorization\GroupModel;
 use App\Models\UserModel;
 use \Myth\Auth\Password;
 use App\Models\UserModel\TaUserModel;
+use App\Models\UserModel\GroupUserModel;
 // use App\Models\adbangmodel\ProgKerjaModel as programkeramodel;
 // use App\Models\LrfkProvModel\SubKegModel; // as lrfkModel;
 use App\Models\DataApbdModel\RealApbdModel;
@@ -19,7 +20,7 @@ class UserController extends BaseController
     // protected $Programkerjamodel;
     protected $keyword;
     // protected $subkegmodel;
-
+    protected $groupuser;
     protected $realapbdmodel;
 
     public function __construct()
@@ -29,6 +30,7 @@ class UserController extends BaseController
         // $this->Programkerjamodel = new programkeramodel();
         // $this->subkegmodel = new SubKegModel();
         $this->realapbdmodel = new RealApbdModel();
+        $this->groupuser = new GroupUserModel();
     }
 
     public function index()
@@ -46,15 +48,24 @@ class UserController extends BaseController
         ];
         // Hanya enkripsi 'id' dan 'name'
         $users = array_map(function ($user) {
-            $user['update_token'] = CryptoUrl::encrypt([
+            $user['update_token_groupuser'] = CryptoUrl::encrypt([
                 'id'   => $user['id'],
                 'name' => $user['username']
             ]);
+            $user['update_token_aktif'] = CryptoUrl::encrypt([
+                'id'   => $user['id'],
+                'active' => $user['active']
+            ]);
+            $user['update_token_hapus'] = CryptoUrl::encrypt([
+                'idhapus'   => $user['id'],
+            ]);
+
+
             return $user;
         }, $data['listuser2']);
         $datauserx = json_encode($users);
         $data['datajson'] = preg_replace('/"([^"]+)"\s*:/', '$1:', $datauserx);
-        return view('Kablampuraviews/Adminadbang/listusersuperadmin', $data);
+        return view('user/listusersuperadmin', $data);
     }
     public function updateuser()
     {
@@ -73,19 +84,44 @@ class UserController extends BaseController
         }
 
         // Ekstrak data hasil dekripsi (hanya ID dan Name)
-        $userId   = $payload['id'];
-        $userName = $payload['name'];
+        $userId   = $payload['id'] ?? null;
+        $active = $payload['active'] ?? null;
+        $idHapus = $payload['idhapus'] ?? null;
         $groupModel = new GroupModel();
-        $data['groups'] = $groupModel->findAll();
+        //        $data['groups'] = $groupModel->findAll();
         $data = [
-            'groups' => $groupModel->findAll(),
+            'groups' => $this->groupuser->listgroupkabkota(), //$groupModel->findAll(), //whereNotIn('name', 'superadmin')->get()->getResultArray(), //findAll(),
             'groupuser' => session()->get('groupuser'),
             'groupmenu' => session()->get('groupuser'),
             'wilayah' =>  session()->get('wilayah'),
             'titlepage' => 'Halaman UBAH RULE GROUP User SiTAPIS Perangkat Daerah',
             'listuser' => $this->tausermodel->listuser($userId),
         ];
-        return view('user/set_group', $data);
+        // echo dd($data['groups']);
+        if ($idHapus) {
+            $this->tausermodel->delete($idHapus);
+
+            // echo dd($idHapus);
+            return redirect()->to(base_url('' . $data['wilayah'] . '/' . $data['groupuser'] . '/daftaruser'));
+        }
+        if ($active == null) {
+            return view('user/set_group', $data);
+        } else {
+            if ($active == 0) {
+                $aktif = 1;
+            }
+            if ($active == 1) {
+                $aktif = 0;
+            }
+            $dataX = [
+                'id' => $userId,
+                'activate_hash' => null,
+                'active' => $aktif,
+            ];
+            // echo dd($dataX);
+            $this->tausermodel->update($userId, $dataX);
+            return redirect()->to(base_url('' . $data['wilayah'] . '/' . $data['groupuser'] . '/daftaruser'));
+        }
     }
     public function user()
     {
@@ -199,9 +235,17 @@ class UserController extends BaseController
 
         $groupModel->addUserToGroup(intval($userId), intval($groupId));
 
-        //echo $userId . ":" . $groupId;
+        $data = [
+            'groups' => $groupModel->findAll(),
+            'groupuser' => session()->get('groupuser'),
+            'groupmenu' => session()->get('groupuser'),
+            'wilayah' =>  session()->get('wilayah'),
+            'titlepage' => 'Halaman UBAH RULE GROUP User SiTAPIS Perangkat Daerah',
+            'listuser' => $this->tausermodel->listuser($userId),
+        ];
+        return redirect()->to(base_url('' . $data['wilayah'] . '/' . $data['groupuser'] . '/daftaruser'));
 
-        return redirect()->to(base_url('lrfkadmin/usersitapis'));
+        // return redirect()->to(base_url('lrfkadmin/usersitapis'));
     }
     public function changePassword($id = null)
     {

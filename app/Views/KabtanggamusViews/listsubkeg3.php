@@ -365,7 +365,10 @@
                                                             <span class="searchable-text"><?= esc($sro['nama']) ?></span>
                                                         </td>
                                                         <td class="text-end text-secondary"><?= number_format($sro['anggaran'], 0, ',', '.') ?></td>
-                                                        <td class="text-end text-secondary"><?= number_format($sro['realisasi'], 0, ',', '.') ?></td>
+                                                        <td class="text-end text-secondary"><?= number_format($sro['realisasi'], 0, ',', '.') ?>
+
+                                                            <i class="bi bi-ui-checks-grid"></i>
+                                                        </td>
                                                         <td class="text-center text-muted small">-</td>
                                                         <td class="text-center text-muted small">-</td>
                                                         <td class="text-center text-muted small">-</td>

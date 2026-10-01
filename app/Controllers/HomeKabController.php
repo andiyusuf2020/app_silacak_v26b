@@ -76,4 +76,13 @@ class HomeKabController extends BaseController
         session()->set('tahun', $tahun);
         return redirect()->back();
     }
+    public function dilarang()
+    {
+        $data = [
+            'title1' => 'Anda tidak memiliki hak akses untuk halaman ini',
+            // 'title2' => 
+        ];
+
+        return view('hakakses', $data);
+    }
 }

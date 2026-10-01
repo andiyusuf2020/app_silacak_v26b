@@ -2,9 +2,12 @@
 
 namespace App\Controllers\KabtanggamusController;
 
+use App\Controllers\Sipkabkota\SuperadminController;
+
 use \Myth\Auth\Authorization\GroupModel;
 use App\Models\KabtanggamusModel\RealApbdModel;
 use App\Models\KabtanggamusModel\JadwalModel;
+use App\Models\UserModel\TaUserModel;
 
 use App\Models\KabtanggamusModel\TglApbdModel;
 use App\Models\KabtanggamusModel\ExcelApbdModel;
@@ -12,6 +15,12 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 
 use App\Controllers\BaseController;
 use App\Libraries\CryptoUrl;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+
 
 class AdminAdbangController extends BaseController
 {
@@ -21,67 +30,35 @@ class AdminAdbangController extends BaseController
     protected $helpers = ['form', 'url'];
     protected $security;
     protected $jadwalmodel;
+    protected $SuperadminController;
+    protected $tausermodel;
 
     public function __construct()
     {
         helper(['form', 'url', 'filesystem']);
         // Load library security untuk sanitasi
         $this->security = \Config\Services::security();
+        $this->SuperadminController = new SuperadminController();
         $this->jadwalmodel = new JadwalModel();
+        $this->tausermodel = new TaUserModel();
 
         $this->realapbdmodel = new RealApbdModel();
         $this->tglapbdmodel = new TglApbdModel();
         $this->excelmodel = new ExcelApbdModel();
     }
-    public function dataperopd()
+    private function cekhakwilayah($w, $id)
     {
-        $token = $this->request->getGet('token');
-
-        if (empty($token)) {
-            return redirect()->back()->with('error', 'Token URL tidak ditemukan.');
+        // $user = user();
+        if ($id == 1) {
+            return;
         }
-
-        // Dekripsi & Validasi Token (Maksimal 15 menit)
-        $payload = CryptoUrl::decrypt($token, 900);
-
-        if (!$payload) {
-            return redirect()->back()->with('error', 'Akses ditolak: Token tidak valid atau telah kadaluwarsa.');
+        $datauser = $this->tausermodel->cekProfileUser($w, $id);
+        if (!$datauser) {
+            return redirect()->to(base_url('user'));
+        } else {
+            return;
         }
-
-        // Ekstrak data hasil dekripsi (hanya ID dan Name)
-        $kdSU   = $payload['kdSU'];
-        $blndata = $payload['blndata'];
-        $user = user();
-        $groupModel = new GroupModel();
-        $groupuser = $groupModel->getGroupsForUser($user->id);
-        $jadwalaktif = $this->jadwalmodel->jadwalaktifskrg();
-
-
-        $data =
-            [
-                'wilayah' => session()->get('wilayah'),
-                'groupuser' => $groupuser[0]['name'],
-                'groupmenu' => $groupuser[0]['name'],
-                'tahunaktif' => session()->get('tahun'),
-                'titlepage' => 'halaman Admin Adbang ',
-                'datauser' => $user->sub_unit,
-                'tglaktif' => session()->get('tglaktif'),
-                'nama_opd' => $kdSU,
-                'rekap' => $this->realapbdmodel->getRekapLengkapPerTingkatAman($blndata, $kdSU),
-                // 'rekap' => $this->realapbdmodel->getRekapLengkapPerTingkat($blndata, $kdSU),
-                'blndata' => $blndata,
-                'tglapbd' => $this->realapbdmodel->tgldata(),
-                'tglapbdaktif' => $this->tglapbdmodel->tgldataaktif(),
-                'bulan' => $jadwalaktif['bulan'],
-                'validation' => \Config\Services::validation()
-
-            ];
-        // echo dd($blndata . '-' . $kdSU);
-        // $data['rekap'] = $this->realapbdmodel->getRekapLengkapPerTingkat($blndata, $kdSU);
-        // echo dd($data['rekap']);
-        return view('KabtanggamusViews/listsubkeg3', $data);
     }
-
     public function index()
     {
         $req = $this->request;
@@ -102,7 +79,7 @@ class AdminAdbangController extends BaseController
         $groupuser = $groupModel->getGroupsForUser($user->id);
         $jadwalaktif = $this->jadwalmodel->jadwalaktifskrg();
         // $data['jadwalaktif'] = $this->jadwalmodel->jadwalaktifskrg();
-
+        // echo dd($user);
         $data =
             [
                 'wilayah' => session()->get('wilayah'),
@@ -132,10 +109,18 @@ class AdminAdbangController extends BaseController
         if (!$receivedParams) {
             // echo dd($data);
             if (!$data['groupuser']) {
-                return redirect()->to(base_url());
+                $data = [
+                    'title1' => 'Anda belum memilih wilayah kabupaten/kota diawal halaman atau anda belum memilih halaman hak akses'
+                ];
+                return view('hakakses', $data);
+                // return redirect()->to(base_url());
             }
             if (!$data['wilayah']) {
-                return redirect()->to(base_url());
+                $data = [
+                    'title1' => 'Anda belum memilih wilayah kabupaten/kota diawal halaman atau anda belum memilih halaman hak akses'
+                ];
+                return view('hakakses', $data);
+                // return redirect()->to(base_url());
             }
             if (!$data['tahun']) {
                 session()->set('groupuser', $data['groupuser']);
@@ -151,6 +136,12 @@ class AdminAdbangController extends BaseController
             // echo dd($tahun . '-'  . $tglaktif);
             // echo dd($data['dataopdadmin']);
             // echo dd($data);
+            // echo dd($data['wilayah'] . '/' . $user->id);
+            $urlasli = $req->getPath();
+            $url = explode('/', $urlasli)[0];
+            if ($url !== $data['wilayah']) {
+                return redirect()->to(base_url('user'));
+            }
             return view('KabtanggamusViews/Adminadbang/index', $data);
         }
         $wilayah = session()->get('wilayah');
@@ -270,6 +261,56 @@ class AdminAdbangController extends BaseController
             }
         }
     }
+    public function dataperopd()
+    {
+        $token = $this->request->getGet('token');
+
+        if (empty($token)) {
+            return redirect()->back()->with('error', 'Token URL tidak ditemukan.');
+        }
+
+        // Dekripsi & Validasi Token (Maksimal 15 menit)
+        $payload = CryptoUrl::decrypt($token, 900);
+
+        if (!$payload) {
+            return redirect()->back()->with('error', 'Akses ditolak: Token tidak valid atau telah kadaluwarsa.');
+        }
+
+        // Ekstrak data hasil dekripsi (hanya ID dan Name)
+        $kdSU   = $payload['kdSU'];
+        $blndata = $payload['blndata'];
+        $user = user();
+        $groupModel = new GroupModel();
+        $groupuser = $groupModel->getGroupsForUser($user->id);
+        $jadwalaktif = $this->jadwalmodel->jadwalaktifskrg();
+
+
+        $data =
+            [
+                'wilayah' => session()->get('wilayah'),
+                'groupuser' => $groupuser[0]['name'],
+                'groupmenu' => $groupuser[0]['name'],
+                'tahunaktif' => session()->get('tahun'),
+                'titlepage' => 'halaman Admin Adbang ',
+                'datauser' => $user->sub_unit,
+                'tglaktif' => session()->get('tglaktif'),
+                'nama_opd' => $kdSU,
+                'rekap' => $this->realapbdmodel->getRekapLengkapPerTingkatAmanlengkap($blndata, $kdSU),
+                // 'rekap' => $this->realapbdmodel->getRekapLengkapPerTingkat($blndata, $kdSU),
+                'blndata' => $blndata,
+                'tglapbd' => $this->realapbdmodel->tgldata(),
+                'tglapbdaktif' => $this->tglapbdmodel->tgldataaktif(),
+                'bulan' => $jadwalaktif['bulan'],
+                'validation' => \Config\Services::validation()
+
+            ];
+        // echo dd($blndata . '-' . $kdSU);
+        // $data['rekap'] = $this->realapbdmodel->getRekapLengkapPerTingkat($blndata, $kdSU);
+        // echo dd($data['rekap']);
+        return view('KabtanggamusViews/listsubkegOpd', $data);
+    }
+
+
     public function uploadapbd()
     {
         ini_set('max_execution_time', 0);
@@ -388,5 +429,178 @@ class AdminAdbangController extends BaseController
             log_message('error', 'Excel Upload Error: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
+    }
+    /**
+     * Export Data Rekap ke Excel (.xlsx) dari Backend
+     */
+    public function exportExcel()
+    {
+        $req = $this->request;
+        $receivedParams = $req->getGet();
+        $wilayah = $receivedParams['wilayah'] ?? null;
+        $hal = $receivedParams['hal'] ?? null;
+        $action = $receivedParams['action'] ?? null;
+        $kdSU = $receivedParams['kdSU'] ?? null;
+        $bulan = $receivedParams['blndata'] ?? null;
+        $kdSK = $receivedParams['kdSK'] ?? null;
+
+        // $bulan = $this->request->getGet('bulan') ?? date('m');
+        // $kdSU  = $this->request->getGet('kd_su') ?? '';
+
+        // Fetch Data menggunakan Model yang sama
+        $rekap = $this->realapbdmodel->getRekapLengkapPerTingkatAmanlengkap($bulan, $kdSU);
+        // echo dd($rekap);
+        if (empty($rekap)) {
+            return redirect()->back()->with('error', 'Tidak ada data untuk diexport.');
+        }
+
+        // Inisialisasi Spreadsheet
+        $spreadsheet = new Spreadsheet();
+        $sheet       = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Rekap Anggaran & SRO');
+
+        // --- 1. HEADER JUDUL ---
+        $sheet->mergeCells('A1:G1');
+        $sheet->setCellValue('A1', 'REKAPITULASI EFISIENSI ANGGARAN DAN CAPAIAN SRO');
+        $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
+        $sheet->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+        $sheet->mergeCells('A2:G2');
+        $sheet->setCellValue('A2', 'Bulan: ' . $bulan . ' | Filter SKPD: ' . ($kdSU ?: 'Semua SKPD'));
+        $sheet->getStyle('A2')->getFont()->setItalic(true)->setSize(11);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+        // --- 2. HEADER TABEL ---
+        $headers = [
+            'A4' => 'Kode & Nama Hierarki',
+            'B4' => 'Anggaran (Rp)',
+            'C4' => 'Realisasi (Rp)',
+            'D4' => 'Capaian Realisasi (%)',
+            'E4' => 'Capaian SRO (%)',
+            'F4' => 'Efisiensi (%)',
+            'G4' => 'Status'
+        ];
+
+        foreach ($headers as $cell => $value) {
+            $sheet->setCellValue($cell, $value);
+        }
+
+        // Styling Header Tabel
+        $headerStyle = [
+            'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical'   => Alignment::VERTICAL_CENTER,
+                'wrapText'   => true
+            ],
+            'fill' => [
+                'fillType'   => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '212529'] // Dark Background
+            ]
+        ];
+        $sheet->getStyle('A4:G4')->applyFromArray($headerStyle);
+        $sheet->getRowDimension(4)->setRowHeight(28);
+
+        // --- 3. POPULASI DATA HIERARKI ---
+        $row = 5;
+
+        foreach ($rekap as $skpd) {
+            // Level 1: SKPD
+            $row = $this->writeExcelRow($sheet, $row, '[SKPD] [' . $skpd['kode'] . '] ' . $skpd['nama'], $skpd, 'D9E2EC', true);
+
+            foreach ($skpd['program'] as $prog) {
+                // Level 2: Program
+                $row = $this->writeExcelRow($sheet, $row, '  [PROGRAM] [' . $prog['kode'] . '] ' . $prog['nama'], $prog, 'E2E8F0', true);
+
+                foreach ($prog['kegiatan'] as $giat) {
+                    // Level 3: Kegiatan
+                    $row = $this->writeExcelRow($sheet, $row, '    [GIAT] [' . $giat['kode'] . '] ' . $giat['nama'], $giat, 'F1F5F9', false);
+
+                    foreach ($giat['sub_kegiatan'] as $subGiat) {
+                        // Level 4: Sub-Kegiatan
+                        $row = $this->writeExcelRow($sheet, $row, '      [SUB GIAT] [' . $subGiat['kode'] . '] ' . $subGiat['nama'], $subGiat, 'FEF3C7', false);
+
+                        foreach ($subGiat['list_sro'] as $sro) {
+                            // Level 5: SRO
+                            $sheet->setCellValue('A' . $row, '        [SRO] [' . $sro['kode'] . '] ' . $sro['nama']);
+                            $sheet->setCellValue('B' . $row, $sro['anggaran']);
+                            $sheet->setCellValue('C' . $row, $sro['realisasi']);
+                            $sheet->setCellValue('D' . $row, '-');
+                            $sheet->setCellValue('E' . $row, '-');
+                            $sheet->setCellValue('F' . $row, '-');
+                            $sheet->setCellValue('G' . $row, 'Detail SRO');
+
+                            // Styling khusus level SRO
+                            $sheet->getStyle('A' . $row)->getFont()->setItalic(true);
+                            $sheet->getStyle('D' . $row . ':G' . $row)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                            $row++;
+                        }
+                    }
+                }
+            }
+        }
+
+        // --- 4. FORMATTING KOLOM (Number Format, Borders, Alignment) ---
+        $lastRow = $row - 1;
+
+        // Number Format Rupiah/Angka
+        $sheet->getStyle('B5:C' . $lastRow)->getNumberFormat()->setFormatCode('#,##0');
+        $sheet->getStyle('D5:F' . $lastRow)->getNumberFormat()->setFormatCode('0.00');
+
+        // Alignment Kolom
+        $sheet->getStyle('B5:C' . $lastRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
+        $sheet->getStyle('D5:G' . $lastRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+        // Border Seluruh Tabel
+        $borderStyle = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => Border::BORDER_THIN,
+                    'color'       => ['rgb' => 'D3D3D3'],
+                ],
+            ],
+        ];
+        $sheet->getStyle('A4:G' . $lastRow)->applyFromArray($borderStyle);
+
+        // Auto-size Lebar Kolom
+        foreach (range('A', 'G') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        // --- 5. OUTPUT RESPONSE DOWNLOAD ---
+        $filename = 'Rekap_Anggaran_SRO_' . date('Ymd_His') . '.xlsx';
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit;
+    }
+
+    /**
+     * Helper privat untuk penulisan baris dan warna hirarki Excel
+     */
+    private function writeExcelRow($sheet, $row, $label, $data, $hexColor, $isBold)
+    {
+        $sheet->setCellValue('A' . $row, $label);
+        $sheet->setCellValue('B' . $row, $data['anggaran']);
+        $sheet->setCellValue('C' . $row, $data['realisasi']);
+        $sheet->setCellValue('D' . $row, $data['capaian_realisasi']);
+        $sheet->setCellValue('E' . $row, $data['capaian_sro']);
+        $sheet->setCellValue('F' . $row, $data['efisiensi']);
+        $sheet->setCellValue('G' . $row, $data['status_efisiensi']);
+
+        // Color Fill & Font Weight
+        $sheet->getStyle('A' . $row . ':G' . $row)->applyFromArray([
+            'font' => ['bold' => $isBold],
+            'fill' => [
+                'fillType'   => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => $hexColor]
+            ]
+        ]);
+
+        return $row + 1;
     }
 }

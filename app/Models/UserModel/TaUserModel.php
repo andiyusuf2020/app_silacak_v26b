@@ -90,8 +90,8 @@ class TaUserModel extends Model
     {
         return $this->update(['id' => $id], $dataprofile);
     }
-    public function cekProfileUser($email = null)
+    public function cekProfileUser($w, $id)
     {
-        //return $this select('nama,nip,jabatan')->
+        return $this->where('id', $id)->where('wilayah', $w);
     }
 }
