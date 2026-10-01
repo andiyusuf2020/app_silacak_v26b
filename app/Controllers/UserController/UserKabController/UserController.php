@@ -65,7 +65,7 @@ class UserController extends BaseController
         }, $data['listuser2']);
         $datauserx = json_encode($users);
         $data['datajson'] = preg_replace('/"([^"]+)"\s*:/', '$1:', $datauserx);
-        echo dd($data['groupuser'] . '//' . $data['wilayah'] . '//' . $data['groupmenu']);
+        // echo dd($data['groupuser'] . '//' . $data['wilayah'] . '//' . $data['groupmenu']);
         return view('user/listusersuperadmin', $data);
     }
     public function updateuser()
