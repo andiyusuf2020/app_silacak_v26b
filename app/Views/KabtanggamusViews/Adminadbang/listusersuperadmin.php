@@ -238,6 +238,9 @@
         if (!($wilayah != null || $groupuser != null || $groupmenu != null)) {
             return redirect()->to(base_url('logout'));
         }
+        if (!($wilayah != '' || $groupuser != '' || $groupmenu != '')) {
+            return redirect()->to(base_url('logout'));
+        }
         /*
         * Menu untuk kabupaten tanggamus===========================
         */
