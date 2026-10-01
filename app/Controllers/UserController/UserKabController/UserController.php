@@ -106,7 +106,7 @@ class UserController extends BaseController
             return redirect()->to(base_url('' . $data['wilayah'] . '/' . $data['groupuser'] . '/daftaruser'));
         }
         if ($active == null) {
-            echo dd($data['groupuser']);
+            // echo dd($data['groupuser']);
             return view('user/set_group', $data);
         } else {
             if ($active == 0) {
