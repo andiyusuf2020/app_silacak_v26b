@@ -232,8 +232,17 @@
         <!--end::Header-->
         <!--begin::Sidebar-->
         <?php
-        if ($groupmenu == 'superadmin') {
-            echo view('template/_part/menusuperadmin');
+        $wilayah = session()->get('wilayah');
+        $groupuser = session()->get('groupuser');
+        $groupmenu = session()->get('groupmenu');
+        if (!($wilayah != null || $groupuser != null || $groupmenu != null)) {
+            return redirect()->to(base_url('logout'));
+        }
+        /*
+        * Menu untuk kabupaten tanggamus===========================
+        */
+        if ($wilayah == 'tanggamus' && $groupuser == 'superadmin') {
+            echo view('template/_part/menukabtanggamus/menusuperadmin');
         }
         ?>
         <!--end::Sidebar-->

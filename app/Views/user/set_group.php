@@ -20,7 +20,7 @@
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-sm-2 col-form-label">Email User</label>
+            <label class="col-sm-2 col-form-label">Email User XXX</label>
             <div class="col-sm-10">
                 <label class="col-sm-5 col-form-label"><?= $listuser['email'] ?>:<?= $listuser['id'] ?></label>
             </div>
