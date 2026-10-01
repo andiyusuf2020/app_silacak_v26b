@@ -161,7 +161,7 @@ class AdminAdbangController extends BaseController
             return view('KabtanggamusViews/Adminadbang/upload_form', $data);
         } elseif ($hal == 'angkasopd') {
             $data['dataopdadmin'] = $this->realapbdmodel->getCapaianKinerjaDenganGeometri($data['tahun'], $data['tglaktif']);
-            return view('KabtanggamusViews/Adminadbang/angkasopd', $data);
+            return view('KabtanggamusViews/Adminadbang/forminputangkasopd', $data);
         } elseif ($hal == 'datapbj') {
             $data['dataopdadmin'] = $this->realapbdmodel->getCapaianKinerjaDenganGeometri($data['tahun'], $data['tglaktif']);
             return view('KabtanggamusViews/Adminadbang/datapbj', $data);
