@@ -61,8 +61,12 @@ $routes->group('tanggamus/superadmin', ['filter' => 'role:superadmin'], function
 
     $routes->post('uploadapbd', 'KabtanggamusController\AdminAdbangController::uploadapbd');
     $routes->get('exportExcel', 'KabtanggamusController\AdminAdbangController::exportExcel');
+    // $routes->get('anggaran-kas', [AnggaranKas::class, 'index']);
+    //[AnggaranKas::class, 'store']);
 });
-
+$routes->post('anggaran-kas/store', 'KabtanggamusController\AdminAdbangController::storeangkas_ajax');
+$routes->get('realisasi/get-summary', [RealisasiController::class, 'getSummaryByPeriode']); // Endpoint AJAX Filter
+$routes->post('realisasi/store', [RealisasiController::class, 'store']);
 ///====for user adminadbang
 $routes->group('tanggamus/Adminadbang', ['filter' => 'role:Adminadbang'], function ($routes) {
     $routes->get('', 'KabtanggamusController\AdminAdbangController::index');

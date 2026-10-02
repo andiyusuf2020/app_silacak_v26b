@@ -219,7 +219,6 @@
         if (!($wilayah != '' || $groupuser != '' || $groupmenu != '')) {
             return redirect()->to(base_url('logout'));
         }
-
         // if ($groupuser == 'forbiddenopd') {
         //     echo view('template/_part/menuforbiddenopd');
         // }

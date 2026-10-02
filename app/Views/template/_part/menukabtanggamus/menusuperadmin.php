@@ -88,10 +88,10 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="<?= hash_url(' ' . $wilayah . '/' . $groupuser, ['hal' => 'lrabpkad']);
+                            <a href="<?= hash_url(' ' . $wilayah . '/' . $groupuser, ['hal' => 'pendapatan']);
                                         ?>" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
-                                <p>Laporan LRA <br> BPKAD</p>
+                                <p>Laporan Pendapatan <br> APBD</p>
                             </a>
                         </li>
                     </ul>
@@ -115,7 +115,7 @@
                     </ul>
                 </li>
 
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon bi bi-clipboard-fill"></i>
                         <p>
@@ -125,20 +125,20 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="<?= hash_url(' ' . $wilayah . '/' . $groupuser, ['hal' => 'datapbj']);
+                            <a href="<?php // hash_url(' ' . $wilayah . '/' . $groupuser, ['hal' => 'datapbj']);
                                         ?>" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
                                 <p>Data Realisasi PBJ</p>
                             </a>
                         </li>
                     </ul>
-                </li>
-                <li class="nav-header">MANAJEMEN OPD</li>
+                </li> -->
+                <li class="nav-header">LAPORAN ADM.PEMBANGUNAN</li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon bi bi-clipboard-fill"></i>
                         <p>
-                            DATA RFK OPD
+                            LAPORAN RFK OPD
                             <i class="nav-arrow bi bi-chevron-right"></i>
                         </p>
                     </a>
@@ -147,7 +147,7 @@
                                 href="<?= hash_url('lrfkopd/apbdopd', ['hal' => 'listsubkeg', 'action' => 'all']);
                                         ?>" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
-                                <p>LRFK Rill</p>
+                                <p>LRFK per<br>Perangkat Daerah</p>
                             </a>
                         </li>
                     </ul>
@@ -156,7 +156,7 @@
                                 href="<?= hash_url('lrfkopd/laporanapbdopd', ['hal' => 'cetak', 'action' => 'all']);
                                         ?>" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
-                                <p>Laporan RFK <br> Perangkat Daerah</p>
+                                <p>LRFK per<br>Program perOPD</p>
                             </a>
                         </li>
                     </ul>

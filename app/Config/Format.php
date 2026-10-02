@@ -61,4 +61,7 @@ class Format extends BaseConfig
         'application/xml'  => 0,
         'text/xml'         => 0,
     ];
+    // TAMBAHKAN PROPERTI INI JIKA BELUM ADA DI CONFIG ANDA:
+    public int $jsonEncodeOptions = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES;
+    public int $jsonEncodeDepth = 512;
 }
