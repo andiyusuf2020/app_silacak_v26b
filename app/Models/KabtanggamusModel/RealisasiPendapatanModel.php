@@ -10,6 +10,8 @@ class RealisasiPendapatanModel extends Model
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
+    protected $useSoftDeletes = true;
+
     protected $allowedFields    = [
         'tahun_anggaran',
         'bulan',
@@ -19,22 +21,62 @@ class RealisasiPendapatanModel extends Model
         'anggaran',
         'realisasi'
     ];
-
     protected $useTimestamps = true;
+    protected $createdField = 'CREATE_AT';
+    protected $updatedField = 'UPDATE_AT';
 
-    // Validasi dasar
-    protected $validationRules = [
-        'tahun_anggaran' => 'required|numeric|exact_length[4]',
-        'bulan'          => 'required|numeric|greater_than_equal_to[1]|less_than_equal_to[12]',
-        'jenis'          => 'required|in_list[Pendapatan,Belanja]',
-        'kode_rekening'  => 'required|string|max_length[50]',
-        'uraian'         => 'required|string|max_length[255]',
-        'anggaran'       => 'required|numeric',
-        'realisasi'      => 'required|numeric',
-    ];
+    // Ambil list data berdasarkan filter tahun & bulan
+    public function getDataFilter($tahun, $bulan = 'all')
+    {
+        $builder = $this->builder();
+        $builder->where('tahun_anggaran', $tahun);
+
+        if ($bulan !== 'all' && $bulan !== '') {
+            $builder->where('bulan', $bulan);
+        }
+
+        $builder->orderBy('bulan', 'ASC');
+        $builder->orderBy('jenis', 'ASC');
+        $builder->orderBy('kode_rekening', 'ASC');
+
+        return $builder->get()->getResultArray();
+    }
+    public function getTrenPersentaseBulanan($tahun)
+    {
+        $builder = $this->db->table($this->table);
+        $builder->select('bulan, jenis, SUM(anggaran) as total_anggaran, SUM(realisasi) as total_realisasi');
+        $builder->where('tahun_anggaran', $tahun);
+        $builder->groupBy(['bulan', 'jenis']);
+        $builder->orderBy('bulan', 'ASC');
+
+        $rows = $builder->get()->getResultArray();
+
+        // Inisialisasi array 12 bulan (default 0%)
+        $pendapatanPct = array_fill(1, 12, 0);
+        $belanjaPct    = array_fill(1, 12, 0);
+
+        foreach ($rows as $row) {
+            $b = (int) $row['bulan'];
+            $anggaran  = (float) $row['total_anggaran'];
+            $realisasi = (float) $row['total_realisasi'];
+            $pct       = $anggaran > 0 ? round(($realisasi / $anggaran) * 100, 2) : 0;
+
+            if ($row['jenis'] === 'Pendapatan') {
+                $pendapatanPct[$b] = $pct;
+            } else if ($row['jenis'] === 'Belanja') {
+                $belanjaPct[$b] = $pct;
+            }
+        }
+
+        return [
+            'pendapatan' => array_values($pendapatanPct),
+            'belanja'    => array_values($belanjaPct)
+        ];
+    }
     // Mengambil ringkasan data bulan terakhir yang ada di database
     public function getSummaryBulanTerakhir()
     {
+        // Cari periode bulan & tahun paling baru
         $latest = $this->select('tahun_anggaran, bulan')
             ->orderBy('tahun_anggaran', 'DESC')
             ->orderBy('bulan', 'DESC')
@@ -44,23 +86,18 @@ class RealisasiPendapatanModel extends Model
             return null;
         }
 
-        return $this->getSummaryByPeriode($latest['tahun_anggaran'], $latest['bulan']);
-    }
-
-    // METHOD BARU: Mengambil data agregat berdasarkan parameter spesifik
-    public function getSummaryByPeriode($tahun, $bulan)
-    {
+        // Hitung total anggaran & realisasi per jenis (Pendapatan & Belanja)
         $builder = $this->db->table($this->table);
         $builder->select('jenis, SUM(anggaran) as total_anggaran, SUM(realisasi) as total_realisasi');
-        $builder->where('tahun_anggaran', $tahun);
-        $builder->where('bulan', $bulan);
+        $builder->where('tahun_anggaran', $latest['tahun_anggaran']);
+        $builder->where('bulan', $latest['bulan']);
         $builder->groupBy('jenis');
 
         $result = $builder->get()->getResultArray();
 
         return [
-            'tahun' => $tahun,
-            'bulan' => $bulan,
+            'tahun' => $latest['tahun_anggaran'],
+            'bulan' => $latest['bulan'],
             'data'  => $result
         ];
     }

@@ -6,7 +6,7 @@
 <head>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <title>SITAPIS - KAB/KOTA</title>
+    <title>SILACAK - Bagian Administrasi Pembangunan Setda Kabupaten Tulang Bawang Barat</title>
     <link rel="icon" href="<?php echo base_url(); ?>/favicon.ico" type="image/gif">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="<?php echo base_url('cssportal'); ?>/costom5.css" media="all">
@@ -166,7 +166,7 @@
         <div class="row justify-content-md-center">
             <div class="col-md-6 col-sm-12 text-center">
                 <div role="alert">
-                    <img class="img-fluid" style="max-height: 200px;" src="<?php echo base_url('cssportal/img_home'); ?>/lampung.png" alt data-pagespeed-url-hash="2410369107" onload="pagespeed.CriticalImages.checkImageForCriticality(this);">
+                    <img class="img-fluid" style="max-height: 200px;" src="<?php echo base_url('cssportal/img_home'); ?>/tubaba.png" alt data-pagespeed-url-hash="2410369107" onload="pagespeed.CriticalImages.checkImageForCriticality(this);">
 
                 </div>
             </div>
@@ -175,15 +175,12 @@
         <div class="row justify-content-md-center">
             <div class="col-md-6 col-sm-12 text-center">
                 <div role="alert">
-                    <a class="normal" style="cursor: pointer;" href="<?php echo base_url($wilayah . '/superadmin'); ?>">
-                        <img class="img-fluid" style="max-height: 200px;" src="<?php echo base_url('cssportal/img_home'); ?>/gub_rmd2.png" alt data-pagespeed-url-hash="2622387745" onload="pagespeed.CriticalImages.checkImageForCriticality(this);">
-                    </a>
-
+                    <img class="img-fluid" style="max-height: 200px;" src="<?php echo base_url('cssportal/img_home'); ?>/bupati.png" alt data-pagespeed-url-hash="2622387745" onload="pagespeed.CriticalImages.checkImageForCriticality(this);">
                 </div>
             </div>
             <div class="col-md-6 col-sm-12 text-center">
                 <div role="alert">
-                    <img class="img-fluid" style="max-height: 200px;" src="<?php echo base_url('cssportal/img_home'); ?>/wagubJihan.png" alt data-pagespeed-url-hash="2410369107" onload="pagespeed.CriticalImages.checkImageForCriticality(this);">
+                    <img class="img-fluid" style="max-height: 200px;" src="<?php echo base_url('cssportal/img_home'); ?>/wakilbup.png" alt data-pagespeed-url-hash="2410369107" onload="pagespeed.CriticalImages.checkImageForCriticality(this);">
 
                 </div>
             </div>
@@ -203,42 +200,43 @@
             <!-- contenrow -->
             <ul class="d-flex justify-content-center flex-wrap">
                 <li>
-                    <a class="normal" style="cursor: pointer;" href="<?php echo base_url($wilayah . '/useropdlrfk'); ?>">
-                        <img src="<?php echo base_url('cssportal/img_home'); ?>/sitapis-kab-2.png" alt>
-                        <div class="caption"><strong>LAPORAN KEUANGAN CAPAIAN KINERJA(LKCK) </strong> </div>
+                    <a class="normal" style="cursor: pointer;" href="<?php echo base_url('rfkopd'); ?>">
+                        <img src="<?php echo base_url('cssportal/img_home'); ?>/SILACAK-RFK.png" alt>
+                        <!-- <div class="caption"><strong>LAPORAN REALISASI FISIK KEUANGAN (LRFK) </strong> </div> -->
                     </a>
                 </li>
                 <li>
-                    <a class="normal" style="cursor: pointer;" href="<?php echo base_url($wilayah . '/Adminadbang'); ?>">
+                    <a class="normal" style="cursor: pointer;" href="<?php echo base_url('superadmin');
+                                                                        ?>">
                         <img src="<?php echo base_url('cssportal/img_home');
-                                    ?>/sitapis-kab-2.png" alt>
-                        <div class="caption"><strong>ADMIN ADBANG</strong> </div>
-                    </a>
-                </li>
-                <!-- <li>
-                    <a class="normal" style="cursor: pointer;" href="<?php //echo base_url('adminbpkad');
-                                                                        ?>">
-                        <img src="<?php //echo base_url('cssportal/img_home');
-                                    ?>/sitapis-kab-2.png" alt>
-                        <div class="caption"><strong>ADMIN BPKAD</strong> </div>
+                                    ?>/SILACAK-ADMINADBANG.png" alt>
+                        <!-- <div class="caption"><strong>CAPAIAN KINERJA PELAKSANAAN PEMBANGUNAN</strong> </div> -->
                     </a>
                 </li>
                 <li>
-                    <a class="normal" style="cursor: pointer;" href="<?php //echo base_url('adminpbj');
+                    <a class="normal" style="cursor: pointer;" href="<?php echo base_url('adminbpkad');
                                                                         ?>">
-                        <img src="<?php  //echo base_url('cssportal/img_home');
-                                    ?>/sitapis-kab-2.png" alt>
-                        <div class="caption"><strong>ADMIN PBJ</strong> </div>
+                        <img src="<?php echo base_url('cssportal/img_home');
+                                    ?>/SILACAK-BPKAD.png" alt>
+                        <!-- <div class="caption"><strong>PROGRAM DESAKU MAJU</strong> </div> -->
                     </a>
-                </li> -->
+                </li>
+                <li>
+                    <a class="normal" style="cursor: pointer;" href="<?php echo base_url('adminpbj');
+                                                                        ?>">
+                        <img src="<?php echo base_url('cssportal/img_home');
+                                    ?>/SILACAK-PBJ.png" alt>
+                        <!-- <div class="caption"><strong>DANA DEKON/TP</strong> </div> -->
+                    </a>
+                </li>
 
             </ul>
         </div>
     </div>
     <video id="intro-video" playsinline autoplay muted loop poster="#" size="100%">
         <!-- <video id="intro-video" playsinline autoplay loop poster="#" size="100%"> -->
-        <source src="https://adbang.lampungprov.go.id/uploads/lampung_low.mp4" type="video/mp4">
-        <!-- <source src="https://adbang.lampungprov.go.id/tubabaratkab/tubaba.mp4" type="video/mp4"> -->
+        <!-- <source src="https://adbang.lampungprov.go.id/uploads/lampung_low.mp4" type="video/mp4"> -->
+        <source src="https://adbang.lampungprov.go.id/tubabaratkab/tubaba.mp4" type="video/mp4">
 
 
     </video>

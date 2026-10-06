@@ -50,20 +50,93 @@ class AdminAdbangController extends BaseController
         $this->excelmodel = new ExcelApbdModel();
         $this->realisasiPendapatanModel = new RealisasiPendapatanModel();
     }
-    private function cekhakwilayah($w, $id)
+    // 2. Endpoint AJAX - Ambil Detail Single Data untuk Modal Edit
+    public function getDetail($id = null)
     {
-        // $user = user();
-        if ($id == 1) {
-            return;
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(405)->setJSON(['status' => 'error', 'message' => 'Method not allowed']);
         }
-        $datauser = $this->tausermodel->cekProfileUser($w, $id);
-        if (!$datauser) {
-            return redirect()->to(base_url('user'));
-        } else {
-            return;
+
+        $data = $this->realisasiPendapatanModel->find($id);
+        if (!$data) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Data tidak ditemukan.']);
         }
+
+        return $this->response->setJSON([
+            'status' => 'success',
+            'data'   => $data
+        ]);
     }
-    public function getSummaryByPeriodePendapatan()
+
+    // 3. Endpoint AJAX - Update Data Realisasi
+    public function update($id = null)
+    {
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(405)->setJSON(['status' => 'error', 'message' => 'Method not allowed']);
+        }
+
+        $row = $this->realisasiPendapatanModel->find($id);
+        if (!$row) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Data tidak ditemukan.']);
+        }
+
+        $anggaranRaw  = $this->request->getPost('anggaran');
+        $realisasiRaw = $this->request->getPost('realisasi');
+
+        $anggaran  = str_replace(['.', ','], ['', '.'], $anggaranRaw ?? '0');
+        $realisasi = str_replace(['.', ','], ['', '.'], $realisasiRaw ?? '0');
+
+        $updateData = [
+            'tahun_anggaran' => $this->request->getPost('tahun_anggaran'),
+            'bulan'          => $this->request->getPost('bulan'),
+            'jenis'          => $this->request->getPost('jenis'),
+            'kode_rekening'  => $this->request->getPost('kode_rekening'),
+            'uraian'         => $this->request->getPost('uraian'),
+            'anggaran'       => floatval($anggaran),
+            'realisasi'      => floatval($realisasi),
+        ];
+
+        if ($this->realisasiPendapatanModel->update($id, $updateData)) {
+            return $this->response->setJSON(['status' => 'success', 'message' => 'Data berhasil diperbarui!']);
+        }
+
+        return $this->response->setJSON(['status' => 'error', 'message' => 'Gagal memperbarui data.']);
+    }
+
+    // 4. Endpoint AJAX - Hapus Data Realisasi
+    public function delete($id = null)
+    {
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(405)->setJSON(['status' => 'error', 'message' => 'Method not allowed']);
+        }
+
+        $row = $this->realisasiPendapatanModel->find($id);
+        if (!$row) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Data tidak ditemukan.']);
+        }
+
+        if ($this->realisasiPendapatanModel->delete($id)) {
+            return $this->response->setJSON(['status' => 'success', 'message' => 'Data berhasil dihapus!']);
+        }
+
+        return $this->response->setJSON(['status' => 'error', 'message' => 'Gagal menghapus data.']);
+    }    // Endpoint AJAX untuk reload tren grafik berdasarkan filter tahun
+    public function getTrenBulanan()
+    {
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(405)->setJSON(['status' => 'error']);
+        }
+
+        $tahun = $this->request->getGet('tahun') ?? date('Y');
+        $data  = $this->realisasiPendapatanModel->getTrenPersentaseBulanan($tahun);
+
+        return $this->response->setJSON([
+            'status' => 'success',
+            'data'   => $data
+        ]);
+    }
+    // METHOD BARU: Mengambil ringkasan data berdasarkan filter AJAX
+    public function getSummaryByPeriode()
     {
         if (!$this->request->isAJAX()) {
             return $this->response->setStatusCode(405)->setJSON(['status' => 'error', 'message' => 'Method Not Allowed']);
@@ -83,7 +156,8 @@ class AdminAdbangController extends BaseController
             'data'   => $summary
         ]);
     }
-    public function storependapatan_ajax()
+
+    public function storeangkas_ajax()
     {
         if (!$this->request->isAJAX()) {
             return $this->response->setStatusCode(405)->setJSON(['status' => 'error', 'message' => 'Method not allowed']);
@@ -94,15 +168,11 @@ class AdminAdbangController extends BaseController
         $bulan = $this->request->getPost('bulan');
 
         if (empty($items) || !is_array($items)) {
-            return $this->response->setJSON([
-                'status'  => 'error',
-                'message' => 'Rincian data tidak boleh kosong.'
-            ]);
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Data tidak boleh kosong.']);
         }
 
         $batchData = [];
         foreach ($items as $item) {
-            // Bersihkan format Rupiah (misal: "15.000.000,00" -> "15000000.00")
             $anggaran  = str_replace(['.', ','], ['', '.'], $item['anggaran'] ?? '0');
             $realisasi = str_replace(['.', ','], ['', '.'], $item['realisasi'] ?? '0');
 
@@ -117,141 +187,11 @@ class AdminAdbangController extends BaseController
             ];
         }
 
-        // Simpan seluruh baris dinamis secara bersamaan
         if ($this->realisasiPendapatanModel->insertBatch($batchData)) {
-            return $this->response->setJSON([
-                'status'  => 'success',
-                'message' => 'Data realisasi berhasil disimpan!'
-            ]);
+            return $this->response->setJSON(['status' => 'success', 'message' => 'Data realisasi berhasil disimpan!']);
         }
 
-        return $this->response->setJSON([
-            'status'  => 'error',
-            'message' => 'Gagal menyimpan data ke database.'
-        ]);
-    }
-    public function storeangkas_ajax()
-    {
-        // Netralkan Output Buffer dari output PHP liar
-        if (ob_get_length()) {
-            ob_clean();
-        }
-
-        // Helper lokal untuk kirim respon JSON murni tanpa melewati Formatter CI4 yang bermasalah
-        $sendJson = function (int $statusCode, array $payload) {
-            return $this->response
-                ->setStatusCode($statusCode)
-                ->setHeader('Content-Type', 'application/json')
-                ->setBody(json_encode($payload, JSON_UNESCAPED_UNICODE));
-        };
-
-        try {
-            // 1. Validasi Input Server-Side
-            $rules = [
-                'perangkat_daerah_id' => 'required|numeric',
-                'tahun_anggaran'      => 'required|numeric|exact_length[4]',
-                'sub_kegiatan'        => 'required',
-                'pagu_anggaran'       => 'required',
-            ];
-
-            if (!$this->validate($rules)) {
-                return $sendJson(400, [
-                    'status'     => 'error',
-                    'message'    => 'Validasi gagal, harap periksa kembali inputan Anda.',
-                    'errors'     => $this->validator->getErrors(),
-                    'csrf_token' => csrf_hash()
-                ]);
-            }
-
-            // Helper Pembersih String Format Rupiah ke Float
-            $cleanRupiah = function ($val) {
-                if (empty($val)) return 0.00;
-                $cleaned = preg_replace('/[^0-9]/', '', (string)$val);
-                return round((float) $cleaned, 2);
-            };
-
-            $paguAnggaran = $cleanRupiah($this->request->getPost('pagu_anggaran'));
-            $inputBulanan = $this->request->getPost('anggaran_kas');
-
-            if (!is_array($inputBulanan)) {
-                return $sendJson(400, [
-                    'status'     => 'error',
-                    'message'    => 'Rincian anggaran bulanan tidak valid atau kosong.',
-                    'csrf_token' => csrf_hash()
-                ]);
-            }
-
-            $bulanList = [
-                'januari',
-                'februari',
-                'maret',
-                'april',
-                'mei',
-                'juni',
-                'juli',
-                'agustus',
-                'september',
-                'oktober',
-                'november',
-                'desember'
-            ];
-
-            $dataToSave = [
-                'perangkat_daerah_id' => (int) $this->request->getPost('perangkat_daerah_id'),
-                'tahun_anggaran'      => (int) $this->request->getPost('tahun_anggaran'),
-                'sub_kegiatan'        => trim((string) $this->request->getPost('sub_kegiatan')),
-                'pagu_anggaran'       => $paguAnggaran,
-            ];
-
-            $totalKas = 0.00;
-
-            foreach ($bulanList as $bulan) {
-                $nilaiBulan = isset($inputBulanan[$bulan]) ? $cleanRupiah($inputBulanan[$bulan]) : 0.00;
-                $dataToSave[$bulan] = $nilaiBulan;
-                $totalKas = round($totalKas + $nilaiBulan, 2);
-            }
-
-            $dataToSave['total_anggaran_kas'] = $totalKas;
-
-            // 2. Cek Balance Pagu DPA vs Total Anggaran Kas
-            if (abs($paguAnggaran - $totalKas) > 0.01) {
-                $paguFormatted  = "Rp " . number_format($paguAnggaran, 0, ',', '.');
-                $totalFormatted = "Rp " . number_format($totalKas, 0, ',', '.');
-
-                return $sendJson(422, [
-                    'status'     => 'error',
-                    'message'    => "Total Anggaran Kas ({$totalFormatted}) tidak balance dengan Pagu DPA ({$paguFormatted}).",
-                    'csrf_token' => csrf_hash()
-                ]);
-            }
-
-            // 3. Simpan ke Database
-            $insertStatus = $this->anggaranKasModel->insert($dataToSave);
-
-            if ($insertStatus === false) {
-                return $sendJson(500, [
-                    'status'     => 'error',
-                    'message'    => 'Gagal menyimpan data ke database.',
-                    'errors'     => $this->anggaranKasModel->errors(),
-                    'csrf_token' => csrf_hash()
-                ]);
-            }
-            // return redirect()->back()->with('success', 'Data Anggaran Kas berhasil disimpan!');
-
-            return $sendJson(200, [
-                'status'     => 'success',
-                'message'    => 'Data Anggaran Kas berhasil disimpan!',
-                'csrf_token' => csrf_hash()
-            ]);
-        } catch (\Throwable $e) {
-            return $sendJson(500, [
-                'status'     => 'error',
-                'message'    => 'Server Exception: ' . $e->getMessage(),
-                'file'       => basename($e->getFile()),
-                'line'       => $e->getLine(),
-                'csrf_token' => csrf_hash()
-            ]);
-        }
+        return $this->response->setJSON(['status' => 'error', 'message' => 'Gagal menyimpan data.']);
     }
 
     public function storeangkas()
@@ -462,11 +402,45 @@ class AdminAdbangController extends BaseController
             // echo dd($data['tglapbd']);
             return view('KabtanggamusViews/Adminadbang/v_jadwal', $data);
         } elseif ($hal == 'pendapatan') {
+            // $summary = $this->realisasiPendapatanModel->getSummaryBulanTerakhir();
+            // $data['summaryStatis'] = $summary;
+            $tahunSelected = $this->request->getGet('tahun') ?? date('Y');
+            $trenBulanan = $this->realisasiPendapatanModel->getTrenPersentaseBulanan($tahunSelected);
+            $data['trenBulanan'] = $trenBulanan;
+            $data['tahunSelected'] = $tahunSelected;
+            // // return view('realisasi/form_input', [
+            // //     'title'        => 'Input & Grafik Tren Realisasi APBD',
+            // //     'tahunSelected' => $tahunSelected,
+            // //     'trenBulanan'  => $trenBulanan
+            // // ]);
+            // return view('KabtanggamusViews/Adminadbang/form_inputpendapatan', $data);
+
+
+            $tahunSelected = $this->request->getGet('tahun') ?? date('Y');
+            $bulanSelected = $this->request->getGet('bulan') ?? 'all';
+
+            $dataRealisasi = $this->realisasiPendapatanModel->getDataFilter($tahunSelected, $bulanSelected);
+            $data['dataRealisasi'] = $dataRealisasi;
+            $data['tahunSelected'] = $tahunSelected;
+            $data['bulanSelected'] = $bulanSelected;
+            // return view('realisasi/data_list', [
+            //     'title'         => 'Data Realisasi APBD',
+            //     'tahunSelected' => $tahunSelected,
+            //     'bulanSelected' => $bulanSelected,
+            //     'dataRealisasi' => $dataRealisasi
+            // ]);
+            return view('KabtanggamusViews/Adminadbang/data_listpendapatan', $data);
+        } elseif ($hal == 'inputbulanan') {
             $summary = $this->realisasiPendapatanModel->getSummaryBulanTerakhir();
             $data['summaryStatis'] = $summary;
+            $tahunSelected = $this->request->getGet('tahun') ?? date('Y');
+            $trenBulanan = $this->realisasiPendapatanModel->getTrenPersentaseBulanan($tahunSelected);
+            $data['trenBulanan'] = $trenBulanan;
+            $data['tahunSelected'] = $tahunSelected;
             // return view('realisasi/form_input', [
-            //     'title'         => 'Input & Dashboard Realisasi APBD',
-            //     'summaryStatis' => $summary
+            //     'title'        => 'Input & Grafik Tren Realisasi APBD',
+            //     'tahunSelected' => $tahunSelected,
+            //     'trenBulanan'  => $trenBulanan
             // ]);
             return view('KabtanggamusViews/Adminadbang/form_inputpendapatan', $data);
         }
@@ -603,7 +577,7 @@ class AdminAdbangController extends BaseController
         // echo dd($blndata . '-' . $kdSU);
         // $data['rekap'] = $this->realapbdmodel->getRekapLengkapPerTingkat($blndata, $kdSU);
         // echo dd($data['rekap']);
-        return view('KabtanggamusViews/listsubkegOpd', $data);
+        return view('KabtanggamusViews/listsubkeg6', $data);
     }
 
 
@@ -898,5 +872,9 @@ class AdminAdbangController extends BaseController
         ]);
 
         return $row + 1;
+    }
+    public function simpanapbd()
+    {
+        echo dd($this->request->getPost());
     }
 }

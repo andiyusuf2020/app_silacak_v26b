@@ -61,13 +61,20 @@ $routes->group('tanggamus/superadmin', ['filter' => 'role:superadmin'], function
 
     $routes->post('uploadapbd', 'KabtanggamusController\AdminAdbangController::uploadapbd');
     $routes->get('exportExcel', 'KabtanggamusController\AdminAdbangController::exportExcel');
-    // $routes->get('anggaran-kas', [AnggaranKas::class, 'index']);
-    //[AnggaranKas::class, 'store']);
+    $routes->get('realisasi/get-tren-bulanan', 'KabtanggamusController\AdminAdbangController::getTrenBulanan');
+    $routes->get('realisasi/get-summary', 'KabtanggamusController\AdminAdbangController::getSummaryByPeriode'); // Endpoint AJAX Filter
+    $routes->post('realisasi/store', 'KabtanggamusController\AdminAdbangController::storeangkas_ajax'); ///====for user adminadbang
+    $routes->get('realisasi/get-detail/(:num)', 'KabtanggamusController\AdminAdbangController::getDetail/$1');
+    $routes->post('realisasi/update/(:num)', 'KabtanggamusController\AdminAdbangController::update/$1');
+    $routes->post('realisasi/delete/(:num)', 'KabtanggamusController\AdminAdbangController::delete/$1');
 });
 $routes->post('anggaran-kas/store', 'KabtanggamusController\AdminAdbangController::storeangkas_ajax');
-$routes->get('realisasi/get-summary', [RealisasiController::class, 'getSummaryByPeriode']); // Endpoint AJAX Filter
-$routes->post('realisasi/store', [RealisasiController::class, 'store']);
-///====for user adminadbang
+// $routes->get('realisasi', [RealisasiController::class, 'index']);
+$routes->get('realisasi/get-tren-bulanan', [RealisasiController::class, 'getTrenBulanan']);
+// $routes->get('realisasi/get-detail/(:num)', [RealisasiController::class, 'getDetail/$1']);
+// $routes->post('realisasi/update/(:num)', [RealisasiController::class, 'update/$1']);
+// $routes->post('realisasi/delete/(:num)', [RealisasiController::class, 'delete/$1']);
+$routes->post('tanggamus/realisasi/store', 'KabtanggamusController\AdminAdbangController::storeangkas_ajax'); ///====for user adminadbang
 $routes->group('tanggamus/Adminadbang', ['filter' => 'role:Adminadbang'], function ($routes) {
     $routes->get('', 'KabtanggamusController\AdminAdbangController::index');
     $routes->get('dataperopd', 'KabtanggamusController\AdminAdbangController::dataperopd');

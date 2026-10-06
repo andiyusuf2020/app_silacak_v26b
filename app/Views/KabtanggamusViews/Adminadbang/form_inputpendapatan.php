@@ -12,88 +12,58 @@
 
     .chart-container {
         position: relative;
-        height: 260px;
+        height: 280px;
         width: 100%;
-    }
-
-    .filter-statis-select {
-        font-size: 0.8rem;
-        padding: 0.2rem 0.4rem;
     }
 </style>
 <div class="app-wrapper">
     <main class="app-main p-4">
         <div class="container-fluid">
 
-            <!-- SECTION 1: DASHBOARD GRAFIK RINGKASAN -->
+            <!-- HEADER FILTER TAHUN GRAFIK -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="fw-bold mb-0">Dashboard & Form Realisasi APBD</h4>
+                <div class="d-flex align-items-center gap-2">
+                    <label for="filterTahunGrafik" class="fw-semibold mb-0">Tahun Grafik:</label>
+                    <select id="filterTahunGrafik" class="form-select form-select-sm" style="width: 120px;">
+                        <?php
+                        $cYear = date('Y');
+                        for ($y = $cYear; $y >= $cYear - 3; $y--): ?>
+                            <option value="<?= $y ?>" <?= $tahunSelected == $y ? 'selected' : '' ?>><?= $y ?></option>
+                        <?php endfor; ?>
+                    </select>
+                </div>
+            </div>
+
+            <!-- SECTION 1: GRAFIK PERSENTASE TREN BULANAN -->
             <div class="row mb-4">
-                <!-- Grafik 1: Statis dengan Filter Periode -->
+                <!-- Grafik 1: Persentase Realisasi Pendapatan -->
                 <div class="col-md-6">
-                    <div class="card card-outline card-info shadow-sm h-100">
-                        <div class="card-header border-0 d-flex align-items-center justify-content-between flex-wrap gap-2">
-                            <h5 class="card-title fw-bold text-info mb-0">
-                                <i class="bi bi-pie-chart-fill me-1"></i>Realisasi Histori (Database)
+                    <div class="card card-outline card-success shadow-sm h-100">
+                        <div class="card-header border-0">
+                            <h5 class="card-title fw-bold text-success mb-0">
+                                <i class="bi bi-graph-up-arrow me-2"></i>Persentase Realisasi Pendapatan Bulanan (%)
                             </h5>
-
-                            <!-- Filter Dropdown untuk Grafik Statis -->
-                            <div class="d-flex align-items-center gap-1">
-                                <select id="filterStatisBulan" class="form-select form-select-sm filter-statis-select">
-                                    <?php
-                                    $months = [
-                                        1 => 'Jan',
-                                        2 => 'Feb',
-                                        3 => 'Mar',
-                                        4 => 'Apr',
-                                        5 => 'Mei',
-                                        6 => 'Jun',
-                                        7 => 'Jul',
-                                        8 => 'Agu',
-                                        9 => 'Sep',
-                                        10 => 'Okt',
-                                        11 => 'Nov',
-                                        12 => 'Des'
-                                    ];
-                                    $selectedBulan = $summaryStatis['bulan'] ?? date('n');
-                                    foreach ($months as $num => $name): ?>
-                                        <option value="<?= $num ?>" <?= $selectedBulan == $num ? 'selected' : '' ?>><?= $name ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-
-                                <select id="filterStatisTahun" class="form-select form-select-sm filter-statis-select">
-                                    <?php
-                                    $currentYear = date('Y');
-                                    $selectedTahun = $summaryStatis['tahun'] ?? $currentYear;
-                                    for ($y = $currentYear; $y >= $currentYear - 3; $y--): ?>
-                                        <option value="<?= $y ?>" <?= $selectedTahun == $y ? 'selected' : '' ?>><?= $y ?></option>
-                                    <?php endfor; ?>
-                                </select>
-
-                                <button type="button" class="btn btn-sm btn-info text-white" id="btnFilterStatis" title="Terapkan Filter">
-                                    <i class="bi bi-funnel"></i>
-                                </button>
-                            </div>
                         </div>
-
                         <div class="card-body">
                             <div class="chart-container">
-                                <canvas id="chartStatis"></canvas>
+                                <canvas id="chartPendapatanBulanan"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Grafik 2: Dinamis (Live Form Input) -->
+                <!-- Grafik 2: Persentase Realisasi Belanja -->
                 <div class="col-md-6">
-                    <div class="card card-outline card-success shadow-sm h-100">
+                    <div class="card card-outline card-danger shadow-sm h-100">
                         <div class="card-header border-0">
-                            <h5 class="card-title fw-bold text-success">
-                                <i class="bi bi-bar-chart-line-fill me-2"></i>Preview Dinamis (Input Saat Ini)
+                            <h5 class="card-title fw-bold text-danger mb-0">
+                                <i class="bi bi-graph-down-arrow me-2"></i>Persentase Realisasi Belanja Bulanan (%)
                             </h5>
-                            <span class="badge bg-success float-end">Live Update</span>
                         </div>
                         <div class="card-body">
                             <div class="chart-container">
-                                <canvas id="chartDinamis"></canvas>
+                                <canvas id="chartBelanjaBulanan"></canvas>
                             </div>
                         </div>
                     </div>
@@ -117,7 +87,7 @@
                             <div class="col-md-4">
                                 <label for="tahun_anggaran" class="form-label fw-semibold">Tahun Anggaran</label>
                                 <select name="tahun_anggaran" id="tahun_anggaran" class="form-select" required>
-                                    <?php for ($y = $currentYear; $y >= $currentYear - 3; $y--): ?>
+                                    <?php for ($y = $cYear; $y >= $cYear - 3; $y--): ?>
                                         <option value="<?= $y ?>"><?= $y ?></option>
                                     <?php endfor; ?>
                                 </select>
@@ -218,165 +188,115 @@
 <!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-beta2/dist/js/adminlte.min.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-beta2/dist/js/adminlte.min.js"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
     $(document).ready(function() {
         let rowIndex = 1;
+        const monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
 
         // ==========================================
-        // 1. INISIALISASI GRAFIK STATIS
+        // 1. CHART PENDAPATAN BULANAN
         // ==========================================
-        const ctxStatis = document.getElementById('chartStatis').getContext('2d');
-        const chartStatis = new Chart(ctxStatis, {
-            type: 'bar',
+        const ctxPendapatan = document.getElementById('chartPendapatanBulanan').getContext('2d');
+        const chartPendapatan = new Chart(ctxPendapatan, {
+            type: 'line',
             data: {
-                labels: ['Pendapatan', 'Belanja'],
+                labels: monthLabels,
                 datasets: [{
-                        label: 'Anggaran (Rp)',
-                        data: [0, 0],
-                        backgroundColor: '#0dcaf0'
-                    },
-                    {
-                        label: 'Realisasi (Rp)',
-                        data: [0, 0],
-                        backgroundColor: '#0d6efd'
-                    }
-                ]
+                    label: 'Capaian Pendapatan (%)',
+                    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    borderColor: '#198754',
+                    backgroundColor: 'rgba(25, 135, 84, 0.1)',
+                    fill: true,
+                    tension: 0.3,
+                    pointRadius: 4
+                }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'top'
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: value => value + '%'
+                        }
                     }
                 }
             }
         });
 
-        // Helper untuk mengisi data ke Chart Statis
-        function populateStatisChart(rawSummary) {
-            let pAnggaran = 0,
-                pRealisasi = 0;
-            let bAnggaran = 0,
-                bRealisasi = 0;
-
-            if (rawSummary && rawSummary.data) {
-                rawSummary.data.forEach(item => {
-                    if (item.jenis === 'Pendapatan') {
-                        pAnggaran = parseFloat(item.total_anggaran) || 0;
-                        pRealisasi = parseFloat(item.total_realisasi) || 0;
-                    } else if (item.jenis === 'Belanja') {
-                        bAnggaran = parseFloat(item.total_anggaran) || 0;
-                        bRealisasi = parseFloat(item.total_realisasi) || 0;
+        // ==========================================
+        // 2. CHART BELANJA BULANAN
+        // ==========================================
+        const ctxBelanja = document.getElementById('chartBelanjaBulanan').getContext('2d');
+        const chartBelanja = new Chart(ctxBelanja, {
+            type: 'line',
+            data: {
+                labels: monthLabels,
+                datasets: [{
+                    label: 'Capaian Belanja (%)',
+                    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    borderColor: '#dc3545',
+                    backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                    fill: true,
+                    tension: 0.3,
+                    pointRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: value => value + '%'
+                        }
                     }
-                });
+                }
             }
+        });
 
-            chartStatis.data.datasets[0].data = [pAnggaran, bAnggaran];
-            chartStatis.data.datasets[1].data = [pRealisasi, bRealisasi];
-            chartStatis.update();
+        // Helper update data grafik
+        function updateCharts(data) {
+            if (data.pendapatan) {
+                chartPendapatan.data.datasets[0].data = data.pendapatan;
+                chartPendapatan.update();
+            }
+            if (data.belanja) {
+                chartBelanja.data.datasets[0].data = data.belanja;
+                chartBelanja.update();
+            }
         }
 
-        // Load awal data statis dari PHP
-        const initialStatis = <?= json_encode($summaryStatis) ?>;
-        populateStatisChart(initialStatis);
+        // Load data grafik pertama kali dari server
+        const initialData = <?= json_encode($trenBulanan) ?>;
+        updateCharts(initialData);
 
-        // Event AJAX Filter Grafik Statis
-        $('#btnFilterStatis, #filterStatisBulan, #filterStatisTahun').on('click change', function(e) {
-            // Mencegah multiple trigger bersamaan jika mengklik tombol
-            if (e.type === 'click' && this.id !== 'btnFilterStatis') return;
-
-            let bulan = $('#filterStatisBulan').val();
-            let tahun = $('#filterStatisTahun').val();
-
+        // Filter Tahun Grafik via AJAX
+        $('#filterTahunGrafik').change(function() {
+            let tahun = $(this).val();
             $.ajax({
-                url: '<?= base_url('realisasi/get-summary') ?>',
+                url: '<?= base_url('realisasi/get-tren-bulanan') ?>',
                 type: 'GET',
                 data: {
-                    tahun: tahun,
-                    bulan: bulan
+                    tahun: tahun
                 },
                 dataType: 'json',
-                success: function(response) {
-                    if (response.status === 'success') {
-                        populateStatisChart(response.data);
+                success: function(res) {
+                    if (res.status === 'success') {
+                        updateCharts(res.data);
                     }
-                },
-                error: function() {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Gagal',
-                        text: 'Gagal mengambil data filter grafik.'
-                    });
                 }
             });
         });
 
         // ==========================================
-        // 2. GRAFIK DINAMIS (LIVE FORM)
-        // ==========================================
-        const ctxDinamis = document.getElementById('chartDinamis').getContext('2d');
-        const chartDinamis = new Chart(ctxDinamis, {
-            type: 'bar',
-            data: {
-                labels: ['Pendapatan', 'Belanja'],
-                datasets: [{
-                        label: 'Anggaran (Rp)',
-                        data: [0, 0],
-                        backgroundColor: '#198754'
-                    },
-                    {
-                        label: 'Realisasi (Rp)',
-                        data: [0, 0],
-                        backgroundColor: '#ffc107'
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'top'
-                    }
-                }
-            }
-        });
-
-        function updateLiveChart() {
-            let totalAnggaranPendapatan = 0,
-                totalRealisasiPendapatan = 0;
-            let totalAnggaranBelanja = 0,
-                totalRealisasiBelanja = 0;
-
-            $('#tbodyRealisasi tr').each(function() {
-                let jenis = $(this).find('.input-jenis').val();
-                let anggaranVal = $(this).find('.input-anggaran').val().replace(/\./g, '').replace(',', '.');
-                let realisasiVal = $(this).find('.input-realisasi').val().replace(/\./g, '').replace(',', '.');
-
-                let anggaran = parseFloat(anggaranVal) || 0;
-                let realisasi = parseFloat(realisasiVal) || 0;
-
-                if (jenis === 'Pendapatan') {
-                    totalAnggaranPendapatan += anggaran;
-                    totalRealisasiPendapatan += realisasi;
-                } else if (jenis === 'Belanja') {
-                    totalAnggaranBelanja += anggaran;
-                    totalRealisasiBelanja += realisasi;
-                }
-            });
-
-            chartDinamis.data.datasets[0].data = [totalAnggaranPendapatan, totalAnggaranBelanja];
-            chartDinamis.data.datasets[1].data = [totalRealisasiPendapatan, totalRealisasiBelanja];
-            chartDinamis.update();
-        }
-
-        // ==========================================
-        // 3. EVENT HANDLER INPUT FORM
+        // 3. EVENT HANDLER FORM INPUT
         // ==========================================
         function formatRupiah(angka) {
             let number_string = angka.replace(/[^,\d]/g, '').toString(),
@@ -393,18 +313,14 @@
             return split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
         }
 
-        $(document).on('keyup change', '.input-number, .input-jenis', function() {
-            if ($(this).hasClass('input-number')) {
-                $(this).val(formatRupiah($(this).val()));
+        $(document).on('keyup change', '.input-number', function() {
+            $(this).val(formatRupiah($(this).val()));
 
-                let row = $(this).closest('tr');
-                let anggaran = parseFloat(row.find('.input-anggaran').val().replace(/\./g, '').replace(',', '.')) || 0;
-                let realisasi = parseFloat(row.find('.input-realisasi').val().replace(/\./g, '').replace(',', '.')) || 0;
-                let persentase = anggaran > 0 ? (realisasi / anggaran) * 100 : 0;
-                row.find('.cell-persentase').text(persentase.toFixed(1) + '%');
-            }
-
-            updateLiveChart();
+            let row = $(this).closest('tr');
+            let anggaran = parseFloat(row.find('.input-anggaran').val().replace(/\./g, '').replace(',', '.')) || 0;
+            let realisasi = parseFloat(row.find('.input-realisasi').val().replace(/\./g, '').replace(',', '.')) || 0;
+            let persentase = anggaran > 0 ? (realisasi / anggaran) * 100 : 0;
+            row.find('.cell-persentase').text(persentase.toFixed(1) + '%');
         });
 
         // Tambah baris
@@ -439,14 +355,12 @@
 
             $('#tbodyRealisasi').append(newRow);
             rowIndex++;
-            updateLiveChart();
         });
 
         // Hapus baris
         $(document).on('click', '.btn-remove-row', function() {
             if ($('#tbodyRealisasi tr').length > 1) {
                 $(this).closest('tr').remove();
-                updateLiveChart();
             } else {
                 Swal.fire({
                     icon: 'warning',
@@ -456,14 +370,14 @@
             }
         });
 
-        // Form Submit
+        // Form Submit via AJAX
         $('#formRealisasi').submit(function(e) {
             e.preventDefault();
             let btnSubmit = $('#btnSubmit');
             btnSubmit.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span> Menyimpan...');
 
             $.ajax({
-                url: '<?= base_url('realisasi/store') ?>',
+                url: '<?= base_url('' . $wilayah . '/' . $groupuser . '/realisasi/store') ?>',
                 type: 'POST',
                 data: $(this).serialize(),
                 dataType: 'json',

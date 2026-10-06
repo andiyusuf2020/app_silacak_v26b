@@ -91,7 +91,7 @@
                             <a href="<?= hash_url(' ' . $wilayah . '/' . $groupuser, ['hal' => 'pendapatan']);
                                         ?>" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
-                                <p>Laporan Pendapatan <br> APBD</p>
+                                <p>Lap.Total Pendapatan <br>dan Belanja perBulan <br> APBD</p>
                             </a>
                         </li>
                     </ul>
