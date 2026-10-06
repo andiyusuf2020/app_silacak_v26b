@@ -10,7 +10,7 @@ class RealisasiPendapatanModel extends Model
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
-    protected $useSoftDeletes = true;
+    // protected $useSoftDeletes = true;
 
     protected $allowedFields    = [
         'tahun_anggaran',
@@ -22,8 +22,8 @@ class RealisasiPendapatanModel extends Model
         'realisasi'
     ];
     protected $useTimestamps = true;
-    protected $createdField = 'CREATE_AT';
-    protected $updatedField = 'UPDATE_AT';
+    protected $createdField = 'created_at';
+    protected $updatedField = 'updated_at';
 
     // Ambil list data berdasarkan filter tahun & bulan
     public function getDataFilter($tahun, $bulan = 'all')
