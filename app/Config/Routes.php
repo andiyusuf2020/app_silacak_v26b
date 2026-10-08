@@ -67,13 +67,14 @@ $routes->group('tanggamus/superadmin', ['filter' => 'role:superadmin'], function
     $routes->get('realisasi/get-detail/(:num)', 'KabtanggamusController\AdminAdbangController::getDetail/$1');
     $routes->post('realisasi/update/(:num)', 'KabtanggamusController\AdminAdbangController::update/$1');
     $routes->post('realisasi/delete/(:num)', 'KabtanggamusController\AdminAdbangController::delete/$1');
+    // $routes->get('dashboard-stats', 'DashboardAdminController::index');
+    $routes->post('dashboard-stats/update', 'KabtanggamusController\AdminAdbangController::updatedatadashboard');
 });
 $routes->post('anggaran-kas/store', 'KabtanggamusController\AdminAdbangController::storeangkas_ajax');
-// $routes->get('realisasi', [RealisasiController::class, 'index']);
-$routes->get('realisasi/get-tren-bulanan', [RealisasiController::class, 'getTrenBulanan']);
-// $routes->get('realisasi/get-detail/(:num)', [RealisasiController::class, 'getDetail/$1']);
-// $routes->post('realisasi/update/(:num)', [RealisasiController::class, 'update/$1']);
-// $routes->post('realisasi/delete/(:num)', [RealisasiController::class, 'delete/$1']);
+// $routes->get('rekap', [RekapController::class, 'index']);
+$routes->get('rekap/exportXlsx', 'KabtanggamusController\AdminAdbangController::exportXlsx');
+$routes->get('rekap/exportPdf', 'KabtanggamusController\AdminAdbangController::exportPdf');
+$routes->get('rekap/getDataJson', 'KabtanggamusController\AdminAdbangController::getDataJson');
 $routes->post('tanggamus/realisasi/store', 'KabtanggamusController\AdminAdbangController::storeangkas_ajax'); ///====for user adminadbang
 $routes->group('tanggamus/Adminadbang', ['filter' => 'role:Adminadbang'], function ($routes) {
     $routes->get('', 'KabtanggamusController\AdminAdbangController::index');

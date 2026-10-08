@@ -78,8 +78,8 @@
     <!--end::Accessibility Meta Tags-->
 
     <!--begin::Primary Meta Tags-->
-    <meta name="title" content="AdminLTE 4 | Data Tables" />
-    <meta name="author" content="ColorlibHQ" />
+    <meta name="title" content="SiTAPIS-KAB | Data User" />
+    <meta name="Adbang" content="SiTAPIS-KAB" />
     <meta
         name="description"
         content="AdminLTE is a free Bootstrap 5 admin dashboard template with almost 50 example pages, built with vanilla JS and designed with accessibility in mind." />
@@ -509,51 +509,22 @@
                         },
                         width: 120,
                     },
-                    // {
-                    //     title: 'Status',
-                    //     field: 'active',
-                    //     formatter: function(cell) {
-                    //         const value = cell.getValue();
-                    //         // Jika nilai 1 atau "1" => Aktif, jika 0 atau "0" => NonAktif
-                    //         if (value == 1) {
-                    //             return '<span class="badge bg-success">Aktif</span>';
-                    //         } else {
-                    //             return '<span class="badge bg-danger">NonAktif</span>';
-                    //         }
-                    //     },
-                    //     headerFilter: 'list',
-                    //     headerFilterParams: {
-                    //         values: [' ', 'Aktif', 'NonAktif']
-                    //     },
-                    //     width: 130,
-                    //     hozAlign: 'center',
-                    // },
                     {
                         title: 'Status',
                         field: 'active',
                         formatter: function(cell) {
-                            const rowData = cell.getRow().getData();
                             const value = cell.getValue();
+                            // Jika nilai 1 atau "1" => Aktif, jika 0 atau "0" => NonAktif
 
-                            // Jika bernilai 1 / "1" (Aktif), link akan mengarah ke aksi nonaktifkan (0)
-                            // Jika bernilai 0 / "0" (NonAktif), link akan mengarah ke aksi aktifkan (1)
                             if (value == 1) {
-                                return `<a href="updateuser?token=${rowData.update_token_aktif}" 
-                                title="Klik untuk menonaktifkan" 
-                                onclick="return confirm('Apakah Anda yakin ingin menonaktifkan user ini?')">
-                        <span class="badge bg-success">Aktif</span>
-                    </a>`;
+                                return '<span class="badge bg-success">Aktif</span>';
                             } else {
-                                return `<a href="updateuser?token=${rowData.update_token_aktif}" 
-                                title="Klik untuk mengaktifkan" 
-                                onclick="return confirm('Apakah Anda yakin ingin mengaktifkan user ini?')">
-                        <span class="badge bg-danger">NonAktif</span>
-                    </a>`;
+                                return '<span class="badge bg-danger">NonAktif</span>';
                             }
                         },
                         headerFilter: 'list',
                         headerFilterParams: {
-                            values: ['', '1', '0'] // Disesuaikan dengan value data agar filter berjalan tepat
+                            values: [' ', 'Aktif', 'NonAktif']
                         },
                         width: 130,
                         hozAlign: 'center',
@@ -573,8 +544,8 @@
                             const rowData = cell.getRow().getData();
 
                             return `
-                    <a href="updateuser?token=${rowData.update_token_groupuser}" class="btn btn-sm btn-primary">Update Role</a>
-                    <a href="updateuser?token=${rowData.update_token_hapus}" class="btn btn-sm btn-danger">Delete</a>
+                    <a href="updateuser?token=${rowData.update_token}" class="btn btn-sm btn-primary">Update</a>
+                    <a href="deleteuser/${rowData.id}" class="btn btn-sm btn-danger">Delete</a>
                 `;
                         }
                     }

@@ -9,6 +9,7 @@
 
     <link rel="stylesheet" href="<?php echo base_url('cssportal/templatemo-graph-page.css'); ?>">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
 
     <link
         rel="stylesheet"
@@ -27,7 +28,7 @@
                         <path d="M3 13h2v8H3zm4-8h2v13H7zm4-2h2v15h-2zm4 4h2v11h-2zm4-2h2v13h-2z" />
                     </svg>
                 </div>
-                <span class="logo-text">Dashboard SiTAPIS-SPAT</span>
+                <span class="logo-text">Dashboard SiTAPIS-KAB <> SIPAdbang</span>
             </a>
             <ul class="nav-links">
                 <li><a href="<?= base_url() ?>" class="active">Home</a></li>
@@ -73,7 +74,9 @@
 
         <div class="hero-content">
             <div class="hero-text">
+                <img src="<?= base_url() ?>cssportal/img_home/tanggamus.png" width="25%" alt="Logo Kabupaten/Kota" />
                 <img src="<?= base_url() ?>cssportal/img_home/sitapis-kab.png" width="40%" alt="Logo Kabupaten/Kota" />
+
                 <h1>Kab. <?= session()->get('wilayah') ?><br>Dashboard</h1>
                 <p>
                     Penyampaian Resume Data Administrasi Pembangunan <?= session()->get('namawilayah') ?> yang
@@ -120,7 +123,7 @@
                         <div class="stat-icon">📊</div>
                         <div class="stat-title">Jumlah Perangkat Daerah</div>
                     </div>
-                    <div class="stat-value">125</div>
+                    <div class="stat-value"><?= $datadashboard['jumlah_perangkat_daerah'] ?? '0' ?></div>
                     <div class="stat-description">Total number of departments and agencies under the provincial government.</div>
                 </div>
                 <div class="stat-card">
@@ -128,7 +131,7 @@
                         <div class="stat-icon">📊</div>
                         <div class="stat-title">Jumlah Kecamatan</div>
                     </div>
-                    <div class="stat-value">12</div>
+                    <div class="stat-value"><?= $datadashboard['jumlah_kecamatan'] ?? '0' ?></div>
                     <div class="stat-description">Total number of districts within the regency.</div>
                 </div>
                 <div class="stat-card">
@@ -136,7 +139,7 @@
                         <div class="stat-icon">📊</div>
                         <div class="stat-title">Jumlah Tiuh/Kampung</div>
                     </div>
-                    <div class="stat-value">120</div>
+                    <div class="stat-value"><?= $datadashboard['jumlah_tiuh_kampung'] ?? '0' ?></div>
                     <div class="stat-description">Total number of villages within the regency.</div>
                 </div>
                 <div class="stat-card">
@@ -144,7 +147,7 @@
                         <div class="stat-icon">💰</div>
                         <div class="stat-title">Total Anggaran APBD</div>
                     </div>
-                    <div class="stat-value">1.5T</div>
+                    <div class="stat-value"><?= $datadashboard['total_anggaran_apbd'] ?? '0' ?></div>
                     <div class="stat-description">Jumlah Anggaran APBD yang dialokasikan untuk pembangunan di wilayah ...,.</div>
                 </div>
                 <div class="stat-card">
@@ -152,7 +155,7 @@
                         <div class="stat-icon"><i class="bi bi-bank2"></i></div>
                         <div class="stat-title">Index SAKIP</div>
                     </div>
-                    <div class="stat-value">(B) 90.19</div>
+                    <div class="stat-value"><?= $datadashboard['index_sakip'] ?? '0' ?></div>
                     <div class="stat-description">Sistem ini merupakan rangkaian aktivitas, alat,
                         dan prosedur yang dirancang untuk menetapkan,
                         mengukur, mengumpulkan data, serta melaporkan kinerja pada instansi pemerintah</div>
@@ -163,7 +166,7 @@
                         <div class="stat-icon">🚀</div>
                         <div class="stat-title">Index Reformasi Birokrasi (IRB)</div>
                     </div>
-                    <div class="stat-value">7,392</div>
+                    <div class="stat-value"><?= $datadashboard['index_rb'] ?? '0' ?></div>
                     <div class="stat-description">skor penilaian dari Kementerian Pendayagunaan Aparatur Negara dan Reformasi Birokrasi
                         untuk mengukur tingkat keberhasilan perbaikan tata kelola pemerintahan pada instansi pusat maupun daerah.</div>
                 </div>
@@ -173,7 +176,7 @@
                         <div class="stat-icon">💰</div>
                         <div class="stat-title">Tingkat Kemiskinan</div>
                     </div>
-                    <div class="stat-value">+28.5%</div>
+                    <div class="stat-value"><?= $datadashboard['tingkat_kemiskinan'] ?? '0' ?>%</div>
                     <div class="stat-description">persentase penduduk yang memiliki pengeluaran per kapita di bawah garis kemiskinan</div>
                 </div>
 
@@ -182,7 +185,7 @@
                         <div class="stat-icon">⚡</div>
                         <div class="stat-title">Angka Stunting</div>
                     </div>
-                    <div class="stat-value">99.9%</div>
+                    <div class="stat-value"><?= $datadashboard['angka_stunting'] ?? '0' ?>%</div>
                     <div class="stat-description">persentase atau jumlah balita yang mengalami stunting, yaitu kondisi gagal tumbuh pada anak akibat kekurangan gizi kronis dan
                         infeksi berulang terutama dalam 1.000 Hari Pertama Kehidupan (HPK)—dari
                         dalam kandungan hingga anak berusia 5 tahun.</div>
@@ -192,9 +195,8 @@
         </div>
         </div>
     </section>
-
-    <!-- Analytics Section -->
-    <section class="analytics-section" id="analytics">
+    <!-- Reports Section -->
+    <section class="reports-section" id="analytics">
         <div class="dashboard-container">
             <h2 class="section-title">Capaian Kinerja Anggaran</h2>
 
@@ -216,213 +218,33 @@
                     <div class="metric-value">68M</div>
                     <div class="metric-label">REALISASI BELANJA(APBD)</div>
                 </div>
-                <div class="metric-item">
-                    <div class="metric-value">89</div>
-                    <div class="metric-label">APBD PERANGKAT DAERAH</div>
-                </div>
-                <div class="metric-item">
-                    <div class="metric-value">3.2K</div>
-                    <div class="metric-label">REALISASI APBD PERANGKAT DAERAH</div>
-                </div>
             </div>
 
-            <!-- Chart Cards -->
-            <div class="charts-grid">
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <h3 class="chart-title">📈 Tren Realisasi Belanja APBD Bulanan</h3>
-                        <!-- <div class="chart-options">
+            <div align="center">
+                <div class="chart-header">
+                    <h3 class="chart-title">📈Grafik Perbandingan Realisasi Pendapatan vs Belanja (%) Tahun <?= esc($tahunSelected) ?></h3>
+                    <!-- <div class="chart-options">
                             <span class="chart-option active">2024</span>
                             <span class="chart-option">2023</span>
                             <span class="chart-option">2022</span>
                         </div> -->
-                    </div>
-                    <div class="chart-container">
-                        <div class="bar-chart" id="barChart">
-                            <div class="bar" style="height: 10%">
-                                <span class="bar-value">10</span>
-                                <span class="bar-label">Jan</span>
-                            </div>
-                            <div class="bar" style="height: 80%">
-                                <span class="bar-value">180</span>
-                                <span class="bar-label">Feb</span>
-                            </div>
-                            <div class="bar" style="height: 45%">
-                                <span class="bar-value">90</span>
-                                <span class="bar-label">Mar</span>
-                            </div>
-                            <div class="bar" style="height: 70%">
-                                <span class="bar-value">140</span>
-                                <span class="bar-label">Apr</span>
-                            </div>
-                            <div class="bar" style="height: 90%">
-                                <span class="bar-value">200</span>
-                                <span class="bar-label">May</span>
-                            </div>
-                            <div class="bar" style="height: 65%">
-                                <span class="bar-value">130</span>
-                                <span class="bar-label">Jun</span>
-                            </div>
-                            <div class="bar" style="height: 75%">
-                                <span class="bar-value">150</span>
-                                <span class="bar-label">Jul</span>
-                            </div>
-                            <div class="bar" style="height: 85%">
-                                <span class="bar-value">170</span>
-                                <span class="bar-label">Aug</span>
-                            </div>
-                            <div class="bar" style="height: 85%">
-                                <span class="bar-value">25</span>
-                                <span class="bar-label">Sept</span>
-                            </div>
-                            <div class="bar" style="height: 85%">
-                                <span class="bar-value">100</span>
-                                <span class="bar-label">Oct</span>
-                            </div>
-                            <div class="bar" style="height: 85%">
-                                <span class="bar-value">170</span>
-                                <span class="bar-label">Nov</span>
-                            </div>
-                            <div class="bar" style="height: 85%">
-                                <span class="bar-value">170</span>
-                                <span class="bar-label">Dec</span>
-                            </div>
-
+                </div>
+                <!-- SECTION: GRAFIK REALISASI GABUNGAN (PENDAPATAN VS BELANJA) -->
+                <div class="card card-outline card-info shadow-sm mb-4">
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="chartRealisasiCombined"></canvas>
                         </div>
                     </div>
                 </div>
 
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <h3 class="chart-title">📊 Tren Realisasi Pendapatan Bulanan</h3>
-
-                    </div>
-                    <div class="chart-container">
-                        <div class="bar-chart" id="barChart">
-                            <div class="bar" style="height: 10%">
-                                <span class="bar-value">10</span>
-                                <span class="bar-label">Jan</span>
-                            </div>
-                            <div class="bar" style="height: 80%">
-                                <span class="bar-value">180</span>
-                                <span class="bar-label">Feb</span>
-                            </div>
-                            <div class="bar" style="height: 45%">
-                                <span class="bar-value">90</span>
-                                <span class="bar-label">Mar</span>
-                            </div>
-                            <div class="bar" style="height: 70%">
-                                <span class="bar-value">140</span>
-                                <span class="bar-label">Apr</span>
-                            </div>
-                            <div class="bar" style="height: 90%">
-                                <span class="bar-value">200</span>
-                                <span class="bar-label">May</span>
-                            </div>
-                            <div class="bar" style="height: 65%">
-                                <span class="bar-value">130</span>
-                                <span class="bar-label">Jun</span>
-                            </div>
-                            <div class="bar" style="height: 75%">
-                                <span class="bar-value">150</span>
-                                <span class="bar-label">Jul</span>
-                            </div>
-                            <div class="bar" style="height: 85%">
-                                <span class="bar-value">170</span>
-                                <span class="bar-label">Aug</span>
-                            </div>
-                            <div class="bar" style="height: 85%">
-                                <span class="bar-value">25</span>
-                                <span class="bar-label">Sept</span>
-                            </div>
-                            <div class="bar" style="height: 85%">
-                                <span class="bar-value">100</span>
-                                <span class="bar-label">Oct</span>
-                            </div>
-                            <div class="bar" style="height: 85%">
-                                <span class="bar-value">170</span>
-                                <span class="bar-label">Nov</span>
-                            </div>
-                            <div class="bar" style="height: 85%">
-                                <span class="bar-value">170</span>
-                                <span class="bar-label">Dec</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <h3 class="chart-title">🌍 Tren Realisasi Belanja pertriwulan</h3>
-                    </div>
-                    <div class="chart-container">
-                        <div class="bar-chart">
-                            <div class="bar" style="height: 85%; background: linear-gradient(180deg, #ff6b6b 0%, #ff8e53 100%);">
-                                <span class="bar-value">42%</span>
-                                <span class="bar-label">Triwulan 1</span>
-                            </div>
-                            <div class="bar" style="height: 65%; background: linear-gradient(180deg, #4ecdc4 0%, #44a08d 100%);">
-                                <span class="bar-value">28%</span>
-                                <span class="bar-label">Triwulan 2</span>
-                            </div>
-                            <div class="bar" style="height: 45%; background: linear-gradient(180deg, #45b7d1 0%, #96c93d 100%);">
-                                <span class="bar-value">18%</span>
-                                <span class="bar-label">Triwulan 3</span>
-                            </div>
-                            <div class="bar" style="height: 25%; background: linear-gradient(180deg, #f093fb 0%, #f5576c 100%);">
-                                <span class="bar-value">12%</span>
-                                <span class="bar-label">Triwulan 4</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <h3 class="chart-title">🌍 APBD Per Rekening Belanja</h3>
-                    </div>
-                    <div class="chart-container">
-                        <table border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse; text-align: center;">
-                            <thead>
-                                <tr>
-                                    <th>Uraian Belanja</th>
-                                    <th>Pagu</th>
-                                    <th>Persentase Realisasi </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                <tr>
-                                    <td>Belanja Pegawai</td>
-                                    <td>Rp 42.000.000</td>
-                                    <td>42%</td>
-                                </tr>
-                                <tr>
-                                    <td>Belanja Barang dan Jasa</td>
-                                    <td>Rp 28.000.000</td>
-                                    <td>28%</td>
-                                </tr>
-                                <tr>
-                                    <td>Belanja Modal</td>
-                                    <td>Rp 18.000.000</td>
-                                    <td>18%</td>
-                                </tr>
-                                <tr>
-                                    <td>Belanja Perjalanan Dinas</td>
-                                    <td>Rp 12.000.000</td>
-                                    <td>12%</td>
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>Total</th>
-                                    <th>Rp 100.000.000</th>
-                                    <th>100%</th>
-                                </tr>
-                        </table>
-                    </div>
-                </div>
             </div>
+
         </div>
+    </section>
+    <!-- Analytics Section -->
+    <section class="analytics-section" id="analytics">
+
         <div class="dashboard-container">
             <h2 class="section-title">Dashboard Realisasi Anggaran dan capaian aktivitas belanja yang merupakan
                 output barang/jasa pada
@@ -594,6 +416,105 @@
                 | Designed by <a href="https://adbang.lampungprov.go.id" rel="nofollow noopener" target="_blank">Bagian Administrasi Pembangunan Setda ...,</a></p>
         </div>
     </footer>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        $(document).ready(function() {
+
+            // ==========================================
+            // 1. INITIALIZE COMBINED CHART (PENDAPATAN VS BELANJA)
+            // ==========================================
+            const monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+            const ctxCombined = document.getElementById('chartRealisasiCombined').getContext('2d');
+
+            const chartCombined = new Chart(ctxCombined, {
+                type: 'line',
+                data: {
+                    labels: monthLabels,
+                    datasets: [{
+                            label: 'Realisasi Pendapatan (%)',
+                            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            borderColor: '#198754',
+                            backgroundColor: 'rgba(25, 135, 84, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.3,
+                            pointRadius: 5,
+                            pointHoverRadius: 7
+                        },
+                        {
+                            label: 'Realisasi Belanja (%)',
+                            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            borderColor: '#dc3545',
+                            backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.3,
+                            pointRadius: 5,
+                            pointHoverRadius: 7
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.parsed.y + '%';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Persentase (%)'
+                            },
+                            ticks: {
+                                callback: value => value + '%'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Bulan'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Helper Update Data Chart
+            function updateCombinedChart(data) {
+                if (data.pendapatan) {
+                    chartCombined.data.datasets[0].data = data.pendapatan;
+                }
+                if (data.belanja) {
+                    chartCombined.data.datasets[1].data = data.belanja;
+                }
+                chartCombined.update();
+            }
+
+            // Load data awal grafik dari PHP
+            const initialTren = <?= json_encode($trenBulanan) ?>;
+            updateCombinedChart(initialTren);
+
+
+        });
+    </script>
 
     <script src="<?php echo base_url('cssportal/templatemo-graph-script.js'); ?>"></script>
     <script

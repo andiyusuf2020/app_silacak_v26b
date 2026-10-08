@@ -23,6 +23,8 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 class AdminAdbangController extends BaseController
 {
@@ -53,6 +55,190 @@ class AdminAdbangController extends BaseController
         $this->realisasiPendapatanModel = new RealisasiPendapatanModel();
         $this->dataDashboardModel = new DataDashboardModel();
         $this->encrypter      = \Config\Services::encrypter();
+    }
+    public function getDataJson()
+    {
+        // $bulan = $this->request->getGet('bulan') ?? date('m');
+        $jadwalaktif = $this->jadwalmodel->jadwalaktifskrg();
+
+        $dataRekap = $this->realapbdmodel->getRekapPerSKPD($jadwalaktif['bulan']);
+
+        return $this->response->setJSON($dataRekap);
+    }
+    public function exportXlsx()
+    {
+        $bulan = $this->request->getGet('bulan') ?? date('m');
+        $dataRekap = $this->realapbdmodel->getRekapPerSKPD($bulan);
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Judul Header Spreadsheet
+        $sheet->setCellValue('A1', 'REKAPITULASI CAPAIAN DAN EFISIENSI PER SKPD');
+        $sheet->setCellValue('A2', 'BULAN: ' . $bulan);
+        $sheet->mergeCells('A1:J1');
+        $sheet->mergeCells('A2:J2');
+        $sheet->getStyle('A1:A2')->getFont()->setBold(true)->setSize(12);
+
+        // Header Tabel
+        $headers = [
+            'NO',
+            'KODE SKPD',
+            'NAMA SKPD',
+            'ANGGARAN (Rp)',
+            'REALISASI (Rp)',
+            'TOTAL SRO',
+            'SRO NOL',
+            'CAPAIAN REALISASI (%)',
+            'CAPAIAN SRO (%)',
+            'STATUS EFISIENSI'
+        ];
+
+        $col = 'A';
+        foreach ($headers as $header) {
+            $sheet->setCellValue($col . '4', $header);
+            $col++;
+        }
+
+        // Style Header Tabel
+        $sheet->getStyle('A4:J4')->getFont()->setBold(true);
+        $sheet->getStyle('A4:J4')->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->getStartColor()->setARGB('D9E1F2');
+        $sheet->getStyle('A4:J4')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+        // Isi Data
+        $rowNum = 5;
+        $no = 1;
+        foreach ($dataRekap as $row) {
+            $sheet->setCellValue('A' . $rowNum, $no++);
+            $sheet->setCellValue('B' . $rowNum, $row['kode']);
+            $sheet->setCellValue('C' . $rowNum, $row['nama']);
+            $sheet->setCellValue('D' . $rowNum, $row['anggaran']);
+            $sheet->setCellValue('E' . $rowNum, $row['realisasi']);
+            $sheet->setCellValue('F' . $rowNum, $row['sro']);
+            $sheet->setCellValue('G' . $rowNum, $row['sro_nol']);
+            $sheet->setCellValue('H' . $rowNum, $row['capaian_realisasi'] / 100);
+            $sheet->setCellValue('I' . $rowNum, $row['capaian_sro'] / 100);
+            $sheet->setCellValue('J' . $rowNum, $row['status_efisiensi']);
+
+            // Format Angka & Persentase
+            $sheet->getStyle('D' . $rowNum . ':E' . $rowNum)->getNumberFormat()->setFormatCode('#,##0.00');
+            $sheet->getStyle('H' . $rowNum . ':I' . $rowNum)->getNumberFormat()->setFormatCode('0.00%');
+            $sheet->getStyle('A' . $rowNum . ':B' . $rowNum)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('F' . $rowNum . ':J' . $rowNum)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+            $rowNum++;
+        }
+
+        // Border Tabel
+        $styleBorder = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => Border::BORDER_THIN,
+                    'color' => ['argb' => '000000'],
+                ],
+            ],
+        ];
+        $sheet->getStyle('A4:J' . ($rowNum - 1))->applyFromArray($styleBorder);
+
+        // Auto Size Kolom
+        foreach (range('A', 'J') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        // Export File
+        $filename = "Rekap_SKPD_Bulan_{$bulan}.xlsx";
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit;
+    }
+
+    public function exportPdf()
+    {
+        $bulan = $this->request->getGet('bulan') ?? date('m');
+        $dataRekap = $this->realapbdmodel->getRekapPerSKPD($bulan);
+
+        $data = [
+            'title'     => 'Rekapitulasi Per SKPD',
+            'bulan'     => $bulan,
+            'dataRekap' => $dataRekap,
+        ];
+
+        $html = view('KabtanggamusViews/Adminadbang/laporanlrfkopdpdf', $data);
+        // return view('KabtanggamusViews/Adminadbang/laporanlrfkopdpdf', $data);
+
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+
+        $dompdf = new Dompdf($options);
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'landscape');
+        $dompdf->render();
+
+        $dompdf->stream("Rekap_SKPD_Bulan_{$bulan}.pdf", ["Attachment" => true]);
+        exit;
+    }
+    public function updatedatadashboard()
+    {
+        $rules = [
+            'enc_id'                  => 'required',
+            'jumlah_perangkat_daerah' => 'required|integer|greater_than_equal_to[0]',
+            'jumlah_kecamatan'        => 'required|integer|greater_than_equal_to[0]',
+            'jumlah_tiuh_kampung'     => 'required|integer|greater_than_equal_to[0]',
+            'total_anggaran_apbd'     => 'required|string|max_length[50]',
+            'index_sakip'             => 'required|string|max_length[50]',
+            'index_rb'                => 'required|string|max_length[50]',
+            'tingkat_kemiskinan'      => 'required|string|max_length[50]',
+            'angka_stunting'          => 'required|string|max_length[50]',
+        ];
+
+        if (!$this->validate($rules)) {
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON([
+                    'status' => 'error',
+                    'errors' => $this->validator->getErrors(),
+                ]);
+            }
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        try {
+            $encId = $this->request->getPost('enc_id');
+            $decryptedId = $this->encrypter->decrypt(hex2bin($encId));
+        } catch (\Exception $e) {
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON(['status' => 'error', 'message' => 'Token/ID tidak valid.']);
+            }
+            return redirect()->back()->with('error', 'Token/ID tidak valid.');
+        }
+
+        $saveData = [
+            'jumlah_perangkat_daerah' => $this->request->getPost('jumlah_perangkat_daerah'),
+            'jumlah_kecamatan'        => $this->request->getPost('jumlah_kecamatan'),
+            'jumlah_tiuh_kampung'     => $this->request->getPost('jumlah_tiuh_kampung'),
+            'total_anggaran_apbd'     => $this->request->getPost('total_anggaran_apbd'),
+            'index_sakip'             => $this->request->getPost('index_sakip'),
+            'index_rb'                => $this->request->getPost('index_rb'),
+            'tingkat_kemiskinan'      => $this->request->getPost('tingkat_kemiskinan'),
+            'angka_stunting'          => $this->request->getPost('angka_stunting'),
+        ];
+
+        $this->dataDashboardModel->update($decryptedId, $saveData);
+
+        if ($this->request->isAJAX()) {
+            return $this->response->setJSON([
+                'status'  => 'success',
+                'message' => 'Data Dashboard Pembangunan berhasil diperbarui!',
+            ]);
+        }
+
+        return redirect()->to(hash_url('' . session()->get('wilayah') . '/' . session()->get('groupuser'), ['hal' => 'inputdashboardutama']))->with('success', 'Data Dashboard Pembangunan berhasil diperbarui!');
     }
     // 2. Endpoint AJAX - Ambil Detail Single Data untuk Modal Edit
     public function getDetail($id = null)
@@ -124,7 +310,8 @@ class AdminAdbangController extends BaseController
         }
 
         return $this->response->setJSON(['status' => 'error', 'message' => 'Gagal menghapus data.']);
-    }    // Endpoint AJAX untuk reload tren grafik berdasarkan filter tahun
+    }
+    // Endpoint AJAX untuk reload tren grafik berdasarkan filter tahun
     public function getTrenBulanan()
     {
         if (!$this->request->isAJAX()) {
@@ -495,6 +682,21 @@ class AdminAdbangController extends BaseController
             $data['encryptedId'] = $encryptedId;
             $data['validation'] = \Config\Services::validation();
             return view('KabtanggamusViews/Adminadbang/form_inputdashboardutama', $data);
+        } elseif ($hal == 'laporanrfkopd') {
+            // Handle the 'laporanrfkopd' case
+            // $bulan = $this->request->getGet('bulan') ?? date('m');
+            // $dataRekap = $this->realapbdmodel->getRekapPerSKPD($jadwalaktif['bulan']);
+
+            // $data = [
+            //     'title'     => 'Rekap Per SKPD',
+            //     'bulan'     => $bulan,
+            //     'dataRekap' => $dataRekap,
+            // ];
+            $data['dataRekap'] = $this->realapbdmodel->getRekapPerSKPD($jadwalaktif['bulan']);
+            $data['bulan'] = $jadwalaktif['bulan'];
+            $data['title'] = 'Rekap Per SKPD';
+            // echo dd($data['dataRekap']);
+            return view('KabtanggamusViews/Adminadbang/laporanlrfkopd2', $data);
         }
 
         if ($hal == 'gantibulanaktif') {
@@ -618,7 +820,9 @@ class AdminAdbangController extends BaseController
                 'datauser' => $user->sub_unit,
                 'tglaktif' => session()->get('tglaktif'),
                 'nama_opd' => $kdSU,
-                'rekap' => $this->realapbdmodel->getRekapLengkapPerTingkatAmanlengkap($blndata, $kdSU),
+
+                'rekap' => $this->realapbdmodel->getRekapLengkapPerTingkatAmanlengkapperOPDperProgram($blndata),
+                // 'rekap' => $this->realapbdmodel->getRekapLengkapPerTingkatAmanlengkap($blndata, $kdSU),
                 // 'rekap' => $this->realapbdmodel->getRekapLengkapPerTingkat($blndata, $kdSU),
                 'blndata' => $blndata,
                 'tglapbd' => $this->realapbdmodel->tgldata(),
@@ -630,7 +834,7 @@ class AdminAdbangController extends BaseController
         // echo dd($blndata . '-' . $kdSU);
         // $data['rekap'] = $this->realapbdmodel->getRekapLengkapPerTingkat($blndata, $kdSU);
         // echo dd($data['rekap']);
-        return view('KabtanggamusViews/listsubkeg6', $data);
+        return view('KabtanggamusViews/listsubkeg7', $data);
     }
 
 

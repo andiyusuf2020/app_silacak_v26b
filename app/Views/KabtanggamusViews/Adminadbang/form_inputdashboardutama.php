@@ -1,8 +1,8 @@
 <?= $this->extend('template/layout') ?>
 <?= $this->section('content') ?>
 <!-- AdminLTE v4 & Bootstrap 5 CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"> -->
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"> -->
 <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-beta2/dist/css/adminlte.min.css"> -->
 
 <style>
@@ -37,13 +37,7 @@
         <div class="row align-items-center">
             <div class="col-sm-6">
                 <h3 class="mb-0 fw-bold text-dark"><i class="bi bi-speedometer2 text-primary me-2"></i>Dashboard Pembangunan</h3>
-                <small class="text-secondary">Kelola statistik & indikator kinerja Kabupaten Tanggamus</small>
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-end mb-0">
-                    <li class="breadcrumb-item"><a href="#">Admin</a></li>
-                    <li class="breadcrumb-item active">Dashboard Input</li>
-                </ol>
+                <small class="text-secondary">Kelola statistik & indikator kinerja <?= session()->get('namawilayah') ?></small>
             </div>
         </div>
     </div>
@@ -64,7 +58,7 @@
         <?php endif; ?>
     </div>
 
-    <form id="formDashboardStat" action="<?= base_url('admin/dashboard-stats/update') ?>" method="POST">
+    <form id="formDashboardStat" action="<?= base_url('' . $wilayah . '/' . $groupuser . '/dashboard-stats/update') ?>" method="POST">
         <?= csrf_field() ?>
         <input type="hidden" name="enc_id" value="<?= esc($encryptedId) ?>">
 
@@ -227,7 +221,7 @@
 </div>
 
 <!-- JS Dependencies -->
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> -->
 <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> -->
 <!-- <script src="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-beta2/dist/js/adminlte.min.js"></script> -->
 

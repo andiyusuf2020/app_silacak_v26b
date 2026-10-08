@@ -54,6 +54,166 @@ class RealApbdModel extends Model
     protected $createdField = 'CREATE_AT';
     protected $updatedField = 'UPDATE_AT';
 
+    public function getRekapPerSKPD($bulan)
+    {
+        // 1. Ambil & kelompokkan data langsung di level SKPD
+        $data = $this->select('
+            KODE_UNIT_SKPD,
+            NAMA_UNIT_SKPD,
+            SUM(TOTAL_ANGGARAN) AS total_anggaran,
+            SUM(TOTAL_REALISASI) AS total_realisasi,
+            COUNT(KODE_SRO) AS total_sro,
+            SUM(CASE WHEN TOTAL_REALISASI = 0 THEN 1 ELSE 0 END) AS total_sro_nol
+        ')
+            ->where('BULAN', $bulan)
+            ->groupBy(['KODE_UNIT_SKPD', 'NAMA_UNIT_SKPD'])
+            ->get()
+            ->getResultArray();
+
+        if (empty($data)) {
+            return [];
+        }
+
+        $rekap = [];
+
+        // 2. Olah data & hitung capaian per-SKPD
+        foreach ($data as $row) {
+            $anggaran  = (float)$row['total_anggaran'];
+            $realisasi = (float)$row['total_realisasi'];
+            $sro       = (int)$row['total_sro'];
+            $sroNol    = (int)$row['total_sro_nol'];
+
+            $capaianReal = $this->hitungPersen($realisasi, $anggaran);
+            $capaianSro  = $this->hitungPersen($sro - $sroNol, $sro);
+            $efisiensi   = round($capaianSro - $capaianReal, 2);
+
+            $rekap[] = [
+                'kode'              => !empty($row['KODE_UNIT_SKPD']) ? $row['KODE_UNIT_SKPD'] : $row['NAMA_UNIT_SKPD'],
+                'nama'              => $row['NAMA_UNIT_SKPD'],
+                'anggaran'          => $anggaran,
+                'realisasi'         => $realisasi,
+                'sro'               => $sro,
+                'sro_nol'           => $sroNol,
+                'capaian_realisasi' => $capaianReal,
+                'capaian_sro'       => $capaianSro,
+                'efisiensi'         => $efisiensi,
+                'status_efisiensi'  => ($efisiensi < 0) ? 'Inefisien' : 'Efisien'
+            ];
+        }
+
+        // 3. Urutkan berdasarkan capaian SRO dari terendah ke tertinggi
+        usort($rekap, function ($a, $b) {
+            return $b['capaian_sro'] <=> $a['capaian_sro'];
+        });
+
+        return $rekap;
+    }
+
+    public function getRekapLengkapPerTingkatAmanlengkapperOPDperProgram($bulan)
+    {
+        // 1. Query mengambil data hingga level Program (menjumlahkan SRO & Realisasi)
+        $builder = $this->select('
+            KODE_UNIT_SKPD,
+            NAMA_UNIT_SKPD,
+            KODE_PROGRAM,
+            NAMA_PROGRAM,
+            SUM(TOTAL_ANGGARAN) AS total_anggaran,
+            SUM(TOTAL_REALISASI) AS total_realisasi,
+            COUNT(KODE_SRO) AS total_sro,
+            SUM(CASE WHEN TOTAL_REALISASI = 0 THEN 1 ELSE 0 END) AS total_sro_nol
+        ')
+            ->where('BULAN', $bulan);
+
+        // // Filter fleksibel untuk Kode atau Nama Unit SKPD
+        // $builder->groupStart()
+        //     ->where('KODE_UNIT_SKPD', $kdSU)
+        //     ->orWhere('NAMA_UNIT_SKPD', $kdSU)
+        //     ->groupEnd();
+
+        $data = $builder->groupBy([
+            'KODE_UNIT_SKPD',
+            'NAMA_UNIT_SKPD',
+            'KODE_PROGRAM',
+            'NAMA_PROGRAM'
+        ])
+            ->get()
+            ->getResultArray();
+
+        if (empty($data)) {
+            return [];
+        }
+
+        $rekap = [];
+
+        // 2. Olah & Akumulasi Data Hingga Level Program
+        foreach ($data as $row) {
+            $kdSkpd    = !empty($row['KODE_UNIT_SKPD']) ? $row['KODE_UNIT_SKPD'] : $row['NAMA_UNIT_SKPD'];
+            $kdProg    = $row['KODE_PROGRAM'];
+
+            $anggaran  = (float)$row['total_anggaran'];
+            $realisasi = (float)$row['total_realisasi'];
+            $sro       = (int)$row['total_sro'];
+            $sroNol    = (int)$row['total_sro_nol'];
+
+            // Inisialisasi Level SKPD
+            if (!isset($rekap[$kdSkpd])) {
+                $rekap[$kdSkpd] = [
+                    'kode'      => $kdSkpd,
+                    'nama'      => $row['NAMA_UNIT_SKPD'],
+                    'anggaran'  => 0,
+                    'realisasi' => 0,
+                    'sro'       => 0,
+                    'sro_nol'   => 0,
+                    'program'   => []
+                ];
+            }
+
+            // Akumulasi ke Level SKPD
+            $rekap[$kdSkpd]['anggaran']  += $anggaran;
+            $rekap[$kdSkpd]['realisasi'] += $realisasi;
+            $rekap[$kdSkpd]['sro']       += $sro;
+            $rekap[$kdSkpd]['sro_nol']   += $sroNol;
+
+            // Hitung Capaian & Efisiensi Level Program
+            $capaianRealProg = $this->hitungPersen($realisasi, $anggaran);
+            $capaianSroProg  = $this->hitungPersen($sro - $sroNol, $sro);
+            $efisiensiProg   = round($capaianSroProg - $capaianRealProg, 2);
+
+            // Data Level Program
+            $rekap[$kdSkpd]['program'][] = [
+                'kode'              => $kdProg,
+                'nama'              => $row['NAMA_PROGRAM'],
+                'anggaran'          => $anggaran,
+                'realisasi'         => $realisasi,
+                'sro'               => $sro,
+                'sro_nol'           => $sroNol,
+                'capaian_realisasi' => $capaianRealProg,
+                'capaian_sro'       => $capaianSroProg,
+                'efisiensi'         => $efisiensiProg,
+                'status_efisiensi'  => ($efisiensiProg < 0) ? 'Inefisien' : 'Efisien'
+            ];
+        }
+
+        // 3. Kalkulasi Level SKPD & Urutkan Program berdasarkan Capaian SRO Tertinggi
+        foreach ($rekap as $kdSkpd => &$skpd) {
+            $capaianRealSkpd = $this->hitungPersen($skpd['realisasi'], $skpd['anggaran']);
+            $capaianSroSkpd  = $this->hitungPersen($skpd['sro'] - $skpd['sro_nol'], $skpd['sro']);
+            $efisiensiSkpd   = round($capaianSroSkpd - $capaianRealSkpd, 2);
+
+            $skpd['capaian_realisasi'] = $capaianRealSkpd;
+            $skpd['capaian_sro']       = $capaianSroSkpd;
+            $skpd['efisiensi']         = $efisiensiSkpd;
+            $skpd['status_efisiensi']  = ($efisiensiSkpd < 0) ? 'Inefisien' : 'Efisien';
+
+            // Urutkan program dari capaian_sro tertinggi ke terendah
+            usort($skpd['program'], function ($a, $b) {
+                return $b['capaian_sro'] <=> $a['capaian_sro'];
+            });
+        }
+
+        return $rekap;
+    }
+
     public function getRekapLengkapPerTingkatAmanlengkap($bulan, $kdSU)
     {
         // 1. Query mengambil data hingga level SRO
