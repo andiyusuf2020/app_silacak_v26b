@@ -10,7 +10,7 @@ use App\Models\KabtanggamusModel\JadwalModel;
 use App\Models\KabtanggamusModel\AnggaranKasModel;
 use App\Models\KabtanggamusModel\RealisasiPendapatanModel;
 use App\Models\UserModel\TaUserModel;
-
+use App\Models\KabtanggamusModel\DataDashboardModel;
 use App\Models\KabtanggamusModel\TglApbdModel;
 use App\Models\KabtanggamusModel\ExcelApbdModel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -36,6 +36,8 @@ class AdminAdbangController extends BaseController
     protected $tausermodel;
     protected $anggaranKasModel;
     protected $realisasiPendapatanModel;
+    protected $dataDashboardModel;
+    protected $encrypter;
     public function __construct()
     {
         helper(['form', 'url', 'filesystem']);
@@ -49,6 +51,8 @@ class AdminAdbangController extends BaseController
         $this->tglapbdmodel = new TglApbdModel();
         $this->excelmodel = new ExcelApbdModel();
         $this->realisasiPendapatanModel = new RealisasiPendapatanModel();
+        $this->dataDashboardModel = new DataDashboardModel();
+        $this->encrypter      = \Config\Services::encrypter();
     }
     // 2. Endpoint AJAX - Ambil Detail Single Data untuk Modal Edit
     public function getDetail($id = null)
@@ -306,6 +310,7 @@ class AdminAdbangController extends BaseController
         $data =
             [
                 'wilayah' => session()->get('wilayah'),
+                'namawilayah' => session()->get('namawilayah'),
                 'groupuser' => $groupuser[0]['name'],
                 'groupmenu' => $groupuser[0]['name'],
                 'tahun' => session()->get('tahun'),
@@ -367,6 +372,27 @@ class AdminAdbangController extends BaseController
             if ($url !== $data['wilayah']) {
                 return redirect()->to(base_url('user'));
             }
+            $tahunSelected = $this->request->getGet('tahun') ?? date('Y');
+            $trenBulanan = $this->realisasiPendapatanModel->getTrenPersentaseBulanan($tahunSelected);
+            $data['trenBulanan'] = $trenBulanan;
+            $data['tahunSelected'] = $tahunSelected;
+            // // return view('realisasi/form_input', [
+            // //     'title'        => 'Input & Grafik Tren Realisasi APBD',
+            // //     'tahunSelected' => $tahunSelected,
+            // //     'trenBulanan'  => $trenBulanan
+            // // ]);
+            // return view('KabtanggamusViews/Adminadbang/form_inputpendapatan', $data);
+
+
+            $tahunSelected = $this->request->getGet('tahun') ?? date('Y');
+            $bulanSelected = $this->request->getGet('bulan') ?? 'all';
+
+            $dataRealisasi = $this->realisasiPendapatanModel->getDataFilter($tahunSelected, $bulanSelected);
+            $data['dataRealisasi'] = $dataRealisasi;
+            $data['tahunSelected'] = $tahunSelected;
+            $data['bulanSelected'] = $bulanSelected;
+            // return view('realisasi/data_list', [
+
             return view('KabtanggamusViews/Adminadbang/index', $data);
         }
         $wilayah = session()->get('wilayah');
@@ -443,7 +469,34 @@ class AdminAdbangController extends BaseController
             //     'trenBulanan'  => $trenBulanan
             // ]);
             return view('KabtanggamusViews/Adminadbang/form_inputpendapatan', $data);
+        } elseif ($hal == 'inputdashboardutama') {
+            $dataStat = $this->dataDashboardModel->first();
+            // echo dd($dataStat);
+            // Buat record awal jika database masih kosong
+            if (!$dataStat) {
+                $this->dataDashboardModel->insert([
+                    'jumlah_perangkat_daerah' => 125,
+                    'jumlah_kecamatan'        => 12,
+                    'jumlah_tiuh_kampung'     => 120,
+                    'total_anggaran_apbd'     => '1.5T',
+                    'index_sakip'             => '(B) 90.19',
+                    'index_rb'                => '7.392',
+                    'tingkat_kemiskinan'      => '28.5%',
+                    'angka_stunting'          => '99.9%',
+                ]);
+            }
+            $dataStat2 = $this->dataDashboardModel->first();
+
+            // Encrypt ID untuk proteksi parameter URL/Form
+            $encryptedId = bin2hex($this->encrypter->encrypt((string)$dataStat2['id']));
+
+            $data['title'] = 'Input Data Dashboard Pembangunan';
+            $data['stat'] = $dataStat2;
+            $data['encryptedId'] = $encryptedId;
+            $data['validation'] = \Config\Services::validation();
+            return view('KabtanggamusViews/Adminadbang/form_inputdashboardutama', $data);
         }
+
         if ($hal == 'gantibulanaktif') {
 
             return view('KabtanggamusViews/Adminadbang/v_listjadwal', $data);

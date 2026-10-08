@@ -17,38 +17,61 @@ class HomeKabController extends BaseController
         $this->ValidasiHash($req);
 
         if ($wilayah == 'lambar') {
-            session()->set('wilayah', 'lambar');
-            return redirect()->to(base_url('lambar'));
+            return view('maintenis/soon');
+            // session()->set('wilayah', 'lambar');
+            // session()->set('namawilayah', 'Kabuapaten Lampung Barat');
+            // return redirect()->to(base_url('lambar'));
         } elseif ($wilayah === 'lampungselatan') {
-            session()->set('wilayah', 'lampungselatan');
-            return redirect()->to(base_url('lampungselatan'));
+            return view('maintenis/soon');
+
+            // session()->set('wilayah', 'lampungselatan');
+            // session()->set('namawilayah', 'Kabupaten Lampung Selatan');
+            // return redirect()->to(base_url('lampungselatan'));
         } elseif ($wilayah === 'lampungtimur') {
-            session()->set('wilayah', 'lampungtimur');
-            return redirect()->to(base_url('lampungtimur'));
+            return view('maintenis/soon');
+            // session()->set('wilayah', 'lampungtimur');
+            // session()->set('namawilayah', 'Kabupaten Lampung Timur');
+            // return redirect()->to(base_url('lampungtimur'));
         } elseif ($wilayah === 'lampungtengah') {
-            session()->set('wilayah', 'lampungtengah');
-            return redirect()->to(base_url('lampungtengah'));
+            return view('maintenis/soon');
+            // session()->set('wilayah', 'lampungtengah');
+            // session()->set('namawilayah', 'Kabupaten Lampung Tengah');
+            // return redirect()->to(base_url('lampungtengah'));
         } elseif ($wilayah === 'lampungutara') {
-            session()->set('wilayah', 'lampungutara');
-            return redirect()->to(base_url('lampungutara'));
+            return view('maintenis/soon');
+            // session()->set('wilayah', 'lampungutara');
+            // session()->set('namawilayah', 'Kabupaten Lampung Utara');
+            // return redirect()->to(base_url('lampungutara'));
         } elseif ($wilayah === 'mesuji') {
-            session()->set('wilayah', 'mesuji');
-            return redirect()->to(base_url('mesuji'));
+            return view('maintenis/soon');
+            // session()->set('wilayah', 'mesuji');
+            // session()->set('namawilayah', 'Kabupaten Mesuji');
+            // return redirect()->to(base_url('mesuji'));
         } elseif ($wilayah === 'pesawaran') {
-            session()->set('wilayah', 'pesawaran');
-            return redirect()->to(base_url('pesawaran'));
+            return view('maintenis/soon');
+            // session()->set('wilayah', 'pesawaran');
+            // session()->set('namawilayah', 'Kabupaten Pesawaran');
+            // return redirect()->to(base_url('pesawaran'));
         } elseif ($wilayah === 'pringsewu') {
-            session()->set('wilayah', 'pringsewu');
-            return redirect()->to(base_url('pringsewu'));
+            return view('maintenis/soon');
+            // session()->set('wilayah', 'pringsewu');
+            // session()->set('namawilayah', 'Kabupaten Pringsewu');
+            // return redirect()->to(base_url('pringsewu'));
         } elseif ($wilayah === 'tanggamus') {
             session()->set('wilayah', 'tanggamus');
+            session()->set('namawilayah', 'Kabupaten Tanggamus');
             return redirect()->to(base_url('tanggamus'));
         } elseif ($wilayah === 'tulangbawang') {
-            session()->set('wilayah', 'tulangbawang');
-            return redirect()->to(base_url('tulangbawang'));
+            return view('maintenis/soon');
+            // session()->set('wilayah', 'tulangbawang');
+            // session()->set('namawilayah', 'Kabupaten Tulang Bawang');
+            // return redirect()->to(base_url('tulangbawang'));
+
         } elseif ($wilayah === 'tulangbawangbarat') {
-            session()->set('wilayah', 'tulangbawangbarat');
-            return redirect()->to(base_url('tulangbawangbarat'));
+            return view('maintenis/soon');
+            // session()->set('wilayah', 'tulangbawangbarat');
+            // session()->set('namawilayah', 'Kabupaten Tulang Bawang Barat');
+            // return redirect()->to(base_url('tulangbawangbarat'));
         } else {
             // Handle the case when the wilayah parameter is not recognized
             // You can choose to show an error page or redirect to a default page

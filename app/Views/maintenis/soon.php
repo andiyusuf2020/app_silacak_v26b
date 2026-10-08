@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+	<title>SiTAPIS-KAB</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="UTF-8">
+
+	<link rel="stylesheet" href="<?= base_url('soon/css/style.css') ?>">
+</head>
+
+<body>
+
+	<div class="main-area-wrapper" style="background-image:url(<?= base_url('soon/images/countdown-6-1600x900.jpg') ?>);">
+		<div class="main-area center-text">
+
+			<div class="display-table">
+				<div class="display-table-cell">
+
+					<h1 class="title"><b>Comming Soon</b></h1>
+					<p class="desc font-white">Sedang dalam tahap pengembangan dan perencanaan kolaborasi antara Biro Adbang dan Bagian Adbang kabupaten. Thank you for your patience.</p>
+
+					<div id="normal-countdown" data-date="2018/01/01"></div>
+
+					<a class="notify-btn" href="#"><b>NOTIFY US</b></a>
+
+					<ul class="social-btn">
+						<li class="list-heading">Follow us for update</li>
+						<li><a href="#"><i class="ion-social-facebook"><svg class="cl-icon" viewBox="0 0 192 512" style="vertical-align:-0.125em" aria-hidden="true" focusable="false">
+										<g transform="translate(0,448) scale(1,-1)">
+											<path d="M128 256H192L184 192H128V0H45V192H0V256H45V299Q45 341 66.0 362.5Q87 384 136 384H192V320H158Q139 320 133.5 314.0Q128 308 128 294Z" />
+										</g>
+									</svg></i></a></li>
+						<li><a href="#"><i class="ion-social-twitter"><svg class="cl-icon" viewBox="0 0 472 512" style="vertical-align:-0.125em" aria-hidden="true" focusable="false">
+										<g transform="translate(0,448) scale(1,-1)">
+											<path d="M472 338Q454 310 424 288V276Q424 171 348.5 85.5Q273 0 148 0Q68 0 0 44Q16 42 23 42Q90 42 143 84Q112 85 87.0 103.5Q62 122 53 151Q65 149 71 149Q81 149 97 153Q64 160 41.5 186.5Q19 213 19 248V249Q41 237 63 237Q20 265 20 318Q20 343 33 366Q110 271 232 265Q230 272 230 287Q230 328 258.0 356.0Q286 384 327.0 384.0Q368 384 397 353Q427 358 459 377Q449 342 416 323Q447 326 472 338Z" />
+										</g>
+									</svg></i></a></li>
+						<li><a href="#"><i class="ion-social-googleplus"><svg class="cl-icon" viewBox="0 0 448 512" style="vertical-align:-0.125em" aria-hidden="true" focusable="false">
+										<g transform="translate(0,448) scale(1,-1)">
+											<path d="M210 172Q225 160 232.5 153.0Q240 146 247.5 131.0Q255 116 255 99Q255 59 218.0 29.5Q181 0 116 0Q60 0 30.0 23.0Q0 46 0 77Q0 117 42 142Q73 161 127 165Q119 179 119 191Q119 198 120 201H116Q74 201 49 227Q25 251 25 284Q25 326 60 355Q97 384 154 384H288L228 351H215Q238 324 238 293Q238 274 230.0 258.5Q222 243 214.5 236.0Q207 229 193 219V218Q182 207 182 201Q182 194 192 186ZM85 308Q85 282 99 257Q115 230 140 230Q157 230 168 241Q178 251 178 271Q178 297 163 324Q146 352 123 352Q104 352 94 339Q85 328 85 308ZM206 80Q206 94 196.0 105.0Q186 116 156 136Q155 136 152.5 136.5Q150 137 148 137Q123 137 98 129Q60 115 60 87Q60 64 82.0 50.0Q104 36 140 36Q171 36 188.5 48.0Q206 60 206 80ZM370 306H448V272H370V191H336V272H256V306H336V384H370Z" />
+										</g>
+									</svg></i></a></li>
+						<li><a href="#"><i class="ion-social-instagram-outline"><svg class="cl-icon" viewBox="0 0 384 512" style="vertical-align:-0.125em" aria-hidden="true" focusable="false">
+										<g transform="translate(0,448) scale(1,-1)">
+											<path d="M384 336V47Q384 28 370.0 14.0Q356 0 336 0H48Q28 0 14.0 14.0Q0 28 0 47V336Q0 356 14.0 370.0Q28 384 48 384H336Q356 384 370.0 370.0Q384 356 384 336ZM248.5 248.5Q225 272 192.0 272.0Q159 272 135.5 248.5Q112 225 112.0 192.0Q112 159 135.5 135.5Q159 112 192.0 112.0Q225 112 248.5 135.5Q272 159 272.0 192.0Q272 225 248.5 248.5ZM352 288V336Q352 352 336 352H288Q272 352 272 336V288Q272 272 288 272H336Q352 272 352 288ZM337 32Q352 32 352 48V224H300Q304 211 304 192Q304 145 272 113Q239 80 192 80Q146 80 113.0 113.0Q80 146 80 192Q80 207 85 224H32V48Q32 41 37.0 36.5Q42 32 49 32Z" />
+										</g>
+									</svg></i></a></li>
+						<li><a href="#"><i class="ion-social-pinterest"><svg class="cl-icon" viewBox="0 0 448 512" style="vertical-align:-0.125em" aria-hidden="true" focusable="false">
+										<g transform="translate(0,448) scale(1,-1)">
+											<path d="M224 -32Q190 -32 160 -23Q178 9 183 25L199 87Q214 59 253 59Q307 59 340.5 102.0Q374 145 374 212Q374 264 334.0 302.5Q294 341 232 341Q158 341 115.0 297.5Q72 254 72 201Q72 134 118 115Q127 111 130 121Q130 123 131.5 130.0Q133 137 134 139Q136 145 131 151Q116 169 116 195Q116 239 146.5 270.5Q177 302 226 302Q270 302 295.0 278.5Q320 255 320 217Q320 167 300.0 132.5Q280 98 249 98Q231 98 220.0 110.5Q209 123 213 141Q215 151 220.5 168.0Q226 185 229.5 198.0Q233 211 233 220Q233 234 225.0 244.0Q217 254 203 254Q185 254 172.5 237.5Q160 221 160 196Q160 187 162.0 178.0Q164 169 166 164L167 160Q142 56 138 38Q132 14 134 -13Q74 14 37.0 69.0Q0 124 0 192Q0 285 65.5 350.5Q131 416 224.0 416.0Q317 416 382.5 350.5Q448 285 448.0 192.0Q448 99 382.5 33.5Q317 -32 224 -32Z" />
+										</g>
+									</svg></i></a></li>
+					</ul>
+
+				</div><!-- display-table -->
+			</div><!-- display-table-cell -->
+		</div><!-- main-area -->
+	</div><!-- main-area-wrapper -->
+
+	<!-- SCIPTS -->
+
+	<script src="<?= base_url('soon/js/snippet.js') ?>"></script>
+</body>
+
+</html>

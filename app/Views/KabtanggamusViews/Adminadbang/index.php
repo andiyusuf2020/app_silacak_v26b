@@ -1,612 +1,212 @@
-<!doctype html>
-<html lang="en">
-<!--begin::Head-->
+<?= $this->extend('template/layout') ?>
+<?= $this->section('content') ?>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>SiTAPIS-KAB | <?= esc($groupuser) ?></title>
+<style>
+    .table-custom th {
+        background-color: #f1f3f5;
+        text-align: center;
+        vertical-align: middle;
+    }
 
-    <!--begin::Theme Init (prevents flash of incorrect theme on load, #6043)-->
-    <script>
-        (() => {
-            'use strict';
-            const root = document.documentElement;
+    .badge-pendapatan {
+        background-color: #198754;
+    }
 
-            // Applications with their own theming opt out of AdminLTE's color mode
-            // entirely, here as well as in the bundle.
-            if (root.getAttribute('data-lte-color-mode') === 'off') {
-                return;
-            }
+    .badge-belanja {
+        background-color: #dc3545;
+    }
 
-            const STORAGE_KEY = 'lte-theme';
-            let stored = null;
-            try {
-                stored = localStorage.getItem(STORAGE_KEY);
-            } catch {
-                // localStorage may be unavailable (private mode, sandboxed iframe).
-            }
-            // Mirror the precedence in color-mode.ts: the visitor's stored choice
-            // wins, then a theme this page declared itself, then the OS preference.
-            const authored = root.getAttribute('data-bs-theme');
-            let resolved = 'light';
-            if (stored === 'dark' || stored === 'light') {
-                resolved = stored;
-            } else if (authored === 'dark' || authored === 'light') {
-                resolved = authored;
-            } else if (globalThis.matchMedia('(prefers-color-scheme: dark)').matches) {
-                resolved = 'dark';
-            }
-            root.setAttribute('data-bs-theme', resolved);
-            root.style.colorScheme = resolved;
-            // Flag values computed here, so the bundle does not mistake them for a
-            // theme the page declared and stop following the OS preference.
-            if (resolved !== authored) {
-                root.setAttribute('data-lte-theme-resolved', '');
-            }
-        })();
-    </script>
-    <meta name="supported-color-schemes" content="light dark" />
-    <link rel="preload" href="<?= base_url() ?>dist_v4/css/adminlte.css" as="style" />
-    <!--end::Accessibility Features-->
+    .chart-container {
+        position: relative;
+        height: 320px;
+        width: 100%;
+    }
+</style>
+<div class="app-wrapper">
+    <main class="app-main p-4">
+        <div class="container-fluid">
 
-    <!--begin::Fonts-->
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
-        integrity="sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q="
-        crossorigin="anonymous"
-        media="print"
-        onload="this.media = 'all'" />
-    <!--end::Fonts-->
-
-    <!--begin::Third Party Plugin(OverlayScrollbars)-->
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"
-        crossorigin="anonymous" />
-    <!--end::Third Party Plugin(OverlayScrollbars)-->
-
-    <!--begin::Third Party Plugin(Bootstrap Icons)-->
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
-        crossorigin="anonymous" />
-    <!--end::Third Party Plugin(Bootstrap Icons)-->
-
-    <!--begin::Required Plugin(AdminLTE)-->
-    <link rel="stylesheet" href="<?= base_url() ?>dist_v4/css/adminlte.css" />
-    <!--end::Required Plugin(AdminLTE)-->
-
-    <!-- apexcharts -->
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.css"
-        integrity="sha256-4MX+61mt9NVvvuPjUWdUdyfZfxSB1/Rf9WtqRHgG5S0="
-        crossorigin="anonymous" />
-</head>
-<!--end::Head-->
-<!--begin::Body-->
-
-<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
-    <!--begin::App Wrapper-->
-    <div class="app-wrapper">
-        <!--begin::Header-->
-        <?php echo view('template/_part/nav'); ?>
-
-        <!--end::Header-->
-        <!--begin::Sidebar-->
-        <?php
-        $wilayah = session()->get('wilayah');
-        $groupuser = session()->get('groupuser');
-        $groupmenu = session()->get('groupmenu');
-        if (!($wilayah != null || $groupuser != null || $groupmenu != null)) {
-            return redirect()->to(base_url('logout'));
-        }
-        /*
-        * Menu untuk kabupaten tanggamus===========================
-        */
-        if ($wilayah == 'tanggamus' && $groupuser == 'superadmin') {
-            echo view('template/_part/menukabtanggamus/menusuperadmin');
-        }
-        if (!($wilayah != '' || $groupuser != '' || $groupmenu != '')) {
-            return redirect()->to(base_url('logout'));
-        }
-        ?>
-
-        <!--end::Sidebar-->
-        <!--begin::App Main-->
-        <main class="app-main">
-            <!--begin::App Content Header-->
-            <div class="app-content-header">
-                <!--begin::Container-->
-                <div class="container-fluid">
-                    <!--begin::Row-->
-                    <div class="row">
-                        <div class="col-sm-9">
-                            <h3 class="mb-0"><?= $titlepage ?></h3>
-                        </div>
-                        <div class="col-sm-3">
-                            <nav aria-label="breadcrumb">
-
-                                <ol class="breadcrumb float-sm-end">
-                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page"><?= $groupuser ?></li>
-                                </ol>
-                                <ol class="breadcrumb float-sm-end">
-                                    <?php $tahunX = session()->get('tahun') ?>
-                                    <button type="button" class="btn btn-outline-primary mb-2"><?= esc($tahunX) ?></button>
-                                    <?php if ($groupuser == 'useropdprov') { ?>
-                                        <button type="button" class="btn btn-outline-success mb-2"> <a href="<?= base_url('lrfkopd'); ?>" class="nav-link">LRFK</a> </button>
-                                        <button type="button" class="btn btn-outline-info mb-2"><a href="<?= base_url('capkin'); ?>" class="nav-link">CAPKIN</a></button>
-                                    <?php } ?>
-                                    <?php if ($groupuser == 'adminprov') { ?>
-                                        <button type="button" class="btn btn-outline-success mb-2"> <a href="<?= base_url('lrfkadmin'); ?>" class="nav-link">ADMIN</a> </button>
-                                    <?php } ?>
-                                </ol>
-                            </nav>
-                        </div>
-                    </div>
-                    <!--end::Row-->
-                </div>
-                <!--end::Container-->
+            <!-- HEADER & BREADCRUMB -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="fw-bold mb-0">
+                    <i class="bi bi-table me-2"></i>Daftar Total Realisasi Pendapatan dan Belanja perBulan APBD Tahun <?= esc($tahunSelected) ?>
+                </h4>
             </div>
-            <!--end::App Content Header-->
-            <!--begin::App Content-->
-            <div class="app-content">
-                <!--begin::Container-->
-                <div class="container-fluid">
-                    <!--begin::Row-->
-                    <div class="row g-4">
-                        <!--begin::Col-->
-                        <div class="col-12 col-lg-6">
-                            <!--begin::Card-->
-                            <div class="card h-100">
-                                <div class="card-header">
-                                    <h3 class="card-title">Perbandingan Realisasi Pendapatan dan Belanja APBD per-Triwulan</h3>
 
-                                    <div class="card-tools">
-                                        <button
-                                            type="button"
-                                            class="btn btn-tool"
-                                            data-lte-toggle="card-collapse"
-                                            aria-label="Collapse card">
-                                            <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
-                                            <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <!-- /.card-header -->
-                                <div class="card-body">
-                                    <div id="column-chart"></div>
-                                </div>
-                                <!-- /.card-body -->
-                            </div>
-                            <!--end::Card-->
+            <!-- CARD FILTER PERIODE LAPORAN & GRAFIK -->
+            <div class="card card-outline card-secondary shadow-sm mb-4">
+                <div class="card-body">
+                    <form method="GET" action="<?= base_url('realisasi/data-list') ?>" id="formFilter" class="row g-3 align-items-end">
+                        <div class="col-md-4">
+                            <label for="filter_tahun" class="form-label fw-semibold">Tahun Anggaran</label>
+                            <select name="tahun" id="filter_tahun" class="form-select">
+                                <?php
+                                $cYear = date('Y');
+                                for ($y = $cYear; $y >= $cYear - 3; $y--): ?>
+                                    <option value="<?= $y ?>" <?= $tahunSelected == $y ? 'selected' : '' ?>><?= $y ?></option>
+                                <?php endfor; ?>
+                            </select>
                         </div>
-                        <!--end::Col-->
-                    </div>
-                    <!--end::Row-->
+
+                        <div class="col-md-4">
+                            <label for="filter_bulan" class="form-label fw-semibold">Bulan</label>
+                            <select name="bulan" id="filter_bulan" class="form-select">
+                                <option value="all" <?= $bulanSelected == 'all' ? 'selected' : '' ?>>-- Semua Bulan --</option>
+                                <?php
+                                $months = [
+                                    1 => 'Januari',
+                                    2 => 'Februari',
+                                    3 => 'Maret',
+                                    4 => 'April',
+                                    5 => 'Mei',
+                                    6 => 'Juni',
+                                    7 => 'Juli',
+                                    8 => 'Agustus',
+                                    9 => 'September',
+                                    10 => 'Oktober',
+                                    11 => 'November',
+                                    12 => 'Desember'
+                                ];
+                                foreach ($months as $num => $name): ?>
+                                    <option value="<?= $num ?>" <?= $bulanSelected == $num ? 'selected' : '' ?>><?= $name ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4 d-flex gap-2">
+                            <button type="submit" class="btn btn-secondary w-100">
+                                <i class="bi bi-filter me-1"></i> Terapkan Filter
+                            </button>
+                            <a href="<?= base_url('realisasi/data-list') ?>" class="btn btn-outline-secondary" title="Reset Filter">
+                                <i class="bi bi-arrow-counterclockwise"></i>
+                            </a>
+                        </div>
+                    </form>
                 </div>
-                <!--end::Container-->
             </div>
-            <!--end::App Content-->
-        </main>
-        <!--end::App Main-->
-        <!--begin::Footer-->
-        <footer class="app-footer">
-            <!--begin::To the end-->
-            <div class="float-end d-none d-sm-inline">v26b-SILACAK</div>
-            <!--end::To the end-->
-            <!--begin::Copyright-->
-            <strong>
-                Copyright &copy; <?php echo date('Y'); ?>&nbsp;
-                <a href="https://adbang.lampungprov.go.id/kabtbb/" class="text-decoration-none">Bagian Administrasi Pembangunan Setda Kabupaten Tulang Bawang Barat</a>.
-            </strong>
-            <!--end::Copyright-->
-        </footer>
-        <!--end::Footer-->
-    </div>
-    <!--end::App Wrapper-->
-    <!--begin::Script-->
-    <!--begin::Third Party Plugin(OverlayScrollbars)-->
-    <script
-        src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js"
-        crossorigin="anonymous"></script>
-    <!--end::Third Party Plugin(OverlayScrollbars)--><!--begin::Required Plugin(popperjs for Bootstrap 5)-->
-    <script
-        src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-        crossorigin="anonymous"></script>
-    <!--end::Required Plugin(popperjs for Bootstrap 5)--><!--begin::Required Plugin(Bootstrap 5)-->
-    <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"
-        crossorigin="anonymous"></script>
-    <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
-    <script src="<?= base_url() ?>dist_v4/js/adminlte.js"></script>
-    <!--end::Required Plugin(AdminLTE)-->
-    <!--begin::OverlayScrollbars Configure-->
-    <script>
-        const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
-        const Default = {
-            scrollbarTheme: 'os-theme-light',
-            scrollbarAutoHide: 'leave',
-            scrollbarClickScroll: true,
-        };
-        document.addEventListener('DOMContentLoaded', function() {
-            const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
 
-            // Disable OverlayScrollbars on mobile devices to prevent touch interference
-            const isMobile = window.innerWidth <= 992;
+            <!-- SECTION: GRAFIK REALISASI GABUNGAN (PENDAPATAN VS BELANJA) -->
+            <div class="card card-outline card-info shadow-sm mb-4">
+                <div class="card-header border-0 d-flex justify-content-between align-items-center">
+                    <h5 class="card-title fw-bold text-info mb-0">
+                        <i class="bi bi-graph-up me-2"></i>Grafik Perbandingan Realisasi Pendapatan vs Belanja (%) Tahun <?= esc($tahunSelected) ?>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="chartRealisasiCombined"></canvas>
+                    </div>
+                </div>
+            </div>
 
-            if (
-                sidebarWrapper &&
-                OverlayScrollbarsGlobal?.OverlayScrollbars !== undefined &&
-                !isMobile
-            ) {
-                OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
-                    scrollbars: {
-                        theme: Default.scrollbarTheme,
-                        autoHide: Default.scrollbarAutoHide,
-                        clickScroll: Default.scrollbarClickScroll,
+        </div>
+    </main>
+</div>
+
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-beta2/dist/js/adminlte.min.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    $(document).ready(function() {
+
+        // ==========================================
+        // 1. INITIALIZE COMBINED CHART (PENDAPATAN VS BELANJA)
+        // ==========================================
+        const monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+        const ctxCombined = document.getElementById('chartRealisasiCombined').getContext('2d');
+
+        const chartCombined = new Chart(ctxCombined, {
+            type: 'line',
+            data: {
+                labels: monthLabels,
+                datasets: [{
+                        label: 'Realisasi Pendapatan (%)',
+                        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        borderColor: '#198754',
+                        backgroundColor: 'rgba(25, 135, 84, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
                     },
-                });
+                    {
+                        label: 'Realisasi Belanja (%)',
+                        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        borderColor: '#dc3545',
+                        backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: {
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.y + '%';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Persentase (%)'
+                        },
+                        ticks: {
+                            callback: value => value + '%'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Bulan'
+                        }
+                    }
+                }
             }
         });
-    </script>
-    <!--end::OverlayScrollbars Configure-->
 
-    <!--begin::Color Mode Toggle-->
-    <!-- The light/dark/auto switcher ships in adminlte.js as the ColorMode
-     module (since 4.1) — no page script needed. Only the no-flash snippet
-     in <head> stays inline, because it must run before first paint. -->
-    <!--end::Color Mode Toggle-->
+        // Helper Update Data Chart
+        function updateCombinedChart(data) {
+            if (data.pendapatan) {
+                chartCombined.data.datasets[0].data = data.pendapatan;
+            }
+            if (data.belanja) {
+                chartCombined.data.datasets[1].data = data.belanja;
+            }
+            chartCombined.update();
+        }
 
-    <!-- OPTIONAL SCRIPTS -->
+        // Load data awal grafik dari PHP
+        const initialTren = <?= json_encode($trenBulanan) ?>;
+        updateCombinedChart(initialTren);
 
-    <!-- apexcharts -->
-    <script
-        src="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.min.js"
-        integrity="sha256-+vh8GkaU7C9/wbSLIcwq82tQ2wTf44aOHA8HlBMwRI8="
-        crossorigin="anonymous"></script>
-    <script>
-        // NOTICE!! DO NOT USE ANY OF THIS JAVASCRIPT
-        // IT'S ALL JUST JUNK FOR DEMO
-        // ++++++++++++++++++++++++++++++++++++++++++
 
-        /* apexcharts
-         * ----------
-         * A small showcase of the most common ApexCharts chart types.
-         * All charts get an explicit height to avoid an ApexCharts
-         * ResizeObserver feedback loop on browser zoom (see #6019).
-         */
-
-        //--------------
-        // - LINE CHART -
-        //--------------
-
-        const line_chart_options = {
-            series: [{
-                name: 'Revenue',
-                data: [
-                    31200, 34800, 32600, 39400, 42100, 45800, 44300, 49700, 52400, 56900, 60200, 65800,
-                ],
-            }, ],
-            chart: {
-                height: 300,
-                type: 'line',
-                toolbar: {
-                    show: false,
-                },
-            },
-            colors: ['#0d6efd'],
-            stroke: {
-                curve: 'straight',
-                width: 3,
-            },
-            dataLabels: {
-                enabled: false,
-            },
-            markers: {
-                size: 4,
-            },
-            xaxis: {
-                categories: [
-                    'Jan',
-                    'Feb',
-                    'Mar',
-                    'Apr',
-                    'May',
-                    'Jun',
-                    'Jul',
-                    'Aug',
-                    'Sep',
-                    'Oct',
-                    'Nov',
-                    'Dec',
-                ],
-            },
-            yaxis: {
-                labels: {
-                    formatter(value) {
-                        return `$${Math.round(value / 1000)}k`;
-                    },
-                },
-            },
-            tooltip: {
-                y: {
-                    formatter(value) {
-                        return `$${value.toLocaleString()}`;
-                    },
-                },
-            },
-        };
-
-        const line_chart = new ApexCharts(document.querySelector('#line-chart'), line_chart_options);
-        line_chart.render();
-
-        //------------------
-        // - END LINE CHART -
-        //------------------
-
-        //--------------
-        // - LINE CHART 2-
-        //--------------
-
-        const line_chart2_options = {
-            series: [{
-                name: 'Revenue',
-                data: [
-                    31200, 34800, 32600, 39400, 42100, 45800, 44300, 49700, 52400, 56900, 60200, 65800,
-                ],
-            }, ],
-            chart: {
-                height: 300,
-                type: 'line',
-                toolbar: {
-                    show: false,
-                },
-            },
-            colors: ['#0d6efd'],
-            stroke: {
-                curve: 'straight',
-                width: 3,
-            },
-            dataLabels: {
-                enabled: false,
-            },
-            markers: {
-                size: 4,
-            },
-            xaxis: {
-                categories: [
-                    'Jan',
-                    'Feb',
-                    'Mar',
-                    'Apr',
-                    'May',
-                    'Jun',
-                    'Jul',
-                    'Aug',
-                    'Sep',
-                    'Oct',
-                    'Nov',
-                    'Dec',
-                ],
-            },
-            yaxis: {
-                labels: {
-                    formatter(value) {
-                        return `$${Math.round(value / 1000)}k`;
-                    },
-                },
-            },
-            tooltip: {
-                y: {
-                    formatter(value) {
-                        return `$${value.toLocaleString()}`;
-                    },
-                },
-            },
-        };
-
-        const line_chart2 = new ApexCharts(document.querySelector('#line-chart-2'), line_chart2_options);
-        line_chart2.render();
-
-        //------------------
-        // - END LINE CHART 2-
-        //------------------
-
-        //----------------
-        // - COLUMN CHART -
-        //----------------
-
-        const column_chart_options = {
-            series: [{
-                    name: 'Online Store',
-                    data: [44300, 55600, 57200, 61400],
-                },
-                {
-                    name: 'Retail Stores',
-                    data: [35100, 41200, 36800, 45300],
-                },
-            ],
-            chart: {
-                height: 300,
-                type: 'bar',
-                toolbar: {
-                    show: false,
-                },
-            },
-            colors: ['#6f42c1', '#20c997'],
-            plotOptions: {
-                bar: {
-                    columnWidth: '55%',
-                    borderRadius: 4,
-                },
-            },
-            dataLabels: {
-                enabled: false,
-            },
-            xaxis: {
-                categories: ['Q1 2025', 'Q2 2025', 'Q3 2025', 'Q4 2025'],
-            },
-            yaxis: {
-                labels: {
-                    formatter(value) {
-                        return `$${Math.round(value / 1000)}k`;
-                    },
-                },
-            },
-            tooltip: {
-                y: {
-                    formatter(value) {
-                        return `$${value.toLocaleString()}`;
-                    },
-                },
-            },
-        };
-
-        const column_chart = new ApexCharts(
-            document.querySelector('#column-chart'),
-            column_chart_options,
-        );
-        column_chart.render();
-
-        //--------------------
-        // - END COLUMN CHART -
-        //--------------------
-
-        //---------------
-        // - DONUT CHART -
-        //---------------
-
-        const donut_chart_options = {
-            series: [3450, 2210, 1160, 940, 620],
-            chart: {
-                type: 'donut',
-                height: 350,
-            },
-            labels: ['Organic Search', 'Direct', 'Referral', 'Social Media', 'Email'],
-            dataLabels: {
-                enabled: false,
-            },
-            colors: ['#0d6efd', '#20c997', '#ffc107', '#d63384', '#6f42c1'],
-        };
-
-        const donut_chart = new ApexCharts(
-            document.querySelector('#donut-chart'),
-            donut_chart_options,
-        );
-        donut_chart.render();
-
-        //-------------------
-        // - END DONUT CHART -
-        //-------------------
-
-        //--------------------
-        // - RADIAL BAR CHART -
-        //--------------------
-
-        const radialbar_chart_options = {
-            series: [76, 67, 61],
-            chart: {
-                type: 'radialBar',
-                height: 350,
-            },
-            labels: ['Sales', 'Marketing', 'Support'],
-            colors: ['#0d6efd', '#20c997', '#ffc107'],
-            plotOptions: {
-                radialBar: {
-                    dataLabels: {
-                        total: {
-                            show: true,
-                            label: 'Average',
-                        },
-                    },
-                },
-            },
-        };
-
-        const radialbar_chart = new ApexCharts(
-            document.querySelector('#radialbar-chart'),
-            radialbar_chart_options,
-        );
-        radialbar_chart.render();
-
-        //------------------------
-        // - END RADIAL BAR CHART -
-        //------------------------
-
-        //---------------
-        // - MIXED CHART -
-        //---------------
-
-        const mixed_chart_options = {
-            series: [{
-                    name: 'Orders',
-                    type: 'column',
-                    data: [440, 505, 414, 671, 227, 413, 201, 352, 752],
-                },
-                {
-                    name: 'Revenue',
-                    type: 'line',
-                    data: [23100, 26200, 22800, 34100, 18300, 24400, 15600, 21900, 38200],
-                },
-            ],
-            chart: {
-                height: 300,
-                type: 'line',
-                toolbar: {
-                    show: false,
-                },
-            },
-            colors: ['#20c997', '#0d6efd'],
-            stroke: {
-                width: [0, 3],
-                curve: 'smooth',
-            },
-            plotOptions: {
-                bar: {
-                    columnWidth: '55%',
-                    borderRadius: 4,
-                },
-            },
-            dataLabels: {
-                enabled: false,
-            },
-            xaxis: {
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
-            },
-            yaxis: [{
-                    title: {
-                        text: 'Orders',
-                    },
-                },
-                {
-                    opposite: true,
-                    title: {
-                        text: 'Revenue',
-                    },
-                    labels: {
-                        formatter(value) {
-                            return `$${Math.round(value / 1000)}k`;
-                        },
-                    },
-                },
-            ],
-        };
-
-        const mixed_chart = new ApexCharts(
-            document.querySelector('#mixed-chart'),
-            mixed_chart_options,
-        );
-        mixed_chart.render();
-
-        //-------------------
-        // - END MIXED CHART -
-        //-------------------
-    </script>
-    <!--end::Script-->
-</body>
-<!--end::Body-->
-
-</html>
+    });
+</script>
+<?= $this->endSection() ?>

@@ -77,6 +77,15 @@
                             </a>
                         </li>
                     </ul>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="<?= hash_url(' ' . $wilayah . '/' . $groupuser, ['hal' => 'inputdashboardutama']) ?>" class="nav-link">
+                                <i class="nav-icon bi bi-circle"></i>
+                                <p>Data Dashboard Utama</p>
+                            </a>
+                        </li>
+                    </ul>
+
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">

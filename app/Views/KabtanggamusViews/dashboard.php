@@ -74,9 +74,9 @@
         <div class="hero-content">
             <div class="hero-text">
                 <img src="<?= base_url() ?>cssportal/img_home/sitapis-kab.png" width="40%" alt="Logo Kabupaten/Kota" />
-                <h1>Kab. Tanggamus<br>Dashboard</h1>
+                <h1>Kab. <?= session()->get('wilayah') ?><br>Dashboard</h1>
                 <p>
-                    Penyampaian Resume Data Administrasi Pembangunan Kabupaten Kab. Tanggamus yang
+                    Penyampaian Resume Data Administrasi Pembangunan <?= session()->get('namawilayah') ?> yang
                     selaras antara Pemerintah Pusat, Provinsi, dan Kabupaten/Kota melalui
                     <strong>SiTAPIS-KAB</strong> (Sistem Data Pengendalian dan Informasi - Kabupaten/Kota)
                 </p>
@@ -112,7 +112,7 @@
     <!-- Dashboard Section -->
     <section class="dashboard-section" id="dashboard">
         <div class="dashboard-container">
-            <h2 class="section-title">Dashboard Pembangunan</h2>
+            <h2 class="section-title">Dashboard Pembangunan <?= session()->get('namawilayah') ?></h2>
             <!-- Stats Cards -->
             <div class="stats-grid">
                 <div class="stat-card">
