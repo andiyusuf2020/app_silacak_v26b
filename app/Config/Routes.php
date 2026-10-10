@@ -6,8 +6,6 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 // $routes->get('/', 'Home::maintenis');
-
-
 /*
 ROUTE FOR AUTHENTICATION LOGIN==============================================
 */
@@ -21,6 +19,7 @@ $routes->get('user', 'HomeKabController::dilarang');
 
 
 //=================================================end route for login=========
+
 
 // Routes for the application SiTAPIS-KAB.
 $routes->get('/', 'HomeKabController::index');
