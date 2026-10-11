@@ -219,30 +219,6 @@
         if (!($wilayah != '' || $groupuser != '' || $groupmenu != '')) {
             return redirect()->to(base_url('logout'));
         }
-        // if ($groupuser == 'forbiddenopd') {
-        //     echo view('template/_part/menuforbiddenopd');
-        // }
-        // if ($groupuser == 'user') {
-        //     echo view('template/_part/menuuser');
-        // }
-        // // if ($groupmenu == 'tahunkosong') {
-        // // }
-
-        // if ($groupmenu == 'usercapkinprov') {
-        //     echo view('template/_part/menuusercapkinopd');
-        // }
-        // if ($groupmenu == 'userlrfkprov') {
-        //     echo view('template/_part/menulrfkprov');
-        // }
-        // if ($groupuser == 'adminprogkerja') {
-        //     echo view('template/_part/menuadmin');
-        // }
-        // if ($groupmenu == 'superadmin') {
-        //     echo view('template/_part/menusuperadmin');
-        // }
-        // if ($groupmenu == 'userdesakumaju') {
-        //     echo view('template/_part/menudesakuopd');
-        // }
         ?>
 
         <!--end::Sidebar-->

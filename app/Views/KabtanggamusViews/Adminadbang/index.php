@@ -28,64 +28,7 @@
     <main class="app-main p-4">
         <div class="container-fluid">
 
-            <!-- HEADER & BREADCRUMB -->
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4 class="fw-bold mb-0">
-                    <i class="bi bi-table me-2"></i>Daftar Total Realisasi Pendapatan dan Belanja perBulan APBD Tahun <?= esc($tahunSelected) ?>
-                </h4>
-            </div>
 
-            <!-- CARD FILTER PERIODE LAPORAN & GRAFIK -->
-            <div class="card card-outline card-secondary shadow-sm mb-4">
-                <div class="card-body">
-                    <form method="GET" action="<?= base_url('realisasi/data-list') ?>" id="formFilter" class="row g-3 align-items-end">
-                        <div class="col-md-4">
-                            <label for="filter_tahun" class="form-label fw-semibold">Tahun Anggaran</label>
-                            <select name="tahun" id="filter_tahun" class="form-select">
-                                <?php
-                                $cYear = date('Y');
-                                for ($y = $cYear; $y >= $cYear - 3; $y--): ?>
-                                    <option value="<?= $y ?>" <?= $tahunSelected == $y ? 'selected' : '' ?>><?= $y ?></option>
-                                <?php endfor; ?>
-                            </select>
-                        </div>
-
-                        <div class="col-md-4">
-                            <label for="filter_bulan" class="form-label fw-semibold">Bulan</label>
-                            <select name="bulan" id="filter_bulan" class="form-select">
-                                <option value="all" <?= $bulanSelected == 'all' ? 'selected' : '' ?>>-- Semua Bulan --</option>
-                                <?php
-                                $months = [
-                                    1 => 'Januari',
-                                    2 => 'Februari',
-                                    3 => 'Maret',
-                                    4 => 'April',
-                                    5 => 'Mei',
-                                    6 => 'Juni',
-                                    7 => 'Juli',
-                                    8 => 'Agustus',
-                                    9 => 'September',
-                                    10 => 'Oktober',
-                                    11 => 'November',
-                                    12 => 'Desember'
-                                ];
-                                foreach ($months as $num => $name): ?>
-                                    <option value="<?= $num ?>" <?= $bulanSelected == $num ? 'selected' : '' ?>><?= $name ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-
-                        <div class="col-md-4 d-flex gap-2">
-                            <button type="submit" class="btn btn-secondary w-100">
-                                <i class="bi bi-filter me-1"></i> Terapkan Filter
-                            </button>
-                            <a href="<?= base_url('realisasi/data-list') ?>" class="btn btn-outline-secondary" title="Reset Filter">
-                                <i class="bi bi-arrow-counterclockwise"></i>
-                            </a>
-                        </div>
-                    </form>
-                </div>
-            </div>
 
             <!-- SECTION: GRAFIK REALISASI GABUNGAN (PENDAPATAN VS BELANJA) -->
             <div class="card card-outline card-info shadow-sm mb-4">

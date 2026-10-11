@@ -56,6 +56,331 @@ class AdminAdbangController extends BaseController
         $this->dataDashboardModel = new DataDashboardModel();
         $this->encrypter      = \Config\Services::encrypter();
     }
+    public function index()
+    {
+        $req = $this->request;
+        $receivedParams = $req->getGet();
+        $wilayah = $receivedParams['wilayah'] ?? null;
+        $hal = $receivedParams['hal'] ?? null;
+        $action = $receivedParams['action'] ?? null;
+        $kdSU = $receivedParams['kdSU'] ?? null;
+        $blndata = $receivedParams['blndata'] ?? null;
+        $kdSK = $receivedParams['kdSK'] ?? null;
+        $tgldataopd = $receivedParams['tgldataopd'] ?? null;
+        $tgldata = $receivedParams['tgldata'] ?? null;
+        $id = $receivedParams['id'] ?? null;
+
+        $user = user();
+        $groupModel = new GroupModel();
+        $groupuser = $groupModel->getGroupsForUser($user->id);
+        $jadwalaktif = $this->jadwalmodel->jadwalaktifskrg();
+        // $data['jadwalaktif'] = $this->jadwalmodel->jadwalaktifskrg();
+        // echo dd($user);
+        $data =
+            [
+                'wilayah' => session()->get('wilayah'),
+                'namawilayah' => session()->get('namawilayah'),
+                'groupuser' => $groupuser[0]['name'],
+                'groupmenu' => $groupuser[0]['name'],
+                'tahun' => session()->get('tahun'),
+                'titlepage' => 'halaman Admin Adbang ',
+                'datauser' => $user->sub_unit,
+                'tglaktif' => session()->get('tglaktif'),
+                'nama_opd' => $kdSU,
+                'blndata' => $blndata,
+                'kdSK' => $kdSK,
+                'tgldataopd' => $tgldataopd,
+                'tglapbd' => $this->realapbdmodel->tgldata(),
+                'tglapbdaktif' => $this->tglapbdmodel->tgldataaktif(),
+                'status' => 'apbd',
+                'title' => 'Upload Realisasi APBD dari Data excel SIPD',
+                'bulan' => $jadwalaktif['bulan'],
+                'jadwal' => $this->jadwalmodel->jadwal(),
+                'validation' => \Config\Services::validation(),
+                // 'title' => 'Form Anggaran Kas Perangkat Daerah',
+                'list_anggaran' => $this->anggaranKasModel->findAll(),
+
+            ];
+        // $data['tglapbd'] = $this->realapbdmodel->tgldata();
+        // $data['tglapbdaktif'] = $this->tglapbdmodel->tgldataaktif();
+
+
+        if (!$receivedParams) {
+            // echo dd($data);
+            if (!$data['groupuser']) {
+                $data = [
+                    'title1' => 'Anda belum memilih wilayah kabupaten/kota diawal halaman atau anda belum memilih halaman hak akses'
+                ];
+                return view('hakakses', $data);
+                // return redirect()->to(base_url());
+            }
+            if (!$data['wilayah']) {
+                $data = [
+                    'title1' => 'Anda belum memilih wilayah kabupaten/kota diawal halaman atau anda belum memilih halaman hak akses'
+                ];
+                return view('hakakses', $data);
+                // return redirect()->to(base_url());
+            }
+            if (!$data['tahun']) {
+                session()->set('groupuser', $data['groupuser']);
+                session()->set('groupmenu', $data['groupuser']);
+                return view('pilihtahun', $data);
+            }
+
+            $datatglaktif = $this->tglapbdmodel->tgldataaktif();
+            session()->set('tglaktif', $datatglaktif['tanggal']);
+            $tahun = session()->get('tahun');
+            $tglaktif = session()->get('tglaktif');
+            $data['dataopdadmin'] = $this->realapbdmodel->getCapaianKinerjaDenganGeometri($tahun, $tglaktif);
+            // echo dd($tahun . '-'  . $tglaktif);
+            // echo dd($data['dataopdadmin']);
+            // echo dd($data);
+            // echo dd($data['wilayah'] . '/' . $user->id);
+            $urlasli = $req->getPath();
+            $url = explode('/', $urlasli)[0];
+            if ($url !== $data['wilayah']) {
+                return redirect()->to(base_url('user'));
+            }
+            $tahunSelected = $this->request->getGet('tahun') ?? date('Y');
+            $trenBulanan = $this->realisasiPendapatanModel->getTrenPersentaseBulanan($tahunSelected);
+            $data['trenBulanan'] = $trenBulanan;
+            $data['tahunSelected'] = $tahunSelected;
+            // // return view('realisasi/form_input', [
+            // //     'title'        => 'Input & Grafik Tren Realisasi APBD',
+            // //     'tahunSelected' => $tahunSelected,
+            // //     'trenBulanan'  => $trenBulanan
+            // // ]);
+            // return view('KabtanggamusViews/Adminadbang/form_inputpendapatan', $data);
+
+
+            $tahunSelected = $this->request->getGet('tahun') ?? date('Y');
+            $bulanSelected = $this->request->getGet('bulan') ?? 'all';
+
+            $dataRealisasi = $this->realisasiPendapatanModel->getDataFilter($tahunSelected, $bulanSelected);
+            $data['dataRealisasi'] = $dataRealisasi;
+            $data['tahunSelected'] = $tahunSelected;
+            $data['bulanSelected'] = $bulanSelected;
+            // return view('realisasi/data_list', [
+
+            return view('KabtanggamusViews/Adminadbang/index', $data);
+        }
+        $wilayah = session()->get('wilayah');
+        if (!$wilayah) {
+            return redirect()->to(base_url());
+        }
+        $this->ValidasiHash($req);
+        if ($hal == 'apbdopd') {
+            return view('KabtanggamusViews/Adminadbang/listtgldata', $data);
+
+            // $data['dataopdadmin'] = $this->realapbdmodel->getCapaianKinerjaDenganGeometri($tgldata);
+            // return view('KabtanggamusViews/Adminadbang/apbdopd', $data);
+        } elseif ($hal == 'uploadapbd') {
+            // $data['status'] = 'apbd';
+            // $data['title'] = 'Upload Realisasi APBD dari Data excel SIPD';
+            // $data['validation'] = \Config\Services::validation();
+            return view('KabtanggamusViews/Adminadbang/upload_form', $data);
+        } elseif ($hal == 'angkasopd') {
+            // $dataa['list_anggaran'] = $this->anggaranKasModel->findAll();
+            $data['list_anggaran'] = $this->anggaranKasModel->findAll();
+            // $data['dataopdadmin'] = $this->realapbdmodel->getCapaianKinerjaDenganGeometri($data['tahun'], $data['tglaktif']);
+            return view('KabtanggamusViews/Adminadbang/forminputangkasopd3lengkap', $data);
+            // return view('KabtanggamusViews/Adminadbang/forminputangkasopd2', $data);
+        } elseif ($hal == 'datapbj') {
+            $data['dataopdadmin'] = $this->realapbdmodel->getCapaianKinerjaDenganGeometri($data['tahun'], $data['tglaktif']);
+            return view('KabtanggamusViews/Adminadbang/datapbj', $data);
+        } elseif ($hal == 'jadwal') {
+
+            $data['jadwalaktif'] = $this->jadwalmodel->jadwalaktifskrg();
+            //tanggal data pada tabel apbd
+            $data['tglapbd'] = $this->realapbdmodel->tgldata();
+            $data['tglapbdaktif'] = $this->tglapbdmodel->tgldataaktif();
+            // echo dd($data['tglapbd']);
+            return view('KabtanggamusViews/Adminadbang/v_jadwal', $data);
+        } elseif ($hal == 'pendapatan') {
+            $tahunSelected = $this->request->getGet('tahun') ?? date('Y');
+            $bulanSelected = $this->request->getGet('bulan') ?? 'all';
+
+            $rawRealisasi = $this->realisasiPendapatanModel->getDataFilter($tahunSelected, $bulanSelected);
+            $trenBulanan  = $this->realisasiPendapatanModel->getTrenPersentaseBulanan($tahunSelected);
+
+            // Grouping Data Per Bulan
+            $groupedData = [];
+            $bulanTerakhir = 0;
+
+            foreach ($rawRealisasi as $row) {
+                $b = (int) $row['bulan'];
+                $groupedData[$b][] = $row;
+                if ($b > $bulanTerakhir) {
+                    $bulanTerakhir = $b;
+                }
+            }
+
+            // Subtotal Akumulasi khusus Bulan Terakhir
+            $subtotalPendapatanBulanTerakhir = ['anggaran' => 0, 'realisasi' => 0];
+            $subtotalBelanjaBulanTerakhir    = ['anggaran' => 0, 'realisasi' => 0];
+
+            if (isset($groupedData[$bulanTerakhir])) {
+                foreach ($groupedData[$bulanTerakhir] as $row) {
+                    if ($row['jenis'] === 'Pendapatan') {
+                        $subtotalPendapatanBulanTerakhir['anggaran']  += $row['anggaran'];
+                        $subtotalPendapatanBulanTerakhir['realisasi'] += $row['realisasi'];
+                    } else if ($row['jenis'] === 'Belanja') {
+                        $subtotalBelanjaBulanTerakhir['anggaran']  += $row['anggaran'];
+                        $subtotalBelanjaBulanTerakhir['realisasi'] += $row['realisasi'];
+                    }
+                }
+            }
+
+            $data['dataRealisasi'] = $rawRealisasi;
+            $data['trenBulanan']   = $trenBulanan;
+            $data['bulanTerakhir'] = $bulanTerakhir;
+            $data['subtotalPendapatanBulanTerakhir'] = $subtotalPendapatanBulanTerakhir;
+            $data['subtotalBelanjaBulanTerakhir']    = $subtotalBelanjaBulanTerakhir;
+            $data['tahunSelected'] = $tahunSelected;
+            $data['bulanSelected'] = $bulanSelected;
+            $data['title'] = 'Data Realisasi APBD';
+            $data['groupedData'] = $groupedData;
+
+            return view('KabtanggamusViews/Adminadbang/data_listpendapatanFinalperBulan2', $data);
+        } elseif ($hal == 'inputbulanan') {
+            $summary = $this->realisasiPendapatanModel->getSummaryBulanTerakhir();
+            $data['summaryStatis'] = $summary;
+            $tahunSelected = $this->request->getGet('tahun') ?? date('Y');
+            $trenBulanan = $this->realisasiPendapatanModel->getTrenPersentaseBulanan($tahunSelected);
+            $data['trenBulanan'] = $trenBulanan;
+            $data['tahunSelected'] = $tahunSelected;
+            // return view('realisasi/form_input', [
+            //     'title'        => 'Input & Grafik Tren Realisasi APBD',
+            //     'tahunSelected' => $tahunSelected,
+            //     'trenBulanan'  => $trenBulanan
+            // ]);
+            return view('KabtanggamusViews/Adminadbang/form_inputpendapatan', $data);
+        } elseif ($hal == 'inputdashboardutama') {
+            $dataStat = $this->dataDashboardModel->first();
+            // echo dd($dataStat);
+            // Buat record awal jika database masih kosong
+            if (!$dataStat) {
+                $this->dataDashboardModel->insert([
+                    'jumlah_perangkat_daerah' => 125,
+                    'jumlah_kecamatan'        => 12,
+                    'jumlah_tiuh_kampung'     => 120,
+                    'total_anggaran_apbd'     => '1.5T',
+                    'index_sakip'             => '(B) 90.19',
+                    'index_rb'                => '7.392',
+                    'tingkat_kemiskinan'      => '28.5%',
+                    'angka_stunting'          => '99.9%',
+                ]);
+            }
+            $dataStat2 = $this->dataDashboardModel->first();
+
+            // Encrypt ID untuk proteksi parameter URL/Form
+            $encryptedId = bin2hex($this->encrypter->encrypt((string)$dataStat2['id']));
+
+            $data['title'] = 'Input Data Dashboard Pembangunan';
+            $data['stat'] = $dataStat2;
+            $data['encryptedId'] = $encryptedId;
+            $data['validation'] = \Config\Services::validation();
+            return view('KabtanggamusViews/Adminadbang/form_inputdashboardutama', $data);
+        } elseif ($hal == 'laporanrfkopd') {
+            // Handle the 'laporanrfkopd' case
+            // $bulan = $this->request->getGet('bulan') ?? date('m');
+            // $dataRekap = $this->realapbdmodel->getRekapPerSKPD($jadwalaktif['bulan']);
+
+            // $data = [
+            //     'title'     => 'Rekap Per SKPD',
+            //     'bulan'     => $bulan,
+            //     'dataRekap' => $dataRekap,
+            // ];
+            $data['dataRekap'] = $this->realapbdmodel->getRekapPerSKPD($jadwalaktif['bulan']);
+            $data['bulan'] = $jadwalaktif['bulan'];
+            $data['title'] = 'Rekap Per SKPD';
+            // echo dd($data['dataRekap']);
+            return view('KabtanggamusViews/Adminadbang/laporanlrfkopd2', $data);
+        }
+
+        if ($hal == 'gantibulanaktif') {
+
+            return view('KabtanggamusViews/Adminadbang/v_listjadwal', $data);
+            //echo dd($data['jadwal']);
+        }
+        if ($hal == 'editbulanaktif') {
+            // $idAwal = $data['jadwalaktif']['id'] ?? null;
+            // $tahun = $data['jadwalaktif']['tahun'] ?? null;
+            // $bulan = $data['jadwalaktif']['bulan'] ?? null;
+            $idAwal = $jadwalaktif['id'] ?? null;
+            $tahun = $jadwalaktif['tahun'] ?? null;
+            $bulan = $jadwalaktif['bulan'] ?? null;
+            //   echo $idUbah;
+            $nonaktifbln = [
+                'id' => $idAwal,
+                'tahun' => $tahun,
+                'bulan' => $bulan,
+                'status' => '0'
+            ];
+            $dataubah = $this->jadwalmodel->jdwlygdiaktifkan($id);
+            $aktifbln = [
+                'id' => $id,
+                'tahun' => $dataubah['tahun'],
+                'bulan' => $dataubah['bulan'],
+                'status' => '1'
+            ];
+            // echo dd($nonaktifbln);
+            $aktifasi = $this->jadwalmodel->save($aktifbln);
+            $nonaktifasi = $this->jadwalmodel->save($nonaktifbln);
+            if (!$aktifasi && !$nonaktifasi) {
+                echo "Terjadi kesalahan";
+            } else {
+                return redirect()->to(hash_url('' . $data['wilayah'] . '/' . $data['groupuser'] . '/', ['hal' => 'jadwal']));
+            }
+        }
+        if ($hal == 'gantitglaktif') {
+            $updateAktif = $this->tglapbdmodel->updatetgl(1, $data['tahun'], $id);
+
+            if (!$updateAktif) {
+                session()->setFlashdata('message', 'Tanggal Data APBD berhasil diaktifkan');
+            }
+            // return redirect()->to(base_url('lrfkadmin/jadwal')->withInput()->with('message', 'Tanggal Data APBD berhasil diaktifkan'));
+            return redirect()->to(hash_url('' . $data['wilayah'] . '/' . $data['groupuser'] . '/', ['hal' => 'jadwal']))->withInput()->with('message', 'Tanggal Data APBD berhasil diaktifkan');
+        }
+        if ($tgldata) {
+            $dataopdadmin = $this->realapbdmodel->getCapaianKinerjaDenganGeometri($data['tahun'], $tgldata);
+            $dataopdapbd = $this->realapbdmodel->getRekapSubSkpd($tgldata);
+            $data['dataopdadmin'] = $this->realapbdmodel->getRekapSubSkpd($tgldata);
+
+            // Hanya enkripsi 'id' dan 'name'
+            $dataopdapbds = array_map(function ($dataopdapbd) {
+                $dataopdapbd['update_token'] = CryptoUrl::encrypt([
+                    'kdSU'   => $dataopdapbd['NAMA_UNIT_SKPD'],
+                    'blndata' => $dataopdapbd['BULAN']
+                ]);
+                return $dataopdapbd;
+            }, $data['dataopdadmin']);
+            $datauserx = json_encode($dataopdapbds);
+            $data['datajson'] = preg_replace('/"([^"]+)"\s*:/', '$1:', $datauserx);
+
+            // echo dd($data['dataopdadmin']);
+            return view('KabtanggamusViews/Adminadbang/listopdapbd3', $data);
+        }
+        // $data['tgldata'] = $tgldata;
+        // $data['dataopdadmin'] = $this->realapbdmodel->listopdadmin($tgldata);
+
+
+        if ($hal == 'detail') {
+            if ($action == 'opd') {
+                $data['dataopd'] = $this->realapbdmodel->rpersk($kdSU, $data['tahun'], $blndata, $tgldataopd);
+                // echo dd($kdSU . '-' . $tahunaktif . '-' . $bulanaktif . '-' . $tglaktif);
+                // echo dd($data['dataopd']);
+                return view('KabtanggamusViews/Adminadbang/detailopdapbd', $data);
+            }
+            if ($action == 'detailopd') {
+                $data['dataopd'] = $this->realapbdmodel->rperrso2($kdSU, $kdSK, $data['tahun'], $tgldataopd)->getResultArray();
+
+                // echo dd($kdSU . '-' . $kdSK . '-' . $tahunaktif . '-' . $tglaktif);
+                // echo dd($data['dataopd']);
+                return view('superadmin/2026/detailopdsro', $data);
+            }
+        }
+    }
     public function getDataJson()
     {
         // $bulan = $this->request->getGet('bulan') ?? date('m');
@@ -240,6 +565,64 @@ class AdminAdbangController extends BaseController
 
         return redirect()->to(hash_url('' . session()->get('wilayah') . '/' . session()->get('groupuser'), ['hal' => 'inputdashboardutama']))->with('success', 'Data Dashboard Pembangunan berhasil diperbarui!');
     }
+    // Endpoint AJAX Server-Side Tabulator
+    public function getTableData()
+    {
+        $request = service('request');
+
+        // Parameter pagination dari Tabulator
+        $page = $request->getGet('page') ?? 1;
+        $size = $request->getGet('size') ?? 10;
+
+        $model = new SkpdModel();
+
+        // Handle pencarian global/filter jika dikirimkan oleh Tabulator
+        $filters = $request->getGet('filter');
+        if (!empty($filters)) {
+            foreach ($filters as $filter) {
+                // Contoh filter sederhana
+                if (isset($filter['field']) && isset($filter['value'])) {
+                    $model->like($filter['field'], $filter['value']);
+                }
+            }
+        }
+
+        // Ambil data dengan pagination
+        $tahun = session()->get('tahun') ?? date('Y');
+        $totalRows = $model->where('tahun', $tahun)->countAllResults(false);
+
+        $offset = ($page - 1) * $size;
+        $data = $model->where('tahun', $tahun)
+            ->findAll($size, $offset);
+
+        // Format respons standar yang dibaca oleh Tabulator server-side
+        return $this->response->JSON([
+            'last_page' => ceil($totalRows / $size),
+            'data'      => $data
+        ]);
+    }
+
+    // Endpoint untuk data Grafik Ringkasan (Chart.js)
+    public function getChartData()
+    {
+        $model = new SkpdModel();
+        $tahun = session()->get('tahun') ?? date('Y');
+
+        // Ambil data ringkasan per SKPD (nama, pagu, realisasi)
+        $results = $model->select('NAMA_UNIT_SKPD, total_anggaran, total_realisasi')
+            ->where('tahun', $tahun)
+            ->orderBy('total_anggaran', 'DESC')
+            ->limit(10) // Ambil top 10 SKPD dengan anggaran terbesar
+            ->findAll();
+
+        return $this->response->JSON($results);
+    }
+    /*
+     * ==========================================================================
+     *  CRUD DATA REALISASI PENDAPATAN DAN BELANJA
+     * ==========================================================================
+     */
+
     // 2. Endpoint AJAX - Ambil Detail Single Data untuk Modal Edit
     public function getDetail($id = null)
     {
@@ -311,7 +694,163 @@ class AdminAdbangController extends BaseController
 
         return $this->response->setJSON(['status' => 'error', 'message' => 'Gagal menghapus data.']);
     }
-    // Endpoint AJAX untuk reload tren grafik berdasarkan filter tahun
+    // Halaman Utama Data Realisasi (Laporan & Grafik Gabungan)
+
+    public function listData()
+    {
+
+        $tahunSelected = $this->request->getGet('tahun') ?? date('Y');
+        $bulanSelected = $this->request->getGet('bulan') ?? 'all';
+
+        $rawRealisasi = $this->realisasiPendapatanModel->getDataFilter($tahunSelected, $bulanSelected);
+        $trenBulanan  = $this->realisasiPendapatanModel->getTrenPersentaseBulanan($tahunSelected);
+
+        // Grouping Data Per Bulan
+        $groupedData = [];
+        $bulanTerakhir = 0;
+
+        foreach ($rawRealisasi as $row) {
+            $b = (int) $row['bulan'];
+            $groupedData[$b][] = $row;
+            if ($b > $bulanTerakhir) {
+                $bulanTerakhir = $b;
+            }
+        }
+
+        // Subtotal Akumulasi khusus Bulan Terakhir
+        $subtotalPendapatanBulanTerakhir = ['anggaran' => 0, 'realisasi' => 0];
+        $subtotalBelanjaBulanTerakhir    = ['anggaran' => 0, 'realisasi' => 0];
+
+        if (isset($groupedData[$bulanTerakhir])) {
+            foreach ($groupedData[$bulanTerakhir] as $row) {
+                if ($row['jenis'] === 'Pendapatan') {
+                    $subtotalPendapatanBulanTerakhir['anggaran']  += $row['anggaran'];
+                    $subtotalPendapatanBulanTerakhir['realisasi'] += $row['realisasi'];
+                } else if ($row['jenis'] === 'Belanja') {
+                    $subtotalBelanjaBulanTerakhir['anggaran']  += $row['anggaran'];
+                    $subtotalBelanjaBulanTerakhir['realisasi'] += $row['realisasi'];
+                }
+            }
+        }
+        $user = user();
+        $groupModel = new GroupModel();
+        $groupuser = $groupModel->getGroupsForUser($user->id);
+
+        $data = [
+            'wilayah' => session()->get('wilayah'),
+            'namawilayah' => session()->get('namawilayah'),
+            'groupuser' => $groupuser[0]['name'],
+            'groupmenu' => $groupuser[0]['name'],
+            'tahun' => session()->get('tahun'),
+            'titlepage' => 'halaman Admin Adbang ',
+        ];
+
+        $data['dataRealisasi'] = $rawRealisasi;
+        $data['trenBulanan']   = $trenBulanan;
+        $data['bulanTerakhir'] = $bulanTerakhir;
+        $data['subtotalPendapatanBulanTerakhir'] = $subtotalPendapatanBulanTerakhir;
+        $data['subtotalBelanjaBulanTerakhir']    = $subtotalBelanjaBulanTerakhir;
+        $data['tahunSelected'] = $tahunSelected;
+        $data['bulanSelected'] = $bulanSelected;
+        $data['title'] = 'Data Realisasi APBD';
+        $data['groupedData'] = $groupedData;
+        return view('KabtanggamusViews/Adminadbang/data_listpendapatanFinalperBulan2', $data);
+    }
+
+    // Export Excel (.xlsx) menggunakan Header HTML Spreadsheet
+    public function exportExcelPendapatan()
+    {
+        $tahun = $this->request->getGet('tahun') ?? date('Y');
+        $bulan = $this->request->getGet('bulan') ?? 'all';
+
+        $rawRealisasi = $this->realisasiPendapatanModel->getDataFilter($tahun, $bulan);
+
+        $groupedData = [];
+        foreach ($rawRealisasi as $row) {
+            $groupedData[(int)$row['bulan']][] = $row;
+        }
+
+        $months = [
+            1 => 'Januari',
+            2 => 'Februari',
+            3 => 'Maret',
+            4 => 'April',
+            5 => 'Mei',
+            6 => 'Juni',
+            7 => 'Juli',
+            8 => 'Agustus',
+            9 => 'September',
+            10 => 'Oktober',
+            11 => 'November',
+            12 => 'Desember'
+        ];
+
+        header("Content-type: application/vnd-ms-excel");
+        header("Content-Disposition: attachment; filename=Laporan_Realisasi_APBD_{$tahun}.xls");
+
+        echo '<table border="1">';
+        echo '<tr><th colspan="7" style="font-size:16px; font-weight:bold;">LAPORAN REALISASI APBD TAHUN ' . $tahun . '</th></tr>';
+        echo '<tr><td colspan="7"></td></tr>';
+
+        foreach ($groupedData as $blnNum => $rows) {
+            echo '<tr style="background-color:#d1e7dd;"><th colspan="7" style="text-align:left;">BULAN: ' . strtoupper($months[$blnNum] ?? "Bulan $blnNum") . '</th></tr>';
+            echo '<tr style="background-color:#f8f9fa;"><th>No</th><th>Jenis</th><th>Kode Rekening</th><th>Uraian</th><th>Anggaran (Rp)</th><th>Realisasi (Rp)</th><th>Capaian (%)</th></tr>';
+
+            $no = 1;
+            $subAng = 0;
+            $subReal = 0;
+
+            foreach ($rows as $r) {
+                $pct = $r['anggaran'] > 0 ? ($r['realisasi'] / $r['anggaran']) * 100 : 0;
+                $subAng += $r['anggaran'];
+                $subReal += $r['realisasi'];
+
+                echo '<tr>';
+                echo '<td>' . $no++ . '</td>';
+                echo '<td>' . $r['jenis'] . '</td>';
+                echo '<td>' . $r['kode_rekening'] . '</td>';
+                echo '<td>' . $r['uraian'] . '</td>';
+                echo '<td align="right">' . number_format($r['anggaran'], 0, ',', '.') . '</td>';
+                echo '<td align="right">' . number_format($r['realisasi'], 0, ',', '.') . '</td>';
+                echo '<td align="center">' . number_format($pct, 1, ',', '.') . '%</td>';
+                echo '</tr>';
+            }
+
+            $subPct = $subAng > 0 ? ($subReal / $subAng) * 100 : 0;
+            echo '<tr style="font-weight:bold; background-color:#f1f3f5;"><td colspan="4" align="right">SUBTOTAL BULAN ' . strtoupper($months[$blnNum]) . ':</td><td align="right">' . number_format($subAng, 0, ',', '.') . '</td><td align="right">' . number_format($subReal, 0, ',', '.') . '</td><td align="center">' . number_format($subPct, 1, ',', '.') . '%</td></tr>';
+            echo '<tr><td colspan="7"></td></tr>';
+        }
+
+        echo '</table>';
+        exit();
+    }
+
+    // Export PDF (Print View)
+    public function exportPdfrealisasiPendapatan()
+    {
+        $tahun = $this->request->getGet('tahun') ?? date('Y');
+        $bulan = $this->request->getGet('bulan') ?? 'all';
+
+        $rawRealisasi = $this->realisasiPendapatanModel->getDataFilter($tahun, $bulan);
+        $trenBulanan  = $this->realisasiPendapatanModel->getTrenPersentaseBulanan($tahun);
+
+        $groupedData = [];
+        $bulanTerakhir = 0;
+        foreach ($rawRealisasi as $row) {
+            $b = (int) $row['bulan'];
+            $groupedData[$b][] = $row;
+            if ($b > $bulanTerakhir) $bulanTerakhir = $b;
+        }
+
+        return view('KabtanggamusViews/Adminadbang/print_pdf_pendapatan', [
+            'tahun'         => $tahun,
+            'bulan'         => $bulan,
+            'groupedData'   => $groupedData,
+            'trenBulanan'   => $trenBulanan,
+            'bulanTerakhir' => $bulanTerakhir
+        ]);
+    }
+    // Endpoint AJAX untuk re-render data grafik gabungan saat filter tahun diubah
     public function getTrenBulanan()
     {
         if (!$this->request->isAJAX()) {
@@ -326,6 +865,13 @@ class AdminAdbangController extends BaseController
             'data'   => $data
         ]);
     }
+    /*
+     * ==========================================================================
+     *  CRUD DATA ANGGARAN KAS PERANGKAT DAERAH
+     * ==========================================================================
+     */
+
+
     // METHOD BARU: Mengambil ringkasan data berdasarkan filter AJAX
     public function getSummaryByPeriode()
     {
@@ -347,7 +893,11 @@ class AdminAdbangController extends BaseController
             'data'   => $summary
         ]);
     }
-
+    /*
+     * ==========================================================================
+     *  CRUD DATA ANGGARAN KAS PERANGKAT DAERAH
+     * ==========================================================================
+     */
     public function storeangkas_ajax()
     {
         if (!$this->request->isAJAX()) {
@@ -473,319 +1023,7 @@ class AdminAdbangController extends BaseController
 
         // return redirect()->to('/anggaran-kas')->with('success', 'Data Anggaran Kas berhasil disimpan!');
     }
-    public function index()
-    {
-        $req = $this->request;
-        $receivedParams = $req->getGet();
-        $wilayah = $receivedParams['wilayah'] ?? null;
-        $hal = $receivedParams['hal'] ?? null;
-        $action = $receivedParams['action'] ?? null;
-        $kdSU = $receivedParams['kdSU'] ?? null;
-        $blndata = $receivedParams['blndata'] ?? null;
-        $kdSK = $receivedParams['kdSK'] ?? null;
-        $tgldataopd = $receivedParams['tgldataopd'] ?? null;
-        $tgldata = $receivedParams['tgldata'] ?? null;
-        $id = $receivedParams['id'] ?? null;
 
-
-        $user = user();
-        $groupModel = new GroupModel();
-        $groupuser = $groupModel->getGroupsForUser($user->id);
-        $jadwalaktif = $this->jadwalmodel->jadwalaktifskrg();
-        // $data['jadwalaktif'] = $this->jadwalmodel->jadwalaktifskrg();
-        // echo dd($user);
-        $data =
-            [
-                'wilayah' => session()->get('wilayah'),
-                'namawilayah' => session()->get('namawilayah'),
-                'groupuser' => $groupuser[0]['name'],
-                'groupmenu' => $groupuser[0]['name'],
-                'tahun' => session()->get('tahun'),
-                'titlepage' => 'halaman Admin Adbang ',
-                'datauser' => $user->sub_unit,
-                'tglaktif' => session()->get('tglaktif'),
-                'nama_opd' => $kdSU,
-                'blndata' => $blndata,
-                'kdSK' => $kdSK,
-                'tgldataopd' => $tgldataopd,
-                'tglapbd' => $this->realapbdmodel->tgldata(),
-                'tglapbdaktif' => $this->tglapbdmodel->tgldataaktif(),
-                'status' => 'apbd',
-                'title' => 'Upload Realisasi APBD dari Data excel SIPD',
-                'bulan' => $jadwalaktif['bulan'],
-                'jadwal' => $this->jadwalmodel->jadwal(),
-                'validation' => \Config\Services::validation(),
-                // 'title' => 'Form Anggaran Kas Perangkat Daerah',
-                'list_anggaran' => $this->anggaranKasModel->findAll(),
-
-            ];
-        // $data['tglapbd'] = $this->realapbdmodel->tgldata();
-        // $data['tglapbdaktif'] = $this->tglapbdmodel->tgldataaktif();
-
-
-        if (!$receivedParams) {
-            // echo dd($data);
-            if (!$data['groupuser']) {
-                $data = [
-                    'title1' => 'Anda belum memilih wilayah kabupaten/kota diawal halaman atau anda belum memilih halaman hak akses'
-                ];
-                return view('hakakses', $data);
-                // return redirect()->to(base_url());
-            }
-            if (!$data['wilayah']) {
-                $data = [
-                    'title1' => 'Anda belum memilih wilayah kabupaten/kota diawal halaman atau anda belum memilih halaman hak akses'
-                ];
-                return view('hakakses', $data);
-                // return redirect()->to(base_url());
-            }
-            if (!$data['tahun']) {
-                session()->set('groupuser', $data['groupuser']);
-                session()->set('groupmenu', $data['groupuser']);
-                return view('pilihtahun', $data);
-            }
-
-            $datatglaktif = $this->tglapbdmodel->tgldataaktif();
-            session()->set('tglaktif', $datatglaktif['tanggal']);
-            $tahun = session()->get('tahun');
-            $tglaktif = session()->get('tglaktif');
-            $data['dataopdadmin'] = $this->realapbdmodel->getCapaianKinerjaDenganGeometri($tahun, $tglaktif);
-            // echo dd($tahun . '-'  . $tglaktif);
-            // echo dd($data['dataopdadmin']);
-            // echo dd($data);
-            // echo dd($data['wilayah'] . '/' . $user->id);
-            $urlasli = $req->getPath();
-            $url = explode('/', $urlasli)[0];
-            if ($url !== $data['wilayah']) {
-                return redirect()->to(base_url('user'));
-            }
-            $tahunSelected = $this->request->getGet('tahun') ?? date('Y');
-            $trenBulanan = $this->realisasiPendapatanModel->getTrenPersentaseBulanan($tahunSelected);
-            $data['trenBulanan'] = $trenBulanan;
-            $data['tahunSelected'] = $tahunSelected;
-            // // return view('realisasi/form_input', [
-            // //     'title'        => 'Input & Grafik Tren Realisasi APBD',
-            // //     'tahunSelected' => $tahunSelected,
-            // //     'trenBulanan'  => $trenBulanan
-            // // ]);
-            // return view('KabtanggamusViews/Adminadbang/form_inputpendapatan', $data);
-
-
-            $tahunSelected = $this->request->getGet('tahun') ?? date('Y');
-            $bulanSelected = $this->request->getGet('bulan') ?? 'all';
-
-            $dataRealisasi = $this->realisasiPendapatanModel->getDataFilter($tahunSelected, $bulanSelected);
-            $data['dataRealisasi'] = $dataRealisasi;
-            $data['tahunSelected'] = $tahunSelected;
-            $data['bulanSelected'] = $bulanSelected;
-            // return view('realisasi/data_list', [
-
-            return view('KabtanggamusViews/Adminadbang/index', $data);
-        }
-        $wilayah = session()->get('wilayah');
-        if (!$wilayah) {
-            return redirect()->to(base_url());
-        }
-        $this->ValidasiHash($req);
-        if ($hal == 'apbdopd') {
-            return view('KabtanggamusViews/Adminadbang/listtgldata', $data);
-
-            // $data['dataopdadmin'] = $this->realapbdmodel->getCapaianKinerjaDenganGeometri($tgldata);
-            // return view('KabtanggamusViews/Adminadbang/apbdopd', $data);
-        } elseif ($hal == 'uploadapbd') {
-            // $data['status'] = 'apbd';
-            // $data['title'] = 'Upload Realisasi APBD dari Data excel SIPD';
-            // $data['validation'] = \Config\Services::validation();
-            return view('KabtanggamusViews/Adminadbang/upload_form', $data);
-        } elseif ($hal == 'angkasopd') {
-            // $dataa['list_anggaran'] = $this->anggaranKasModel->findAll();
-            $data['list_anggaran'] = $this->anggaranKasModel->findAll();
-            // $data['dataopdadmin'] = $this->realapbdmodel->getCapaianKinerjaDenganGeometri($data['tahun'], $data['tglaktif']);
-            return view('KabtanggamusViews/Adminadbang/forminputangkasopd3lengkap', $data);
-            // return view('KabtanggamusViews/Adminadbang/forminputangkasopd2', $data);
-        } elseif ($hal == 'datapbj') {
-            $data['dataopdadmin'] = $this->realapbdmodel->getCapaianKinerjaDenganGeometri($data['tahun'], $data['tglaktif']);
-            return view('KabtanggamusViews/Adminadbang/datapbj', $data);
-        } elseif ($hal == 'jadwal') {
-
-            $data['jadwalaktif'] = $this->jadwalmodel->jadwalaktifskrg();
-            //tanggal data pada tabel apbd
-            $data['tglapbd'] = $this->realapbdmodel->tgldata();
-            $data['tglapbdaktif'] = $this->tglapbdmodel->tgldataaktif();
-            // echo dd($data['tglapbd']);
-            return view('KabtanggamusViews/Adminadbang/v_jadwal', $data);
-        } elseif ($hal == 'pendapatan') {
-            // $summary = $this->realisasiPendapatanModel->getSummaryBulanTerakhir();
-            // $data['summaryStatis'] = $summary;
-            $tahunSelected = $this->request->getGet('tahun') ?? date('Y');
-            $trenBulanan = $this->realisasiPendapatanModel->getTrenPersentaseBulanan($tahunSelected);
-            $data['trenBulanan'] = $trenBulanan;
-            $data['tahunSelected'] = $tahunSelected;
-            // // return view('realisasi/form_input', [
-            // //     'title'        => 'Input & Grafik Tren Realisasi APBD',
-            // //     'tahunSelected' => $tahunSelected,
-            // //     'trenBulanan'  => $trenBulanan
-            // // ]);
-            // return view('KabtanggamusViews/Adminadbang/form_inputpendapatan', $data);
-
-
-            $tahunSelected = $this->request->getGet('tahun') ?? date('Y');
-            $bulanSelected = $this->request->getGet('bulan') ?? 'all';
-
-            $dataRealisasi = $this->realisasiPendapatanModel->getDataFilter($tahunSelected, $bulanSelected);
-            $data['dataRealisasi'] = $dataRealisasi;
-            $data['tahunSelected'] = $tahunSelected;
-            $data['bulanSelected'] = $bulanSelected;
-            // return view('realisasi/data_list', [
-            //     'title'         => 'Data Realisasi APBD',
-            //     'tahunSelected' => $tahunSelected,
-            //     'bulanSelected' => $bulanSelected,
-            //     'dataRealisasi' => $dataRealisasi
-            // ]);
-            return view('KabtanggamusViews/Adminadbang/data_listpendapatan', $data);
-        } elseif ($hal == 'inputbulanan') {
-            $summary = $this->realisasiPendapatanModel->getSummaryBulanTerakhir();
-            $data['summaryStatis'] = $summary;
-            $tahunSelected = $this->request->getGet('tahun') ?? date('Y');
-            $trenBulanan = $this->realisasiPendapatanModel->getTrenPersentaseBulanan($tahunSelected);
-            $data['trenBulanan'] = $trenBulanan;
-            $data['tahunSelected'] = $tahunSelected;
-            // return view('realisasi/form_input', [
-            //     'title'        => 'Input & Grafik Tren Realisasi APBD',
-            //     'tahunSelected' => $tahunSelected,
-            //     'trenBulanan'  => $trenBulanan
-            // ]);
-            return view('KabtanggamusViews/Adminadbang/form_inputpendapatan', $data);
-        } elseif ($hal == 'inputdashboardutama') {
-            $dataStat = $this->dataDashboardModel->first();
-            // echo dd($dataStat);
-            // Buat record awal jika database masih kosong
-            if (!$dataStat) {
-                $this->dataDashboardModel->insert([
-                    'jumlah_perangkat_daerah' => 125,
-                    'jumlah_kecamatan'        => 12,
-                    'jumlah_tiuh_kampung'     => 120,
-                    'total_anggaran_apbd'     => '1.5T',
-                    'index_sakip'             => '(B) 90.19',
-                    'index_rb'                => '7.392',
-                    'tingkat_kemiskinan'      => '28.5%',
-                    'angka_stunting'          => '99.9%',
-                ]);
-            }
-            $dataStat2 = $this->dataDashboardModel->first();
-
-            // Encrypt ID untuk proteksi parameter URL/Form
-            $encryptedId = bin2hex($this->encrypter->encrypt((string)$dataStat2['id']));
-
-            $data['title'] = 'Input Data Dashboard Pembangunan';
-            $data['stat'] = $dataStat2;
-            $data['encryptedId'] = $encryptedId;
-            $data['validation'] = \Config\Services::validation();
-            return view('KabtanggamusViews/Adminadbang/form_inputdashboardutama', $data);
-        } elseif ($hal == 'laporanrfkopd') {
-            // Handle the 'laporanrfkopd' case
-            // $bulan = $this->request->getGet('bulan') ?? date('m');
-            // $dataRekap = $this->realapbdmodel->getRekapPerSKPD($jadwalaktif['bulan']);
-
-            // $data = [
-            //     'title'     => 'Rekap Per SKPD',
-            //     'bulan'     => $bulan,
-            //     'dataRekap' => $dataRekap,
-            // ];
-            $data['dataRekap'] = $this->realapbdmodel->getRekapPerSKPD($jadwalaktif['bulan']);
-            $data['bulan'] = $jadwalaktif['bulan'];
-            $data['title'] = 'Rekap Per SKPD';
-            // echo dd($data['dataRekap']);
-            return view('KabtanggamusViews/Adminadbang/laporanlrfkopd2', $data);
-        }
-
-        if ($hal == 'gantibulanaktif') {
-
-            return view('KabtanggamusViews/Adminadbang/v_listjadwal', $data);
-            //echo dd($data['jadwal']);
-        }
-        if ($hal == 'editbulanaktif') {
-            // $idAwal = $data['jadwalaktif']['id'] ?? null;
-            // $tahun = $data['jadwalaktif']['tahun'] ?? null;
-            // $bulan = $data['jadwalaktif']['bulan'] ?? null;
-            $idAwal = $jadwalaktif['id'] ?? null;
-            $tahun = $jadwalaktif['tahun'] ?? null;
-            $bulan = $jadwalaktif['bulan'] ?? null;
-            //   echo $idUbah;
-            $nonaktifbln = [
-                'id' => $idAwal,
-                'tahun' => $tahun,
-                'bulan' => $bulan,
-                'status' => '0'
-            ];
-            $dataubah = $this->jadwalmodel->jdwlygdiaktifkan($id);
-            $aktifbln = [
-                'id' => $id,
-                'tahun' => $dataubah['tahun'],
-                'bulan' => $dataubah['bulan'],
-                'status' => '1'
-            ];
-            // echo dd($nonaktifbln);
-            $aktifasi = $this->jadwalmodel->save($aktifbln);
-            $nonaktifasi = $this->jadwalmodel->save($nonaktifbln);
-            if (!$aktifasi && !$nonaktifasi) {
-                echo "Terjadi kesalahan";
-            } else {
-                return redirect()->to(hash_url('' . $data['wilayah'] . '/' . $data['groupuser'] . '/', ['hal' => 'jadwal']));
-            }
-        }
-        if ($hal == 'gantitglaktif') {
-            $updateAktif = $this->tglapbdmodel->updatetgl(1, $data['tahun'], $id);
-
-            if (!$updateAktif) {
-                session()->setFlashdata('message', 'Tanggal Data APBD berhasil diaktifkan');
-            }
-            // return redirect()->to(base_url('lrfkadmin/jadwal')->withInput()->with('message', 'Tanggal Data APBD berhasil diaktifkan'));
-            return redirect()->to(hash_url('' . $data['wilayah'] . '/' . $data['groupuser'] . '/', ['hal' => 'jadwal']))->withInput()->with('message', 'Tanggal Data APBD berhasil diaktifkan');
-        }
-
-
-        if ($tgldata) {
-            $dataopdadmin = $this->realapbdmodel->getCapaianKinerjaDenganGeometri($data['tahun'], $tgldata);
-            // $dataapbdopd = $dataopdadmin['data'];
-            // $data['dataopdadmin'] = $this->realapbdmodel->getRekapSubSkpdLengkap($tgldata, $data['bulan']);
-            $dataopdapbd = $this->realapbdmodel->getRekapSubSkpd($tgldata);
-            $data['dataopdadmin'] = $this->realapbdmodel->getRekapSubSkpd($tgldata);
-
-            // Hanya enkripsi 'id' dan 'name'
-            $dataopdapbds = array_map(function ($dataopdapbd) {
-                $dataopdapbd['update_token'] = CryptoUrl::encrypt([
-                    'kdSU'   => $dataopdapbd['NAMA_UNIT_SKPD'],
-                    'blndata' => $dataopdapbd['BULAN']
-                ]);
-                return $dataopdapbd;
-            }, $data['dataopdadmin']);
-            $datauserx = json_encode($dataopdapbds);
-            $data['datajson'] = preg_replace('/"([^"]+)"\s*:/', '$1:', $datauserx);
-
-            // echo dd($data['dataopdadmin']);
-            return view('KabtanggamusViews/Adminadbang/listopdapbd2', $data);
-        }
-        // $data['tgldata'] = $tgldata;
-        // $data['dataopdadmin'] = $this->realapbdmodel->listopdadmin($tgldata);
-
-
-        if ($hal == 'detail') {
-            if ($action == 'opd') {
-                $data['dataopd'] = $this->realapbdmodel->rpersk($kdSU, $data['tahun'], $blndata, $tgldataopd);
-                // echo dd($kdSU . '-' . $tahunaktif . '-' . $bulanaktif . '-' . $tglaktif);
-                // echo dd($data['dataopd']);
-                return view('KabtanggamusViews/Adminadbang/detailopdapbd', $data);
-            }
-            if ($action == 'detailopd') {
-                $data['dataopd'] = $this->realapbdmodel->rperrso2($kdSU, $kdSK, $data['tahun'], $tgldataopd)->getResultArray();
-
-                // echo dd($kdSU . '-' . $kdSK . '-' . $tahunaktif . '-' . $tglaktif);
-                // echo dd($data['dataopd']);
-                return view('superadmin/2026/detailopdsro', $data);
-            }
-        }
-    }
     public function dataperopd()
     {
         $token = $this->request->getGet('token');

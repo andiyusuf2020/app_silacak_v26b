@@ -1,8 +1,8 @@
 <?= $this->extend('template/layout') ?>
 <?= $this->section('content') ?>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-beta2/dist/css/adminlte.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-
 <style>
     .table-custom th {
         background-color: #f1f3f5;
@@ -41,13 +41,13 @@
             <!-- CARD FILTER PERIODE LAPORAN & GRAFIK -->
             <div class="card card-outline card-secondary shadow-sm mb-4">
                 <div class="card-body">
-                    <form method="GET" action="<?= base_url('realisasi/data-list') ?>" id="formFilter" class="row g-3 align-items-end">
+                    <form method="GET" action="<?= hash_url('' . $wilayah . '/' . $groupuser . '/realisasi/data-list') ?>" id="formFilter" class="row g-3 align-items-end">
                         <div class="col-md-4">
                             <label for="filter_tahun" class="form-label fw-semibold">Tahun Anggaran</label>
                             <select name="tahun" id="filter_tahun" class="form-select">
                                 <?php
                                 $cYear = date('Y');
-                                for ($y = $cYear; $y >= $cYear - 3; $y--): ?>
+                                for ($y = $cYear; $y >= $cYear - 0; $y--): ?>
                                     <option value="<?= $y ?>" <?= $tahunSelected == $y ? 'selected' : '' ?>><?= $y ?></option>
                                 <?php endfor; ?>
                             </select>
@@ -80,9 +80,9 @@
 
                         <div class="col-md-4 d-flex gap-2">
                             <button type="submit" class="btn btn-secondary w-100">
-                                <i class="bi bi-filter me-1"></i> Terapkan Filter
+                                <i class="bi bi-filter me-1"></i> Terapkan Filter Bulan
                             </button>
-                            <a href="<?= base_url('realisasi/data-list') ?>" class="btn btn-outline-secondary" title="Reset Filter">
+                            <a href="<?= base_url('/realisasi/data-list') ?>" class="btn btn-outline-secondary" title="Reset Filter">
                                 <i class="bi bi-arrow-counterclockwise"></i>
                             </a>
                         </div>

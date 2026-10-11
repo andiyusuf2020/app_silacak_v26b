@@ -66,8 +66,11 @@ $routes->group('tanggamus/superadmin', ['filter' => 'role:superadmin'], function
     $routes->get('realisasi/get-detail/(:num)', 'KabtanggamusController\AdminAdbangController::getDetail/$1');
     $routes->post('realisasi/update/(:num)', 'KabtanggamusController\AdminAdbangController::update/$1');
     $routes->post('realisasi/delete/(:num)', 'KabtanggamusController\AdminAdbangController::delete/$1');
-    // $routes->get('dashboard-stats', 'DashboardAdminController::index');
+    $routes->get('realisasi/data-list', 'KabtanggamusController\AdminAdbangController::listData');
     $routes->post('dashboard-stats/update', 'KabtanggamusController\AdminAdbangController::updatedatadashboard');
+
+    $routes->get('realisasi/export-excel-pendapatan', 'KabtanggamusController\AdminAdbangController::exportExcelPendapatan');
+    $routes->post('realisasi/export-pdf-pendapatan', 'KabtanggamusController\AdminAdbangController::exportPdfrealisasiPendapatan');
 });
 $routes->post('anggaran-kas/store', 'KabtanggamusController\AdminAdbangController::storeangkas_ajax');
 // $routes->get('rekap', [RekapController::class, 'index']);
