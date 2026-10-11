@@ -566,56 +566,54 @@ class AdminAdbangController extends BaseController
         return redirect()->to(hash_url('' . session()->get('wilayah') . '/' . session()->get('groupuser'), ['hal' => 'inputdashboardutama']))->with('success', 'Data Dashboard Pembangunan berhasil diperbarui!');
     }
     // Endpoint AJAX Server-Side Tabulator
-    public function getTableData()
-    {
-        $request = service('request');
+    // public function getTableData()
+    // {
+    //     $request = service('request');
 
-        // Parameter pagination dari Tabulator
-        $page = $request->getGet('page') ?? 1;
-        $size = $request->getGet('size') ?? 10;
+    //     // Parameter pagination dari Tabulator
+    //     $page = $request->getGet('page') ?? 1;
+    //     $size = $request->getGet('size') ?? 10;
 
-        $model = new SkpdModel();
+    //     $model = new SkpdModel();
 
-        // Handle pencarian global/filter jika dikirimkan oleh Tabulator
-        $filters = $request->getGet('filter');
-        if (!empty($filters)) {
-            foreach ($filters as $filter) {
-                // Contoh filter sederhana
-                if (isset($filter['field']) && isset($filter['value'])) {
-                    $model->like($filter['field'], $filter['value']);
-                }
-            }
-        }
+    //     // Handle pencarian global/filter jika dikirimkan oleh Tabulator
+    //     $filters = $request->getGet('filter');
+    //     if (!empty($filters)) {
+    //         foreach ($filters as $filter) {
+    //             // Contoh filter sederhana
+    //             if (isset($filter['field']) && isset($filter['value'])) {
+    //                 $model->like($filter['field'], $filter['value']);
+    //             }
+    //         }
+    //     }
 
-        // Ambil data dengan pagination
-        $tahun = session()->get('tahun') ?? date('Y');
-        $totalRows = $model->where('tahun', $tahun)->countAllResults(false);
+    //     // Ambil data dengan pagination
+    //     $tahun = session()->get('tahun') ?? date('Y');
+    //     $totalRows = $model->where('tahun', $tahun)->countAllResults(false);
 
-        $offset = ($page - 1) * $size;
-        $data = $model->where('tahun', $tahun)
-            ->findAll($size, $offset);
+    //     $offset = ($page - 1) * $size;
+    //     $data = $model->where('tahun', $tahun)
+    //         ->findAll($size, $offset);
 
-        // Format respons standar yang dibaca oleh Tabulator server-side
-        return $this->response->JSON([
-            'last_page' => ceil($totalRows / $size),
-            'data'      => $data
-        ]);
-    }
+    //     // Format respons standar yang dibaca oleh Tabulator server-side
+    //     return $this->response->JSON([
+    //         'last_page' => ceil($totalRows / $size),
+    //         'data'      => $data
+    //     ]);
+    // }
 
     // Endpoint untuk data Grafik Ringkasan (Chart.js)
-    public function getChartData()
+    public function getChartDataOpdRangking()
     {
-        $model = new SkpdModel();
-        $tahun = session()->get('tahun') ?? date('Y');
+        // $model = new SkpdModel();
+        // $tahun = session()->get('tahun') ?? date('Y');
+        $tgldata = session()->get('tglaktif') ?? null;
+        $data['dataopdadmin'] = $this->realapbdmodel->getRekapSubSkpdRangking($tgldata);
 
         // Ambil data ringkasan per SKPD (nama, pagu, realisasi)
-        $results = $model->select('NAMA_UNIT_SKPD, total_anggaran, total_realisasi')
-            ->where('tahun', $tahun)
-            ->orderBy('total_anggaran', 'DESC')
-            ->limit(10) // Ambil top 10 SKPD dengan anggaran terbesar
-            ->findAll();
-
-        return $this->response->JSON($results);
+        $results = $this->realapbdmodel->getRekapSubSkpdRangking($tgldata);
+        // echo dd($results);
+        return $this->response->setJSON($results);
     }
     /*
      * ==========================================================================

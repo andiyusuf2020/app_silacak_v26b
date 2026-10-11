@@ -54,6 +54,7 @@ Route for Kab Tanggamus SiTAPIS-KAB tahun 2026 =================================
 $routes->group('tanggamus/superadmin', ['filter' => 'role:superadmin'], function ($routes) {
     $routes->get('', 'KabtanggamusController\AdminAdbangController::index');
     $routes->get('dataperopd', 'KabtanggamusController\AdminAdbangController::dataperopd');
+    $routes->get('getChartDataOpdRangking', 'KabtanggamusController\AdminAdbangController::getChartDataOpdRangking');
     $routes->get('daftaruser', 'UserController\UserKabController\UserController::index');
     $routes->get('updateuser', 'UserController\UserKabController\UserController::updateuser');
     $routes->post('groupset', 'UserController\UserKabController\UserController::changeGroup');

@@ -7,6 +7,8 @@
 
 <!-- SheetJS for Excel Export support in Tabulator -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<!-- Chart.js untuk Grafik Ringkasan -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
 <div class="app-content">
@@ -85,12 +87,12 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         // 1. Inisialisasi Chart.js Ringkasan Anggaran
-        fetch('<?= base_url('superadmin/getChartData') ?>')
+        fetch('<?= base_url('' . $wilayah . '/' . $groupuser . '/getChartDataOpdRangking') ?>')
             .then(response => response.json())
             .then(data => {
                 const labels = data.map(item => item.NAMA_UNIT_SKPD);
-                const paguData = data.map(item => item.total_anggaran);
-                const realisasiData = data.map(item => item.total_realisasi);
+                const CapaianAnggaran = data.map(item => item.persen_capaian_anggaran);
+                const CapaianSRO = data.map(item => item.persen_capaian_sro);
 
                 const ctx = document.getElementById('skpdSummaryChart').getContext('2d');
                 new Chart(ctx, {
@@ -98,15 +100,15 @@
                     data: {
                         labels: labels,
                         datasets: [{
-                                label: 'Pagu Anggaran (Rp)',
-                                data: paguData,
+                                label: 'Capaian Anggaran (%)',
+                                data: CapaianAnggaran,
                                 backgroundColor: 'rgba(13, 110, 253, 0.7)',
                                 borderColor: 'rgba(13, 110, 253, 1)',
                                 borderWidth: 1
                             },
                             {
-                                label: 'Realisasi Anggaran (Rp)',
-                                data: realisasiData,
+                                label: 'Capaian Sub Rincian Objek (%)',
+                                data: CapaianSRO,
                                 backgroundColor: 'rgba(25, 135, 84, 0.7)',
                                 borderColor: 'rgba(25, 135, 84, 1)',
                                 borderWidth: 1
@@ -120,7 +122,7 @@
                             y: {
                                 ticks: {
                                     callback: function(value) {
-                                        return 'Rp ' + new Intl.NumberFormat('id-ID').format(value);
+                                        return value + '%';
                                     }
                                 }
                             }
