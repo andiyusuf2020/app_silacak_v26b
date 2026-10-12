@@ -97,13 +97,9 @@ class AdminAdbangController extends BaseController
                 'bulan' => $jadwalaktif['bulan'],
                 'jadwal' => $this->jadwalmodel->jadwal(),
                 'validation' => \Config\Services::validation(),
-                // 'title' => 'Form Anggaran Kas Perangkat Daerah',
                 'list_anggaran' => $this->anggaranKasModel->findAll(),
 
             ];
-        // $data['tglapbd'] = $this->realapbdmodel->tgldata();
-        // $data['tglapbdaktif'] = $this->tglapbdmodel->tgldataaktif();
-
 
         if (!$receivedParams) {
             // echo dd($data);
@@ -296,6 +292,12 @@ class AdminAdbangController extends BaseController
             $data['title'] = 'Rekap Per SKPD';
             // echo dd($data['dataRekap']);
             return view('KabtanggamusViews/Adminadbang/laporanlrfkopd2', $data);
+        } elseif ($hal == 'laporanrfkopdperjenis') {
+            $data['rekap'] = $this->realapbdmodel->getRekapRealisasiJenis($jadwalaktif['bulan']);
+            $data['bulan'] = $jadwalaktif['bulan'];
+            $data['title'] = 'Rekap Per Jenis';
+            // echo dd($data['rekap']);
+            return view('KabtanggamusViews/Adminadbang/laporanlrfkopdperjenis', $data);
         }
 
         if ($hal == 'gantibulanaktif') {
@@ -343,10 +345,7 @@ class AdminAdbangController extends BaseController
             return redirect()->to(hash_url('' . $data['wilayah'] . '/' . $data['groupuser'] . '/', ['hal' => 'jadwal']))->withInput()->with('message', 'Tanggal Data APBD berhasil diaktifkan');
         }
         if ($tgldata) {
-            $dataopdadmin = $this->realapbdmodel->getCapaianKinerjaDenganGeometri($data['tahun'], $tgldata);
-            $dataopdapbd = $this->realapbdmodel->getRekapSubSkpd($tgldata);
             $data['dataopdadmin'] = $this->realapbdmodel->getRekapSubSkpd($tgldata);
-
             // Hanya enkripsi 'id' dan 'name'
             $dataopdapbds = array_map(function ($dataopdapbd) {
                 $dataopdapbd['update_token'] = CryptoUrl::encrypt([
@@ -357,13 +356,9 @@ class AdminAdbangController extends BaseController
             }, $data['dataopdadmin']);
             $datauserx = json_encode($dataopdapbds);
             $data['datajson'] = preg_replace('/"([^"]+)"\s*:/', '$1:', $datauserx);
-
             // echo dd($data['dataopdadmin']);
             return view('KabtanggamusViews/Adminadbang/listopdapbd3', $data);
         }
-        // $data['tgldata'] = $tgldata;
-        // $data['dataopdadmin'] = $this->realapbdmodel->listopdadmin($tgldata);
-
 
         if ($hal == 'detail') {
             if ($action == 'opd') {
@@ -381,6 +376,74 @@ class AdminAdbangController extends BaseController
             }
         }
     }
+
+    public function dataperopd()
+    {
+        $token = $this->request->getGet('token');
+
+        if (empty($token)) {
+            return redirect()->back()->with('error', 'Token URL tidak ditemukan.');
+        }
+
+        // Dekripsi & Validasi Token (Maksimal 15 menit)
+        $payload = CryptoUrl::decrypt($token, 900);
+
+        if (!$payload) {
+            return redirect()->back()->with('error', 'Akses ditolak: Token tidak valid atau telah kadaluwarsa.');
+        }
+
+        // Ekstrak data hasil dekripsi (hanya ID dan Name)
+        $kdSU   = $payload['kdSU'];
+        $blndata = $payload['blndata'];
+        $user = user();
+        $groupModel = new GroupModel();
+        $groupuser = $groupModel->getGroupsForUser($user->id);
+        $jadwalaktif = $this->jadwalmodel->jadwalaktifskrg();
+
+
+        $data =
+            [
+                'wilayah' => session()->get('wilayah'),
+                'groupuser' => $groupuser[0]['name'],
+                'groupmenu' => $groupuser[0]['name'],
+                'tahunaktif' => session()->get('tahun'),
+                'titlepage' => 'halaman Admin Adbang ',
+                'datauser' => $user->sub_unit,
+                'tglaktif' => session()->get('tglaktif'),
+                'nama_opd' => $kdSU,
+                // 'rekap' => $this->realapbdmodel->getRekapLengkapPerTingkatAmanlengkapperOPDperProgram($blndata),
+                // 'rekap' => $this->realapbdmodel->getRekapLengkapPerTingkatAmanlengkap($blndata, $kdSU),
+                // 'rekap' => $this->realapbdmodel->getRekapLengkapPerTingkatAman($blndata, $kdSU),
+                'rekap' => $this->realapbdmodel->getRekapLengkapPerTingkatAmanlengkapDetail($blndata, $kdSU),
+                // 'rekap' => $this->realapbdmodel->getRekapLengkapPerTingkat($blndata, $kdSU),
+                'blndata' => $blndata,
+                'tglapbd' => $this->realapbdmodel->tgldata(),
+                'tglapbdaktif' => $this->tglapbdmodel->tgldataaktif(),
+                'bulan' => $jadwalaktif['bulan'],
+                'validation' => \Config\Services::validation()
+
+            ];
+        // echo dd($blndata . '-' . $kdSU);
+        // $data['rekap'] = $this->realapbdmodel->getRekapLengkapPerTingkat($blndata, $kdSU);
+        // echo dd($data['rekap']);
+        // return view('KabtanggamusViews/listsubkeg7', $data);
+        //* return view('KabtanggamusViews/listsubkeg6', $data);
+        // return view('KabtanggamusViews/listsubkeg5', $data);
+        // return view('KabtanggamusViews/listsubkeg4', $data);
+        // return view('KabtanggamusViews/listsubkeg3', $data);
+        // return view('KabtanggamusViews/listsubkeg2', $data);
+        return view('KabtanggamusViews/listsubkegOpd', $data);
+    }
+    public function update_sro()
+    {
+        $idSro = $this->request->getPost('id_sro');
+        $realisasi = $this->request->getPost('realisasi');
+
+        // Proses update ke database sesuai model Anda
+        $this->realapbdmodel->update($idSro, ['TOTAL_REALISASI' => $realisasi]);
+        // echo dd($idSro . '-' . $realisasi);
+        return redirect()->back()->with('success', 'Data realisasi SRO berhasil diperbarui.');
+    }
     public function getDataJson()
     {
         // $bulan = $this->request->getGet('bulan') ?? date('m');
@@ -390,17 +453,34 @@ class AdminAdbangController extends BaseController
 
         return $this->response->setJSON($dataRekap);
     }
+
     public function exportXlsx()
     {
         $bulan = $this->request->getGet('bulan') ?? date('m');
-        $dataRekap = $this->realapbdmodel->getRekapPerSKPD($bulan);
+        $months = [
+            1 => 'Januari',
+            2 => 'Februari',
+            3 => 'Maret',
+            4 => 'April',
+            5 => 'Mei',
+            6 => 'Juni',
+            7 => 'Juli',
+            8 => 'Agustus',
+            9 => 'September',
+            10 => 'Oktober',
+            11 => 'November',
+            12 => 'Desember'
+        ];
+        $data['bulan_nama'] = $months[(int)$bulan] ?? 'Bulan Tidak Valid';
+
+        $dataRekap = $this->realapbdmodel->getRekapPerSKPD($data['bulan_nama']);
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
         // Judul Header Spreadsheet
         $sheet->setCellValue('A1', 'REKAPITULASI CAPAIAN DAN EFISIENSI PER SKPD');
-        $sheet->setCellValue('A2', 'BULAN: ' . $bulan);
+        $sheet->setCellValue('A2', 'BULAN: ' . $data['bulan_nama']);
         $sheet->mergeCells('A1:J1');
         $sheet->mergeCells('A2:J2');
         $sheet->getStyle('A1:A2')->getFont()->setBold(true)->setSize(12);
@@ -486,17 +566,29 @@ class AdminAdbangController extends BaseController
     public function exportPdf()
     {
         $bulan = $this->request->getGet('bulan') ?? date('m');
-        $dataRekap = $this->realapbdmodel->getRekapPerSKPD($bulan);
-
+        $months = [
+            1 => 'Januari',
+            2 => 'Februari',
+            3 => 'Maret',
+            4 => 'April',
+            5 => 'Mei',
+            6 => 'Juni',
+            7 => 'Juli',
+            8 => 'Agustus',
+            9 => 'September',
+            10 => 'Oktober',
+            11 => 'November',
+            12 => 'Desember'
+        ];
+        $data['bulan_nama'] = $months[(int)$bulan] ?? 'Bulan Tidak Valid';
+        $dataRekap = $this->realapbdmodel->getRekapPerSKPD($data['bulan_nama']);
         $data = [
             'title'     => 'Rekapitulasi Per SKPD',
             'bulan'     => $bulan,
             'dataRekap' => $dataRekap,
         ];
-
+        // echo dd($data['bulan_nama']);
         $html = view('KabtanggamusViews/Adminadbang/laporanlrfkopdpdf', $data);
-        // return view('KabtanggamusViews/Adminadbang/laporanlrfkopdpdf', $data);
-
         $options = new Options();
         $options->set('isHtml5ParserEnabled', true);
         $options->set('isRemoteEnabled', true);
@@ -565,43 +657,6 @@ class AdminAdbangController extends BaseController
 
         return redirect()->to(hash_url('' . session()->get('wilayah') . '/' . session()->get('groupuser'), ['hal' => 'inputdashboardutama']))->with('success', 'Data Dashboard Pembangunan berhasil diperbarui!');
     }
-    // Endpoint AJAX Server-Side Tabulator
-    // public function getTableData()
-    // {
-    //     $request = service('request');
-
-    //     // Parameter pagination dari Tabulator
-    //     $page = $request->getGet('page') ?? 1;
-    //     $size = $request->getGet('size') ?? 10;
-
-    //     $model = new SkpdModel();
-
-    //     // Handle pencarian global/filter jika dikirimkan oleh Tabulator
-    //     $filters = $request->getGet('filter');
-    //     if (!empty($filters)) {
-    //         foreach ($filters as $filter) {
-    //             // Contoh filter sederhana
-    //             if (isset($filter['field']) && isset($filter['value'])) {
-    //                 $model->like($filter['field'], $filter['value']);
-    //             }
-    //         }
-    //     }
-
-    //     // Ambil data dengan pagination
-    //     $tahun = session()->get('tahun') ?? date('Y');
-    //     $totalRows = $model->where('tahun', $tahun)->countAllResults(false);
-
-    //     $offset = ($page - 1) * $size;
-    //     $data = $model->where('tahun', $tahun)
-    //         ->findAll($size, $offset);
-
-    //     // Format respons standar yang dibaca oleh Tabulator server-side
-    //     return $this->response->JSON([
-    //         'last_page' => ceil($totalRows / $size),
-    //         'data'      => $data
-    //     ]);
-    // }
-
     // Endpoint untuk data Grafik Ringkasan (Chart.js)
     public function getChartDataOpdRangking()
     {
@@ -848,6 +903,7 @@ class AdminAdbangController extends BaseController
             'bulanTerakhir' => $bulanTerakhir
         ]);
     }
+
     // Endpoint AJAX untuk re-render data grafik gabungan saat filter tahun diubah
     public function getTrenBulanan()
     {
@@ -1022,56 +1078,6 @@ class AdminAdbangController extends BaseController
         // return redirect()->to('/anggaran-kas')->with('success', 'Data Anggaran Kas berhasil disimpan!');
     }
 
-    public function dataperopd()
-    {
-        $token = $this->request->getGet('token');
-
-        if (empty($token)) {
-            return redirect()->back()->with('error', 'Token URL tidak ditemukan.');
-        }
-
-        // Dekripsi & Validasi Token (Maksimal 15 menit)
-        $payload = CryptoUrl::decrypt($token, 900);
-
-        if (!$payload) {
-            return redirect()->back()->with('error', 'Akses ditolak: Token tidak valid atau telah kadaluwarsa.');
-        }
-
-        // Ekstrak data hasil dekripsi (hanya ID dan Name)
-        $kdSU   = $payload['kdSU'];
-        $blndata = $payload['blndata'];
-        $user = user();
-        $groupModel = new GroupModel();
-        $groupuser = $groupModel->getGroupsForUser($user->id);
-        $jadwalaktif = $this->jadwalmodel->jadwalaktifskrg();
-
-
-        $data =
-            [
-                'wilayah' => session()->get('wilayah'),
-                'groupuser' => $groupuser[0]['name'],
-                'groupmenu' => $groupuser[0]['name'],
-                'tahunaktif' => session()->get('tahun'),
-                'titlepage' => 'halaman Admin Adbang ',
-                'datauser' => $user->sub_unit,
-                'tglaktif' => session()->get('tglaktif'),
-                'nama_opd' => $kdSU,
-
-                'rekap' => $this->realapbdmodel->getRekapLengkapPerTingkatAmanlengkapperOPDperProgram($blndata),
-                // 'rekap' => $this->realapbdmodel->getRekapLengkapPerTingkatAmanlengkap($blndata, $kdSU),
-                // 'rekap' => $this->realapbdmodel->getRekapLengkapPerTingkat($blndata, $kdSU),
-                'blndata' => $blndata,
-                'tglapbd' => $this->realapbdmodel->tgldata(),
-                'tglapbdaktif' => $this->tglapbdmodel->tgldataaktif(),
-                'bulan' => $jadwalaktif['bulan'],
-                'validation' => \Config\Services::validation()
-
-            ];
-        // echo dd($blndata . '-' . $kdSU);
-        // $data['rekap'] = $this->realapbdmodel->getRekapLengkapPerTingkat($blndata, $kdSU);
-        // echo dd($data['rekap']);
-        return view('KabtanggamusViews/listsubkeg7', $data);
-    }
 
 
     public function uploadapbd()

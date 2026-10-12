@@ -20,7 +20,7 @@
                     <div class="card shadow-sm border-0">
                         <div class="card-header bg-transparent py-3">
                             <h3 class="card-title fw-bold text-dark m-0">
-                                <i class="bi bi-bar-chart-fill me-2 text-primary"></i>Top 10 Pagu vs Realisasi Anggaran SKPD
+                                <i class="bi bi-bar-chart-fill me-2 text-primary"></i>Top 10 Capaian Realisasi Anggaran SKPD <?= session()->get('namawilayah') ?>
                             </h3>
                         </div>
                         <div class="card-body">
@@ -47,28 +47,7 @@
                     </div>
                 </div>
             </div>
-
             <div class="card-body">
-                <!-- Action Toolbar / Export Buttons -->
-                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
-                    <div class="d-flex gap-2 flex-wrap">
-                        <button id="export-xlsx" type="button" class="btn btn-sm btn-outline-success">
-                            <i class="bi bi-file-earmark-excel me-1" aria-hidden="true"></i> Export Excel
-                        </button>
-                        <button id="export-csv" type="button" class="btn btn-sm btn-outline-secondary">
-                            <i class="bi bi-filetype-csv me-1" aria-hidden="true"></i> Export CSV
-                        </button>
-                        <button id="export-json" type="button" class="btn btn-sm btn-outline-secondary">
-                            <i class="bi bi-filetype-json me-1" aria-hidden="true"></i> Export JSON
-                        </button>
-                    </div>
-                    <div>
-                        <button id="print-table" type="button" class="btn btn-sm btn-outline-dark">
-                            <i class="bi bi-printer me-1" aria-hidden="true"></i> Print Tabel
-                        </button>
-                    </div>
-                </div>
-
                 <!-- Tabulator Container -->
                 <div id="listopdadmin-table" class="rounded border"></div>
             </div>

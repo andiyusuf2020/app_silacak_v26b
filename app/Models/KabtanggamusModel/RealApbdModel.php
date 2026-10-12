@@ -11,49 +11,134 @@ class RealApbdModel extends Model
     protected $table                = 'kabtanggamus_ta_sipd';
     protected $primaryKey           = 'NO';
     protected $useAutoIncrement     = true;
-    protected $useSoftDeletes = true;
-    protected $allowedFields = [
-        'NO',
-        'TAHUN',
-        'BULAN',
-        'KODE_SKPD',
-        'NAMA_SKPD',
-        'KODE_UNIT_SKPD',
-        'NAMA_UNIT_SKPD',
-        'KODE_URUSAN',
-        'NAMA_URUSAN',
-        'KODE_BIDANG_URUSAN',
-        'NAMA_BIDANG_URUSAN',
-        'KODE_PROGRAM',
-        'NAMA_PROGRAM',
-        'KODE_GIAT',
-        'NAMA_GIAT',
-        'KODE_SUB_GIAT',
-        'NAMA_SUB_GIAT',
-        'KODE_AKUN',
-        'NAMA_AKUN',
-        'KODE_KELOMPOK',
-        'NAMA_KELOMPOK',
-        'KODE_JENIS',
-        'NAMA_JENIS',
-        'KODE_OBJEK',
-        'NAMA_OBJEK',
-        'KODE_RINCIAN_OBJEK',
-        'NAMA_RINCIAN_OBJEK',
-        'KODE_SRO',
-        'NAMA_SRO',
-        'TOTAL_ANGGARAN',
-        'TOTAL_REALISASI',
-        'SELISIH',
-        'KETERANGAN',
-        'REALISASI_SPJ',
-        'CREATE_AT',
-        'UPDATE_AT',
-    ];
+    protected $returnType           = 'array';
+    protected $useSoftDeletes       = false;
+    protected $protectFields        = false;
+    // protected $useSoftDeletes = true;
+    // protected $allowedFields = [
+    //     'NO',
+    //     'TAHUN',
+    //     'BULAN',
+    //     'KODE_SKPD',
+    //     'NAMA_SKPD',
+    //     'KODE_UNIT_SKPD',
+    //     'NAMA_UNIT_SKPD',
+    //     'KODE_URUSAN',
+    //     'NAMA_URUSAN',
+    //     'KODE_BIDANG_URUSAN',
+    //     'NAMA_BIDANG_URUSAN',
+    //     'KODE_PROGRAM',
+    //     'NAMA_PROGRAM',
+    //     'KODE_GIAT',
+    //     'NAMA_GIAT',
+    //     'KODE_SUB_GIAT',
+    //     'NAMA_SUB_GIAT',
+    //     'KODE_AKUN',
+    //     'NAMA_AKUN',
+    //     'KODE_KELOMPOK',
+    //     'NAMA_KELOMPOK',
+    //     'KODE_JENIS',
+    //     'NAMA_JENIS',
+    //     'KODE_OBJEK',
+    //     'NAMA_OBJEK',
+    //     'KODE_RINCIAN_OBJEK',
+    //     'NAMA_RINCIAN_OBJEK',
+    //     'KODE_SRO',
+    //     'NAMA_SRO',
+    //     'TOTAL_ANGGARAN',
+    //     'TOTAL_REALISASI',
+    //     'SELISIH',
+    //     'KETERANGAN',
+    //     'REALISASI_SPJ',
+    //     'CREATE_AT',
+    //     'UPDATE_AT',
+    // ];
     protected $useTimestamps = true;
     protected $createdField = 'CREATE_AT';
     protected $updatedField = 'UPDATE_AT';
 
+    public function getRekapRealisasiBertingkat($bulan)
+    {
+        $builder = $this->db->table($this->table);
+
+        $builder->select([
+            'kode_unit_skpd',
+            'nama_unit_skpd',
+            'nama_bidang_urusan',
+            'nama_program',
+            'nama_giat',
+            'nama_sub_giat',
+            'nama_jenis',
+            // 'nama_rincian_objek',
+            // 'nama_sro',
+            'SUM(total_anggaran) AS jumlah_total_anggaran',
+            'SUM(total_realisasi) AS total_realisasi',
+            'CASE WHEN SUM(total_anggaran) > 0 THEN (SUM(total_realisasi) / SUM(total_anggaran)) * 100 ELSE 0 END AS capaian_realisasi'
+        ]);
+        $builder->where('bulan', $bulan);
+
+        // Grouping bertingkat berdasarkan seluruh kolom atribut
+        $builder->groupBy([
+            'kode_unit_skpd',
+            'nama_unit_skpd',
+            'nama_bidang_urusan',
+            'nama_program',
+            'nama_giat',
+            'nama_sub_giat',
+            'nama_jenis',
+            // 'nama_rincian_objek',
+            // 'nama_sro'
+        ]);
+
+        // Pengurutan bertingkat: Unit SKPD -> Sub Kegiatan -> Nama Jenis
+        $builder->orderBy('nama_unit_skpd', 'ASC');
+        $builder->orderBy('nama_sub_giat', 'ASC');
+        $builder->orderBy('nama_jenis', 'ASC');
+
+        return $builder->get()->getResultArray();
+    }
+
+    public function getRekapRealisasiJenis($bulan)
+    {
+        // 1. Query mengambil data hingga level Jenis (menjumlahkan SRO & Realisasi)
+
+        $builder = $this->db->table($this->table);
+
+        $builder->select([
+            'kode_unit_skpd',
+            'nama_unit_skpd',
+            'nama_bidang_urusan',
+            'nama_program',
+            'nama_giat',
+            'nama_sub_giat',
+            'nama_kelompok',
+            'nama_jenis',
+            'nama_rincian_objek',
+            'nama_sro',
+            'SUM(total_anggaran) AS jumlah_total_anggaran',
+            'SUM(total_realisasi) AS total_realisasi',
+            'CASE WHEN SUM(total_anggaran) > 0 THEN (SUM(total_realisasi) / SUM(total_anggaran)) * 100 ELSE 0 END AS capaian_realisasi'
+        ]);
+        $builder->where('bulan', $bulan);
+        // Group by seluruh kolom non-agregat sesuai standar SQL, dengan fokus pengelompokan utama pada nama_jenis
+        $builder->groupBy([
+            // 'kode_unit_skpd',
+            // 'nama_unit_skpd',
+            // 'nama_bidang_urusan',
+            // 'nama_program',
+            // 'nama_giat',
+            // 'nama_sub_giat',
+            'nama_kelompok',
+            // 'nama_jenis',
+            // 'nama_rincian_objek',
+            // 'nama_sro'
+        ]);
+
+        // Urutkan berdasarkan nama jenis untuk memudahkan pembacaan laporan
+        $builder->orderBy('nama_jenis', 'ASC');
+
+        return $builder->get()->getResultArray();
+    }
     public function getRekapPerSKPD($bulan)
     {
         // 1. Ambil & kelompokkan data langsung di level SKPD
@@ -225,7 +310,7 @@ class RealApbdModel extends Model
             KODE_GIAT,
             NAMA_GIAT,
             KODE_SUB_GIAT,
-            NAMA_SUB_GIAT,
+            NAMA_SUB_GIAT,            
             KODE_SRO,
             NAMA_SRO,
             SUM(TOTAL_ANGGARAN) AS total_anggaran,
@@ -397,6 +482,231 @@ class RealApbdModel extends Model
                         $rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['sub_kegiatan'][$kdSubGiat]['capaian_sro']       = $capaianSroSub;
                         $rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['sub_kegiatan'][$kdSubGiat]['efisiensi']          = $efisiensiSub;
                         $rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['sub_kegiatan'][$kdSubGiat]['status_efisiensi']  = ($efisiensiSub < 0) ? 'Inefisien' : 'Efisien';
+                    }
+                }
+            }
+        }
+
+        return $rekap;
+    }
+    public function getRekapLengkapPerTingkatAmanlengkapDetail($bulan, $kdSU)
+    {
+        // 1. Query mengambil data hingga level SRO
+        $builder = $this->select('
+            NO,
+            KODE_UNIT_SKPD,
+            NAMA_UNIT_SKPD,
+            KODE_PROGRAM,
+            NAMA_PROGRAM,
+            KODE_GIAT,
+            NAMA_GIAT,
+            KODE_SUB_GIAT,
+            NAMA_SUB_GIAT,   
+            KODE_JENIS,
+            NAMA_JENIS,         
+            KODE_SRO,
+            NAMA_SRO,
+            SUM(TOTAL_ANGGARAN) AS total_anggaran,
+            SUM(TOTAL_REALISASI) AS total_realisasi
+        ')
+            ->where('BULAN', $bulan);
+
+        // Filter fleksibel untuk Kode atau Nama Unit SKPD
+        $builder->groupStart()
+            ->where('KODE_UNIT_SKPD', $kdSU)
+            ->orWhere('NAMA_UNIT_SKPD', $kdSU)
+            ->groupEnd();
+
+        $data = $builder->groupBy([
+            'KODE_UNIT_SKPD',
+            'NAMA_UNIT_SKPD',
+            'KODE_PROGRAM',
+            'NAMA_PROGRAM',
+            'KODE_GIAT',
+            'NAMA_GIAT',
+            'KODE_SUB_GIAT',
+            'NAMA_SUB_GIAT',
+            'KODE_JENIS',
+            'NAMA_JENIS',
+            'KODE_SRO',
+            'NAMA_SRO'
+        ])
+            ->orderBy('KODE_PROGRAM', 'ASC')
+            ->orderBy('KODE_GIAT', 'ASC')
+            ->orderBy('KODE_SUB_GIAT', 'ASC')
+            ->orderBy('KODE_JENIS', 'ASC')
+            ->orderBy('KODE_SRO', 'ASC')
+            ->get()
+            ->getResultArray();
+
+        if (empty($data)) {
+            return [];
+        }
+
+        $rekap = [];
+
+        foreach ($data as $row) {
+            $kdSkpd    = !empty($row['KODE_UNIT_SKPD']) ? $row['KODE_UNIT_SKPD'] : $row['NAMA_UNIT_SKPD'];
+            $kdProg    = $row['KODE_PROGRAM'];
+            $kdGiat    = $row['KODE_GIAT'];
+            $kdSubGiat = $row['KODE_SUB_GIAT'];
+            $kdJenis   = $row['KODE_JENIS'];
+            $NO        = $row['NO'];
+            $kdSro     = $row['KODE_SRO'];
+            $anggaran  = (float)$row['total_anggaran'];
+            $realisasi = (float)$row['total_realisasi'];
+            $isSroNol  = ($realisasi == 0) ? 1 : 0;
+
+            // 1. Inisialisasi Level SKPD
+            if (!isset($rekap[$kdSkpd])) {
+                $rekap[$kdSkpd] = [
+                    'kode'      => $kdSkpd,
+                    'nama'      => $row['NAMA_UNIT_SKPD'],
+                    'anggaran'  => 0,
+                    'realisasi' => 0,
+                    'sro'       => 0,
+                    'sro_nol'   => 0,
+                    'program'   => []
+                ];
+            }
+
+            // 2. Inisialisasi Level Program
+            if (!isset($rekap[$kdSkpd]['program'][$kdProg])) {
+                $rekap[$kdSkpd]['program'][$kdProg] = [
+                    'kode'      => $kdProg,
+                    'nama'      => $row['NAMA_PROGRAM'],
+                    'anggaran'  => 0,
+                    'realisasi' => 0,
+                    'sro'       => 0,
+                    'sro_nol'   => 0,
+                    'kegiatan'  => []
+                ];
+            }
+
+            // 3. Inisialisasi Level Kegiatan
+            if (!isset($rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat])) {
+                $rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat] = [
+                    'kode'         => $kdGiat,
+                    'nama'         => $row['NAMA_GIAT'],
+                    'anggaran'     => 0,
+                    'realisasi'    => 0,
+                    'sro'          => 0,
+                    'sro_nol'      => 0,
+                    'sub_kegiatan' => []
+                ];
+            }
+
+            // 4. Inisialisasi Level Sub-Kegiatan
+            if (!isset($rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['sub_kegiatan'][$kdSubGiat])) {
+                $rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['sub_kegiatan'][$kdSubGiat] = [
+                    'kode'      => $kdSubGiat,
+                    'nama'      => $row['NAMA_SUB_GIAT'],
+                    'anggaran'  => 0,
+                    'realisasi' => 0,
+                    'sro'       => 0,
+                    'sro_nol'   => 0,
+                    'list_sro'  => []
+                ];
+            }
+            //Level Jenis
+            if (!isset($rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['sub_kegiatan'][$kdSubGiat]['list_jenis'][$kdJenis])) {
+                $rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['sub_kegiatan'][$kdSubGiat]['list_jenis'][$kdJenis] = [
+                    'kode'      => $kdJenis,
+                    'nama'      => $row['NAMA_JENIS'],
+                    'anggaran'  => 0,
+                    'realisasi' => 0,
+                    'sro'       => 0,
+                    'sro_nol'   => 0,
+                    'list_sro'  => []
+                ];
+            }
+            // 5. Level SRO (Hanya Anggaran dan Realisasi)
+            $rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['sub_kegiatan'][$kdSubGiat]['list_sro'][$kdSro] = [
+                'NO'        => $NO,
+                'kode'      => $kdSro,
+                'nama'      => $row['NAMA_SRO'],
+                'anggaran'  => $anggaran,
+                'realisasi' => $realisasi
+            ];
+
+            // 6. Akumulasi Anggaran, Realisasi, & Counter SRO ke Tingkat Atas
+            $rekap[$kdSkpd]['anggaran']  += $anggaran;
+            $rekap[$kdSkpd]['realisasi'] += $realisasi;
+            $rekap[$kdSkpd]['sro']       += 1;
+            $rekap[$kdSkpd]['sro_nol']   += $isSroNol;
+
+            $rekap[$kdSkpd]['program'][$kdProg]['anggaran']  += $anggaran;
+            $rekap[$kdSkpd]['program'][$kdProg]['realisasi'] += $realisasi;
+            $rekap[$kdSkpd]['program'][$kdProg]['sro']       += 1;
+            $rekap[$kdSkpd]['program'][$kdProg]['sro_nol']   += $isSroNol;
+
+            $rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['anggaran']  += $anggaran;
+            $rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['realisasi'] += $realisasi;
+            $rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['sro']       += 1;
+            $rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['sro_nol']   += $isSroNol;
+
+            $rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['sub_kegiatan'][$kdSubGiat]['anggaran']  += $anggaran;
+            $rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['sub_kegiatan'][$kdSubGiat]['realisasi'] += $realisasi;
+            $rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['sub_kegiatan'][$kdSubGiat]['sro']       += 1;
+            $rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['sub_kegiatan'][$kdSubGiat]['sro_nol']   += $isSroNol;
+
+            $rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['sub_kegiatan'][$kdSubGiat]['list_jenis'][$kdJenis]['anggaran']  += $anggaran;
+            $rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['sub_kegiatan'][$kdSubGiat]['list_jenis'][$kdJenis]['realisasi'] += $realisasi;
+            $rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['sub_kegiatan'][$kdSubGiat]['list_jenis'][$kdJenis]['sro']       += 1;
+            $rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['sub_kegiatan'][$kdSubGiat]['list_jenis'][$kdJenis]['sro_nol']   += $isSroNol;
+        }
+
+        // 7. Hitung kalkulasi capaian & efisiensi untuk level Sub-Kegiatan, Kegiatan, Program, dan SKPD
+        foreach ($rekap as $kdSkpd => $skpd) {
+            $capaianRealSkpd = $this->hitungPersen($skpd['realisasi'], $skpd['anggaran']);
+            $capaianSroSkpd  = $this->hitungPersen($skpd['sro'] - $skpd['sro_nol'], $skpd['sro']);
+            $efisiensiSkpd   = round($capaianSroSkpd - $capaianRealSkpd, 2);
+
+            $rekap[$kdSkpd]['capaian_realisasi'] = $capaianRealSkpd;
+            $rekap[$kdSkpd]['capaian_sro']       = $capaianSroSkpd;
+            $rekap[$kdSkpd]['efisiensi']          = $efisiensiSkpd;
+            $rekap[$kdSkpd]['status_efisiensi']  = ($efisiensiSkpd < 0) ? 'Inefisien' : 'Efisien';
+
+            foreach ($skpd['program'] as $kdProg => $prog) {
+                $capaianRealProg = $this->hitungPersen($prog['realisasi'], $prog['anggaran']);
+                $capaianSroProg  = $this->hitungPersen($prog['sro'] - $prog['sro_nol'], $prog['sro']);
+                $efisiensiProg   = round($capaianSroProg - $capaianRealProg, 2);
+
+                $rekap[$kdSkpd]['program'][$kdProg]['capaian_realisasi'] = $capaianRealProg;
+                $rekap[$kdSkpd]['program'][$kdProg]['capaian_sro']       = $capaianSroProg;
+                $rekap[$kdSkpd]['program'][$kdProg]['efisiensi']          = $efisiensiProg;
+                $rekap[$kdSkpd]['program'][$kdProg]['status_efisiensi']  = ($efisiensiProg < 0) ? 'Inefisien' : 'Efisien';
+
+                foreach ($prog['kegiatan'] as $kdGiat => $giat) {
+                    $capaianRealGiat = $this->hitungPersen($giat['realisasi'], $giat['anggaran']);
+                    $capaianSroGiat  = $this->hitungPersen($giat['sro'] - $giat['sro_nol'], $giat['sro']);
+                    $efisiensiGiat   = round($capaianSroGiat - $capaianRealGiat, 2);
+
+                    $rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['capaian_realisasi'] = $capaianRealGiat;
+                    $rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['capaian_sro']       = $capaianSroGiat;
+                    $rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['efisiensi']          = $efisiensiGiat;
+                    $rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['status_efisiensi']  = ($efisiensiGiat < 0) ? 'Inefisien' : 'Efisien';
+
+                    foreach ($giat['sub_kegiatan'] as $kdSubGiat => $subGiat) {
+                        $capaianRealSub = $this->hitungPersen($subGiat['realisasi'], $subGiat['anggaran']);
+                        $capaianSroSub  = $this->hitungPersen($subGiat['sro'] - $subGiat['sro_nol'], $subGiat['sro']);
+                        $efisiensiSub   = round($capaianSroSub - $capaianRealSub, 2);
+
+                        $rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['sub_kegiatan'][$kdSubGiat]['capaian_realisasi'] = $capaianRealSub;
+                        $rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['sub_kegiatan'][$kdSubGiat]['capaian_sro']       = $capaianSroSub;
+                        $rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['sub_kegiatan'][$kdSubGiat]['efisiensi']          = $efisiensiSub;
+                        $rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['sub_kegiatan'][$kdSubGiat]['status_efisiensi']  = ($efisiensiSub < 0) ? 'Inefisien' : 'Efisien';
+
+                        foreach ($subGiat['list_jenis'] as $kdJenis => $jenis) {
+                            $capaianRealJenis = $this->hitungPersen($jenis['realisasi'], $jenis['anggaran']);
+                            $capaianSroJenis  = $this->hitungPersen($jenis['sro'] - $jenis['sro_nol'], $jenis['sro']);
+                            $efisiensiJenis   = round($capaianSroJenis - $capaianRealJenis, 2);
+
+                            $rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['sub_kegiatan'][$kdSubGiat]['list_jenis'][$kdJenis]['capaian_realisasi'] = $capaianRealJenis;
+                            $rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['sub_kegiatan'][$kdSubGiat]['list_jenis'][$kdJenis]['capaian_sro']       = $capaianSroJenis;
+                            $rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['sub_kegiatan'][$kdSubGiat]['list_jenis'][$kdJenis]['efisiensi']          = $efisiensiJenis;
+                            $rekap[$kdSkpd]['program'][$kdProg]['kegiatan'][$kdGiat]['sub_kegiatan'][$kdSubGiat]['list_jenis'][$kdJenis]['status_efisiensi']  = ($efisiensiJenis < 0) ? 'Inefisien' : 'Efisien';
+                        }
                     }
                 }
             }

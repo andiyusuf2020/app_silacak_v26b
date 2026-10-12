@@ -44,6 +44,25 @@
                 </div>
             </div>
 
+            <!-- SECTION 1: GRAFIK RINGKASAN CHART.JS -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-header bg-transparent py-3">
+                            <h3 class="card-title fw-bold text-dark m-0">
+                                <i class="bi bi-bar-chart-fill me-2 text-primary"></i>Top 10 Capaian Realisasi Anggaran SKPD <?= session()->get('namawilayah') ?>
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <div style="height: 320px; position: relative;">
+                                <canvas id="skpdSummaryChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
     </main>
 </div>
@@ -148,7 +167,50 @@
         // Load data awal grafik dari PHP
         const initialTren = <?= json_encode($trenBulanan) ?>;
         updateCombinedChart(initialTren);
+        // 1. Inisialisasi Chart.js Ringkasan Anggaran
+        fetch('<?= base_url('' . $wilayah . '/' . $groupuser . '/getChartDataOpdRangking') ?>')
+            .then(response => response.json())
+            .then(data => {
+                const labels = data.map(item => item.NAMA_UNIT_SKPD);
+                const CapaianAnggaran = data.map(item => item.persen_capaian_anggaran);
+                const CapaianSRO = data.map(item => item.persen_capaian_sro);
 
+                const ctx = document.getElementById('skpdSummaryChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                                label: 'Capaian Anggaran (%)',
+                                data: CapaianAnggaran,
+                                backgroundColor: 'rgba(13, 110, 253, 0.7)',
+                                borderColor: 'rgba(13, 110, 253, 1)',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'Capaian Sub Rincian Objek (%)',
+                                data: CapaianSRO,
+                                backgroundColor: 'rgba(25, 135, 84, 0.7)',
+                                borderColor: 'rgba(25, 135, 84, 1)',
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '%';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            });
 
     });
 </script>

@@ -54,8 +54,8 @@
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li>
-                                        <a class="dropdown-menu-item dropdown-item" href="<?= base_url('rekap/exportExcel') ?>">
-                                            <i class="fas fa-download me-2 text-success"></i> Export All Data (Backend)
+                                        <a class="dropdown-menu-item dropdown-item" href="<?= hash_url('' . $wilayah . '/' . $groupuser . '/exportExcel', ['kdSU' => $nama_opd, 'blndata' => $blndata]) ?>">
+                                            <i class="fas fa-download me-2 text-success"></i> Export All Data
                                         </a>
                                     </li>
                                 </ul>
@@ -193,6 +193,7 @@
                                                             <i class="fas fa-minus text-secondary me-2 print-hide"></i>
                                                             <span class="badge bg-dark me-1 print-badge">SRO</span>
                                                             [<?= esc($sro['kode']) ?>] <?= esc($sro['nama']) ?>
+                                                            (NO: <?= esc($sro['NO']) ?>)
                                                         </td>
                                                         <td class="text-end"><?= number_format($sro['anggaran'], 0, ',', '.') ?></td>
                                                         <td class="text-end"><?= number_format($sro['realisasi'], 0, ',', '.') ?></td>
@@ -201,7 +202,7 @@
                                                             <button type="button" class="btn btn-xs btn-outline-warning shadow-sm"
                                                                 title="Edit Realisasi SRO"
                                                                 onclick="openEditSroModal(<?= htmlspecialchars(json_encode([
-                                                                                                'id_sro' => $kdSro,
+                                                                                                'id_sro' => $sro['NO'], ////$kdSro,
                                                                                                 'kode_sro' => $sro['kode'],
                                                                                                 'nama_sro' => $sro['nama'],
                                                                                                 'kode_giat' => $giat['kode'],
@@ -258,7 +259,7 @@
 <div class="modal fade" id="modalEditSro" tabindex="-1" aria-labelledby="modalEditSroLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form action="<?= base_url('rekap/update_sro') ?>" method="post">
+            <form action="<?= base_url('' . $wilayah . '/' . $groupuser . '/rekap/update_sro') ?>" method="post">
                 <?= csrf_field() ?> <!-- Token CSRF jika menggunakan CodeIgniter 4 -->
 
                 <div class="modal-header bg-warning text-dark">

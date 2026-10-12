@@ -162,7 +162,7 @@
                     </ul>
                     <ul class="nav nav-treeview">
                         <li class="nav-item"> <a
-                                href="<?= hash_url('lrfkopd/laporanapbdopd', ['hal' => 'cetak', 'action' => 'all']);
+                                href="<?= hash_url(' ' . $wilayah . '/' . $groupuser, ['hal' => 'laporanrfkopdperjenis']);
                                         ?>" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
                                 <p>LRFK per<br>Program perOPD</p>
