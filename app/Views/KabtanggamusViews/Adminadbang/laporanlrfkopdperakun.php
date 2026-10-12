@@ -19,82 +19,51 @@
         font-weight: normal;
     }
 </style>
-<div class="app-wrapper">
+<!-- Main Content -->
+<div class="app-content">
+    <div class="container-fluid">
 
-    <!-- Content Wrapper -->
-    <main class="app-main">
-        <!-- Content Header -->
-        <div class="app-content-header">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <h3 class="mb-0">Rekapitulasi Anggaran & Realisasi (Bertingkat)</h3>
+        <!-- Row Grafik Visualisasi -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card card-primary card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-chart-bar me-1"></i> Grafik Anggaran vs Realisasi per Jenis Belanja</h3>
                     </div>
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-end">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">Rekap Bertingkat</li>
-                        </ol>
+                    <div class="card-body">
+                        <div style="height: 300px;">
+                            <canvas id="jenisChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="app-content">
-            <div class="container-fluid">
-
-                <!-- Row Grafik Visualisasi -->
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <div class="card card-primary card-outline">
-                            <div class="card-header">
-                                <h3 class="card-title"><i class="fas fa-chart-bar me-1"></i> Grafik Anggaran vs Realisasi per Jenis Belanja</h3>
-                            </div>
-                            <div class="card-body">
-                                <div style="height: 300px;">
-                                    <canvas id="jenisChart"></canvas>
-                                </div>
-                            </div>
+        <!-- Row Tabel Tree View Tabulator -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="card-title"><i class="fas fa-layer-group me-1"></i> Data Hierarki: Unit SKPD &rarr; Sub Kegiatan &rarr; Jenis Belanja</h3>
+                        <div class="card-tools">
+                            <button id="btn-expand-all" class="btn btn-outline-secondary btn-sm me-1"><i class="fas fa-folder-open me-1"></i> Buka Semua</button>
+                            <button id="btn-collapse-all" class="btn btn-outline-secondary btn-sm me-2"><i class="fas fa-folder me-1"></i> Tutup Semua</button>
+                            <button id="download-excel" class="btn btn-success btn-sm me-1"><i class="fas fa-file-excel me-1"></i> Excel</button>
+                            <button id="download-pdf" class="btn btn-danger btn-sm"><i class="fas fa-file-pdf me-1"></i> PDF</button>
                         </div>
                     </div>
-                </div>
-
-                <!-- Row Tabel Tree View Tabulator -->
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card mb-4">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <h3 class="card-title"><i class="fas fa-layer-group me-1"></i> Data Hierarki: Unit SKPD &rarr; Sub Kegiatan &rarr; Jenis Belanja</h3>
-                                <div class="card-tools">
-                                    <button id="btn-expand-all" class="btn btn-outline-secondary btn-sm me-1"><i class="fas fa-folder-open me-1"></i> Buka Semua</button>
-                                    <button id="btn-collapse-all" class="btn btn-outline-secondary btn-sm me-2"><i class="fas fa-folder me-1"></i> Tutup Semua</button>
-                                    <button id="download-excel" class="btn btn-success btn-sm me-1"><i class="fas fa-file-excel me-1"></i> Excel</button>
-                                    <button id="download-pdf" class="btn btn-danger btn-sm"><i class="fas fa-file-pdf me-1"></i> PDF</button>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <!-- Live Filter -->
-                                <div class="mb-3">
-                                    <input type="text" id="filter-text" class="form-control" placeholder="Cari berdasarkan kata kunci di semua level...">
-                                </div>
-
-                                <!-- Container Tabel Tree -->
-                                <div id="tabel-tree"></div>
-                            </div>
+                    <div class="card-body">
+                        <!-- Live Filter -->
+                        <div class="mb-3">
+                            <input type="text" id="filter-text" class="form-control" placeholder="Cari berdasarkan kata kunci di semua level...">
                         </div>
+
                     </div>
                 </div>
-
             </div>
         </div>
-    </main>
 
-    <!-- Footer -->
-    <footer class="app-footer">
-        <div class="float-end d-none d-sm-inline">AdminLTE v4 & CodeIgniter 4.7.5</div>
-        <strong>Copyright &copy; 2026 <a href="#">Regional Financial System</a>.</strong> All rights reserved.
-    </footer>
+    </div>
 </div>
 
 <!-- SCRIPTS -->

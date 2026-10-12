@@ -57,86 +57,40 @@ class RealApbdModel extends Model
     protected $createdField = 'CREATE_AT';
     protected $updatedField = 'UPDATE_AT';
 
-    public function getRekapRealisasiBertingkat($bulan)
-    {
-        $builder = $this->db->table($this->table);
 
-        $builder->select([
-            'kode_unit_skpd',
-            'nama_unit_skpd',
-            'nama_bidang_urusan',
-            'nama_program',
-            'nama_giat',
-            'nama_sub_giat',
-            'nama_jenis',
-            // 'nama_rincian_objek',
-            // 'nama_sro',
-            'SUM(total_anggaran) AS jumlah_total_anggaran',
-            'SUM(total_realisasi) AS total_realisasi',
-            'CASE WHEN SUM(total_anggaran) > 0 THEN (SUM(total_realisasi) / SUM(total_anggaran)) * 100 ELSE 0 END AS capaian_realisasi'
-        ]);
-        $builder->where('bulan', $bulan);
-
-        // Grouping bertingkat berdasarkan seluruh kolom atribut
-        $builder->groupBy([
-            'kode_unit_skpd',
-            'nama_unit_skpd',
-            'nama_bidang_urusan',
-            'nama_program',
-            'nama_giat',
-            'nama_sub_giat',
-            'nama_jenis',
-            // 'nama_rincian_objek',
-            // 'nama_sro'
-        ]);
-
-        // Pengurutan bertingkat: Unit SKPD -> Sub Kegiatan -> Nama Jenis
-        $builder->orderBy('nama_unit_skpd', 'ASC');
-        $builder->orderBy('nama_sub_giat', 'ASC');
-        $builder->orderBy('nama_jenis', 'ASC');
-
-        return $builder->get()->getResultArray();
-    }
-
-    public function getRekapRealisasiJenis($bulan)
+    public function getRekapRealisasiAkun($bulan, $akun)
     {
         // 1. Query mengambil data hingga level Jenis (menjumlahkan SRO & Realisasi)
 
         $builder = $this->db->table($this->table);
 
+        if ($akun == 'nama_kelompok') {
+            $dataview = 'nama_kelompok';
+        } elseif ($akun == 'nama_jenis') {
+            $dataview = 'nama_jenis';
+        } elseif ($akun == 'nama_rincian_objek') {
+            $dataview = 'nama_rincian_objek';
+        } elseif ($akun == 'nama_akun') {
+            $dataview = 'nama_akun';
+        } elseif ($akun == 'NAMA_BIDANG_URUSAN') {
+            $dataview = 'NAMA_BIDANG_URUSAN';
+        } elseif ($akun == 'NAMA_URUSAN') {
+            $dataview = 'NAMA_URUSAN';
+        } else {
+            $dataview = 'nama_akun';
+        }
         $builder->select([
-            'kode_unit_skpd',
-            'nama_unit_skpd',
-            'nama_bidang_urusan',
-            'nama_program',
-            'nama_giat',
-            'nama_sub_giat',
-            'nama_kelompok',
-            'nama_jenis',
-            'nama_rincian_objek',
-            'nama_sro',
+            $dataview,
             'SUM(total_anggaran) AS jumlah_total_anggaran',
             'SUM(total_realisasi) AS total_realisasi',
             'CASE WHEN SUM(total_anggaran) > 0 THEN (SUM(total_realisasi) / SUM(total_anggaran)) * 100 ELSE 0 END AS capaian_realisasi'
         ]);
         $builder->where('bulan', $bulan);
-        // Group by seluruh kolom non-agregat sesuai standar SQL, dengan fokus pengelompokan utama pada nama_jenis
         $builder->groupBy([
-            // 'kode_unit_skpd',
-            // 'nama_unit_skpd',
-            // 'nama_bidang_urusan',
-            // 'nama_program',
-            // 'nama_giat',
-            // 'nama_sub_giat',
-            'nama_kelompok',
-            // 'nama_jenis',
-            // 'nama_rincian_objek',
-            // 'nama_sro'
+            $dataview,
         ]);
-
         // Urutkan berdasarkan nama jenis untuk memudahkan pembacaan laporan
-        $builder->orderBy('nama_jenis', 'ASC');
-
+        $builder->orderBy($dataview, 'ASC');
         return $builder->get()->getResultArray();
     }
     public function getRekapPerSKPD($bulan)

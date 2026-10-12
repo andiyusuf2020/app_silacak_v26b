@@ -74,6 +74,11 @@ $routes->group('tanggamus/superadmin', ['filter' => 'role:superadmin'], function
     $routes->get('realisasi/export-excel-pendapatan', 'KabtanggamusController\AdminAdbangController::exportExcelPendapatan');
     $routes->post('realisasi/export-pdf-pendapatan', 'KabtanggamusController\AdminAdbangController::exportPdfrealisasiPendapatan');
 });
+// $routes->get('realisasi', 'RealisasiController::index');
+$routes->get('rekap/get-data-json', 'KabtanggamusController\AdminAdbangController::getDataJsonPerAkun');
+$routes->get('realisasi/cetakPdf', 'KabtanggamusController\AdminAdbangController::cetakPdfPerAkun');
+$routes->get('realisasi/exportExcel', 'KabtanggamusController\AdminAdbangController::exportExcel');
+
 $routes->post('anggaran-kas/store', 'KabtanggamusController\AdminAdbangController::storeangkas_ajax');
 // $routes->get('rekap', [RekapController::class, 'index']);
 $routes->get('rekap/exportXlsx', 'KabtanggamusController\AdminAdbangController::exportXlsx');

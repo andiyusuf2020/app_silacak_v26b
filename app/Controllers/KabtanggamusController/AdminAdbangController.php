@@ -278,26 +278,20 @@ class AdminAdbangController extends BaseController
             $data['validation'] = \Config\Services::validation();
             return view('KabtanggamusViews/Adminadbang/form_inputdashboardutama', $data);
         } elseif ($hal == 'laporanrfkopd') {
-            // Handle the 'laporanrfkopd' case
-            // $bulan = $this->request->getGet('bulan') ?? date('m');
-            // $dataRekap = $this->realapbdmodel->getRekapPerSKPD($jadwalaktif['bulan']);
-
-            // $data = [
-            //     'title'     => 'Rekap Per SKPD',
-            //     'bulan'     => $bulan,
-            //     'dataRekap' => $dataRekap,
-            // ];
             $data['dataRekap'] = $this->realapbdmodel->getRekapPerSKPD($jadwalaktif['bulan']);
             $data['bulan'] = $jadwalaktif['bulan'];
             $data['title'] = 'Rekap Per SKPD';
             // echo dd($data['dataRekap']);
             return view('KabtanggamusViews/Adminadbang/laporanlrfkopd2', $data);
         } elseif ($hal == 'laporanrfkopdperjenis') {
-            $data['rekap'] = $this->realapbdmodel->getRekapRealisasiJenis($jadwalaktif['bulan']);
+            $data['rekap'] = $this->realapbdmodel->getRekapRealisasiAkun($jadwalaktif['bulan'], 'nama_akun');
             $data['bulan'] = $jadwalaktif['bulan'];
             $data['title'] = 'Rekap Per Jenis';
             // echo dd($data['rekap']);
-            return view('KabtanggamusViews/Adminadbang/laporanlrfkopdperjenis', $data);
+            $data['title'] = 'Rekapitulasi Realisasi Anggaran';
+            $data['bulan_aktif'] = 9; //$jadwalaktif['bulan']; // date('m'); // Default bulan berjalan
+            $data['akun_aktif'] = 'nama_akun';
+            return view('KabtanggamusViews/Adminadbang/laporanlrfkopdperakun2', $data);
         }
 
         if ($hal == 'gantibulanaktif') {
@@ -375,6 +369,16 @@ class AdminAdbangController extends BaseController
                 return view('superadmin/2026/detailopdsro', $data);
             }
         }
+    }
+    public function getDataJsonPerAkun()
+    {
+        $bulan = $this->request->getGet('bulan') ?? date('m');
+        $akun  = $this->request->getGet('akun');
+
+        // $model = new \App\Models\YourModel(); // Ganti dengan model Anda
+        $data  = $this->realapbdmodel->getRekapRealisasiAkun($bulan, $akun);
+        // echo dd($data);
+        return $this->response->setJSON($data);
     }
 
     public function dataperopd()
