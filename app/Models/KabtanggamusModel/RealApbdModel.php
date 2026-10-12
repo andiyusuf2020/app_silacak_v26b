@@ -60,8 +60,6 @@ class RealApbdModel extends Model
 
     public function getRekapRealisasiAkun($bulan, $akun)
     {
-        // 1. Query mengambil data hingga level Jenis (menjumlahkan SRO & Realisasi)
-
         $builder = $this->db->table($this->table);
 
         if ($akun == 'nama_kelompok') {
@@ -79,18 +77,21 @@ class RealApbdModel extends Model
         } else {
             $dataview = 'nama_akun';
         }
+
         $builder->select([
             $dataview,
             'SUM(total_anggaran) AS jumlah_total_anggaran',
             'SUM(total_realisasi) AS total_realisasi',
             'CASE WHEN SUM(total_anggaran) > 0 THEN (SUM(total_realisasi) / SUM(total_anggaran)) * 100 ELSE 0 END AS capaian_realisasi'
         ]);
-        $builder->where('bulan', $bulan);
-        $builder->groupBy([
-            $dataview,
-        ]);
-        // Urutkan berdasarkan nama jenis untuk memudahkan pembacaan laporan
+
+        if (!empty($bulan)) {
+            $builder->where('bulan', $bulan);
+        }
+
+        $builder->groupBy([$dataview]);
         $builder->orderBy($dataview, 'ASC');
+
         return $builder->get()->getResultArray();
     }
     public function getRekapPerSKPD($bulan)

@@ -284,13 +284,21 @@ class AdminAdbangController extends BaseController
             // echo dd($data['dataRekap']);
             return view('KabtanggamusViews/Adminadbang/laporanlrfkopd2', $data);
         } elseif ($hal == 'laporanrfkopdperjenis') {
-            $data['rekap'] = $this->realapbdmodel->getRekapRealisasiAkun($jadwalaktif['bulan'], 'nama_akun');
+            // $data['rekap'] = $this->realapbdmodel->getRekapRealisasiAkun($jadwalaktif['bulan'], 'nama_akun');
+            // echo dd($data['rekap']);
+            // Menangkap parameter dari URL (jika form filter disubmit)
+            $bulan = $this->request->getGet('bulan');
+            $akun  = $this->request->getGet('akun') ?? 'nama_kelompok'; // Default akun
+
+            // Ambil data dari model berdasarkan filter
+            $rekapData = $this->realapbdmodel->getRekapRealisasiAkun($bulan, $akun);
+
+            // Kirim data ke View
             $data['bulan'] = $jadwalaktif['bulan'];
             $data['title'] = 'Rekap Per Jenis';
-            // echo dd($data['rekap']);
-            $data['title'] = 'Rekapitulasi Realisasi Anggaran';
-            $data['bulan_aktif'] = 9; //$jadwalaktif['bulan']; // date('m'); // Default bulan berjalan
-            $data['akun_aktif'] = 'nama_akun';
+            $data['akun'] = $akun;
+            $data['rekapData'] = $rekapData;
+            // echo dd($data['rekapData']);
             return view('KabtanggamusViews/Adminadbang/laporanlrfkopdperakun2', $data);
         }
 
