@@ -17,8 +17,6 @@
             <label class="col-sm-2 col-form-label">Perangkat Daerah</label>
             <div class="col-sm-10">
                 <label class="col-sm-5 col-form-label"><?= $listuser['sub_unit'] ?></label>
-                <label class="col-sm-5 col-form-label"><?= $wilayah ?></label>
-                <label class="col-sm-5 col-form-label"><?= $groupuser ?></label>
 
             </div>
         </div>

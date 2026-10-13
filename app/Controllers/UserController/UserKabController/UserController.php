@@ -60,7 +60,10 @@ class UserController extends BaseController
                 'idhapus'   => $user['id'],
             ]);
 
-
+            $user['update_token_opduser'] = CryptoUrl::encrypt([
+                'id'   => $user['id'],
+                'sub_unit' => $user['sub_unit']
+            ]);
             return $user;
         }, $data['listuser2']);
         $datauserx = json_encode($users);
@@ -90,6 +93,7 @@ class UserController extends BaseController
         $userId   = $payload['id'] ?? null;
         $active = $payload['active'] ?? null;
         $idHapus = $payload['idhapus'] ?? null;
+        $sub_unit = $payload['sub_unit'] ?? null;
         $groupModel = new GroupModel();
         //        $data['groups'] = $groupModel->findAll();
         $data = [
@@ -100,6 +104,15 @@ class UserController extends BaseController
             'titlepage' => 'Halaman UBAH RULE GROUP User SiTAPIS Perangkat Daerah',
             'listuser' => $this->tausermodel->listuser($userId),
         ];
+        if ($sub_unit) {
+            $dataX = [
+                'id' => $userId,
+                'sub_unit' => $sub_unit,
+            ];
+            // echo dd($dataX);
+            $this->tausermodel->update($userId, $dataX);
+            return redirect()->to(base_url('' . $data['wilayah'] . '/' . $data['groupuser'] . '/daftaruser'));
+        }
         // echo dd($data['groups']);
         if ($idHapus) {
             $this->tausermodel->delete($idHapus);
