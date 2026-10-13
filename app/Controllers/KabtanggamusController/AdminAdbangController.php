@@ -399,12 +399,51 @@ class AdminAdbangController extends BaseController
             'rekapData' => $rekapData
 
         ];
-
-
-
-        return view('KabtanggamusViews/Adminadbang/laporanlrfkopdperakun2', $data);
+        return view('KabtanggamusViews/Adminadbang/laporanlrfkopdperakun3', $data);
     }
+    public function cetakpdfrekapperakun()
+    {
+        $bulan = $this->request->getPost('bulan');
+        $akun  = $this->request->getPost('akun');
+        $chartImage = $this->request->getPost('chart_image'); // Menerima base64 gambar chart
 
+        // Ambil data rekapitulasi berdasarkan filter yang sama
+        $rekapData = $this->realapbdmodel->getRekapRealisasiAkun($bulan, $akun);
+        // Path lokal file logo Anda
+        $pathLogo = FCPATH . 'cssportal/img_home/lampung.png';
+        $logoBase64 = '';
+
+        // Cek apakah file logo benar-benar ada
+        if (file_exists($pathLogo)) {
+            $type = pathinfo($pathLogo, PATHINFO_EXTENSION);
+            $data = file_get_contents($pathLogo);
+            // Ubah ke format data URI base64
+            $logoBase64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+        }
+
+        // Konfigurasi Dompdf
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+
+        $dompdf = new Dompdf($options);
+
+        // Buat template HTML khusus untuk PDF (atau parse dari view lain)
+        $html = view('KabtanggamusViews/Adminadbang/laporanperakunpdf', [
+            'rekapData'  => $rekapData ?? [],
+            'bulan'      => $bulan,
+            'akun'       => $akun,
+            'chartImage' => $chartImage,
+            'logoBase64' => $logoBase64
+        ]);
+
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        // Output file PDF (Stream / Download langsung di browser)
+        $dompdf->stream("Rekap_Realisasi_Anggaran.pdf", ["Attachment" => false]);
+    }
     public function dataperopd()
     {
         $token = $this->request->getGet('token');

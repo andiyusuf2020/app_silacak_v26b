@@ -1,9 +1,11 @@
 <?php
+
 /**
  * @package dompdf
  * @link    https://github.com/dompdf/dompdf
  * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
  */
+
 namespace Dompdf;
 
 class Options
@@ -68,15 +70,15 @@ class Options
     private $chroot;
 
     /**
-    * Protocol whitelist
-    *
-    * Protocols and PHP wrappers allowed in URIs, and the validation rules
-    * that determine if a resource may be loaded. Full support is not guaranteed
-    * for the protocols/wrappers specified
-    * by this array.
-    *
-    * @var array
-    */
+     * Protocol whitelist
+     *
+     * Protocols and PHP wrappers allowed in URIs, and the validation rules
+     * that determine if a resource may be loaded. Full support is not guaranteed
+     * for the protocols/wrappers specified
+     * by this array.
+     *
+     * @var array
+     */
     private $allowedProtocols = [
         "data://" => ["rules" => []],
         "file://" => ["rules" => []],
@@ -85,10 +87,10 @@ class Options
     ];
 
     /**
-    * Operational artifact (log files, temporary files) path validation
-    *
-    * @var callable
-    */
+     * Operational artifact (log files, temporary files) path validation
+     *
+     * @var callable
+     */
     private $artifactPathValidation = null;
 
     /**
@@ -211,7 +213,7 @@ class Options
      *
      * @var bool
      */
-    private $isRemoteEnabled = false;
+    private $isRemoteEnabled = true;
 
     /**
      * List of allowed remote hosts
@@ -434,7 +436,7 @@ class Options
     {
         $methodForMatch = lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $key))));
         $methodForCall = "get" . ucfirst($methodForMatch);
-        
+
         if ($methodForMatch === 'enablePhp') {
             $methodForCall = "getIsPhpEnabled";
         } elseif ($methodForMatch === 'enableRemote') {
@@ -452,7 +454,7 @@ class Options
         if (method_exists($this, $methodForCall)) {
             return $this->{$methodForCall}();
         }
-        
+
         return null;
     }
 

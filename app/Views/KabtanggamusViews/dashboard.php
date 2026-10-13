@@ -116,8 +116,8 @@
         <div class="dashboard-container">
             <div align="center">
                 <!-- <h2 class="section-title">Capaian Program Unggulan</h2> -->
-
                 <img style="max-height: 200px;" src="<?php echo base_url('cssportal/img_home'); ?>/bupati_tanggamus.jpg" alt="Bupati">
+
                 <img style="max-height: 200px;" src="<?php echo base_url('cssportal/img_home'); ?>/wakil_bup_tanggamus.jpg" alt="Wakil Bupati">
             </div>
             <!-- <h2 class="section-title">Program Unggulan Bupati dan Wakil Bupati</h2><br> -->
