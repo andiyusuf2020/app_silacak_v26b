@@ -284,15 +284,9 @@ class AdminAdbangController extends BaseController
             // echo dd($data['dataRekap']);
             return view('KabtanggamusViews/Adminadbang/laporanlrfkopd2', $data);
         } elseif ($hal == 'laporanrfkopdperjenis') {
-            // $data['rekap'] = $this->realapbdmodel->getRekapRealisasiAkun($jadwalaktif['bulan'], 'nama_akun');
-            // echo dd($data['rekap']);
-            // Menangkap parameter dari URL (jika form filter disubmit)
-            $bulan = $this->request->getGet('bulan');
             $akun  = $this->request->getGet('akun') ?? 'nama_kelompok'; // Default akun
-
             // Ambil data dari model berdasarkan filter
-            $rekapData = $this->realapbdmodel->getRekapRealisasiAkun($bulan, $akun);
-
+            $rekapData = $this->realapbdmodel->getRekapRealisasiAkun($jadwalaktif['bulan'], $akun);
             // Kirim data ke View
             $data['bulan'] = $jadwalaktif['bulan'];
             $data['title'] = 'Rekap Per Jenis';
@@ -378,15 +372,37 @@ class AdminAdbangController extends BaseController
             }
         }
     }
-    public function getDataJsonPerAkun()
+    public function getDataperAkun()
     {
-        $bulan = $this->request->getGet('bulan') ?? date('m');
-        $akun  = $this->request->getGet('akun');
 
-        // $model = new \App\Models\YourModel(); // Ganti dengan model Anda
-        $data  = $this->realapbdmodel->getRekapRealisasiAkun($bulan, $akun);
-        // echo dd($data);
-        return $this->response->setJSON($data);
+        // Menangkap parameter dari URL (jika form filter disubmit)
+        $bulan = $this->request->getGet('bulan');
+        $akun  = $this->request->getGet('akun') ?? 'nama_akun'; // Default akun
+
+        // Ambil data dari model berdasarkan filter
+        $rekapData = $this->realapbdmodel->getRekapRealisasiAkun($bulan, $akun);
+
+        // Kirim data ke View
+        $user = user();
+        $groupModel = new GroupModel();
+        $groupuser = $groupModel->getGroupsForUser($user->id);
+
+        $data = [
+            'wilayah' => session()->get('wilayah'),
+            'namawilayah' => session()->get('namawilayah'),
+            'groupuser' => $groupuser[0]['name'],
+            'groupmenu' => $groupuser[0]['name'],
+            'tahun' => session()->get('tahun'),
+            'titlepage' => 'halaman Admin Adbang ',
+            'bulan'     => $bulan,
+            'akun'      => $akun,
+            'rekapData' => $rekapData
+
+        ];
+
+
+
+        return view('KabtanggamusViews/Adminadbang/laporanlrfkopdperakun2', $data);
     }
 
     public function dataperopd()

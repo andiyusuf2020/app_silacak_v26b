@@ -111,6 +111,74 @@
             </div>
         </div>
     </section>
+    <!-- Reports Section -->
+    <section class="reports-section" id="reports">
+        <div class="dashboard-container">
+            <div align="center">
+                <!-- <h2 class="section-title">Capaian Program Unggulan</h2> -->
+
+                <img style="max-height: 200px;" src="<?php echo base_url('cssportal/img_home'); ?>/bupati_tanggamus.jpg" alt="Bupati">
+                <img style="max-height: 200px;" src="<?php echo base_url('cssportal/img_home'); ?>/wakil_bup_tanggamus.jpg" alt="Wakil Bupati">
+            </div>
+            <!-- <h2 class="section-title">Program Unggulan Bupati dan Wakil Bupati</h2><br> -->
+            <h2 class="section-title">
+                Progam Strategis/Unggulan/Prioritas Daerah.
+
+            </h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-icon">💼</div>
+                    <h3 class="info-title">Bidang Infrastruktur</h3>
+                    <!-- <div class="info-value">98.5%</div> -->
+                    <p style="font-size: 14px; color: #a0a0a0;">
+                        Pembangunan infrastruktur yang berkualitas dan berkelanjutan merupakan salah satu prioritas utama
+                        pemerintah daerah. Dengan fokus pada pembangunan jalan, jembatan, fasilitas publik,
+                        dan infrastruktur lainnya, pemerintah daerah berupaya meningkatkan konektivitas antarwilayah,
+                        memperkuat perekonomian lokal, dan meningkatkan kualitas hidup masyarakat secara keseluruhan
+                    </p>
+                    </p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">📱</div>
+                    <h3 class="info-title">Bidang Pendidikan</h3>
+                    <p style="font-size: 14px; color: #a0a0a0;">
+                        Pemerintah daerah berkomitmen untuk meningkatkan kualitas pendidikan di wilayahnya.
+                        Dengan fokus pada peningkatan fasilitas pendidikan, pelatihan guru,
+                        dan pengembangan kurikulum yang relevan, pemerintah daerah bertujuan untuk menciptakan
+                        lingkungan belajar yang mendukung pertumbuhan akademik dan perkembangan pribadi siswa.
+                        Upaya ini diharapkan dapat menghasilkan generasi muda yang berkualitas, siap menghadapi tantangan global,
+                        dan mampu berkontribusi positif bagi pembangunan daerah.
+                    </p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">🌍</div>
+                    <h3 class="info-title">Bidang Ekonomi,Sosial dan Budaya<br>
+                        "Meningkatkan Kesejahteraan Masyarakat"</h3>
+                    </h3>
+                    <p style="font-size: 14px; color: #a0a0a0;">
+                        Pemerintah daerah berfokus pada pengembangan sektor ekonomi untuk meningkatkan kesejahteraan masyarakat.
+                        Dengan mendorong investasi, mendukung usaha mikro, kecil, dan menengah (UMKM),
+                        serta menciptakan lapangan kerja yang berkelanjutan,
+                        pemerintah daerah bertujuan untuk memperkuat perekonomian lokal.
+                        Upaya ini diharapkan dapat meningkatkan pendapatan masyarakat, mengurangi tingkat pengangguran
+                    </p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">🚀</div>
+                    <h3 class="info-title">Bidang Lingkungan Hidup<br>
+                        "Meningkatkan Kualitas Lingkungan Hidup"</h3>
+                    </h3>
+                    <p style="font-size: 14px; color: #a0a0a0;">
+                        Pemerintah daerah berkomitmen untuk menjaga dan meningkatkan kualitas lingkungan hidup di wilayahnya.
+                        Dengan fokus pada pengelolaan sumber daya alam yang berkelanjutan, pengurangan polusi,
+                        dan pelestarian ekosistem, pemerintah daerah bertujuan untuk menciptakan lingkungan yang sehat dan lestari bagi masyarakat.
+                        Upaya ini mencakup program-program seperti penghijauan, pengelolaan limbah,
+                        dan edukasi lingkungan untuk meningkatkan kesadaran masyarakat akan pentingnya menjaga lingkungan hidup.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Dashboard Section -->
     <section class="dashboard-section" id="dashboard">
@@ -296,74 +364,6 @@
 
     </section>
 
-    <!-- Reports Section -->
-    <section class="reports-section" id="reports">
-        <div class="dashboard-container">
-            <div align="center">
-                <!-- <h2 class="section-title">Capaian Program Unggulan</h2> -->
-
-                <img style="max-height: 200px;" src="<?php echo base_url('cssportal/img_home'); ?>/Xbupati.png" alt="Bupati">
-                <img style="max-height: 200px;" src="<?php echo base_url('cssportal/img_home'); ?>/Xwakilbup.png" alt="Wakil Bupati">
-            </div>
-            <!-- <h2 class="section-title">Program Unggulan Bupati dan Wakil Bupati</h2><br> -->
-            <h2 class="section-title">
-                Progam Strategis/Unggulan/Prioritas Daerah.
-
-            </h2>
-            <div class="info-grid">
-                <div class="info-card">
-                    <div class="info-icon">💼</div>
-                    <h3 class="info-title">Bidang Infrastruktur</h3>
-                    <!-- <div class="info-value">98.5%</div> -->
-                    <p style="font-size: 14px; color: #a0a0a0;">
-                        Pembangunan infrastruktur yang berkualitas dan berkelanjutan merupakan salah satu prioritas utama
-                        pemerintah daerah. Dengan fokus pada pembangunan jalan, jembatan, fasilitas publik,
-                        dan infrastruktur lainnya, pemerintah daerah berupaya meningkatkan konektivitas antarwilayah,
-                        memperkuat perekonomian lokal, dan meningkatkan kualitas hidup masyarakat secara keseluruhan
-                    </p>
-                    </p>
-                </div>
-                <div class="info-card">
-                    <div class="info-icon">📱</div>
-                    <h3 class="info-title">Bidang Pendidikan</h3>
-                    <p style="font-size: 14px; color: #a0a0a0;">
-                        Pemerintah daerah berkomitmen untuk meningkatkan kualitas pendidikan di wilayahnya.
-                        Dengan fokus pada peningkatan fasilitas pendidikan, pelatihan guru,
-                        dan pengembangan kurikulum yang relevan, pemerintah daerah bertujuan untuk menciptakan
-                        lingkungan belajar yang mendukung pertumbuhan akademik dan perkembangan pribadi siswa.
-                        Upaya ini diharapkan dapat menghasilkan generasi muda yang berkualitas, siap menghadapi tantangan global,
-                        dan mampu berkontribusi positif bagi pembangunan daerah.
-                    </p>
-                </div>
-                <div class="info-card">
-                    <div class="info-icon">🌍</div>
-                    <h3 class="info-title">Bidang Ekonomi,Sosial dan Budaya<br>
-                        "Meningkatkan Kesejahteraan Masyarakat"</h3>
-                    </h3>
-                    <p style="font-size: 14px; color: #a0a0a0;">
-                        Pemerintah daerah berfokus pada pengembangan sektor ekonomi untuk meningkatkan kesejahteraan masyarakat.
-                        Dengan mendorong investasi, mendukung usaha mikro, kecil, dan menengah (UMKM),
-                        serta menciptakan lapangan kerja yang berkelanjutan,
-                        pemerintah daerah bertujuan untuk memperkuat perekonomian lokal.
-                        Upaya ini diharapkan dapat meningkatkan pendapatan masyarakat, mengurangi tingkat pengangguran
-                    </p>
-                </div>
-                <div class="info-card">
-                    <div class="info-icon">🚀</div>
-                    <h3 class="info-title">Bidang Lingkungan Hidup<br>
-                        "Meningkatkan Kualitas Lingkungan Hidup"</h3>
-                    </h3>
-                    <p style="font-size: 14px; color: #a0a0a0;">
-                        Pemerintah daerah berkomitmen untuk menjaga dan meningkatkan kualitas lingkungan hidup di wilayahnya.
-                        Dengan fokus pada pengelolaan sumber daya alam yang berkelanjutan, pengurangan polusi,
-                        dan pelestarian ekosistem, pemerintah daerah bertujuan untuk menciptakan lingkungan yang sehat dan lestari bagi masyarakat.
-                        Upaya ini mencakup program-program seperti penghijauan, pengelolaan limbah,
-                        dan edukasi lingkungan untuk meningkatkan kesadaran masyarakat akan pentingnya menjaga lingkungan hidup.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- Contact Section -->
     <section class="contact-section" id="contact">
