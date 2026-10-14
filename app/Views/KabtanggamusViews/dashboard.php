@@ -85,6 +85,7 @@
                 </p>
 
                 <a href="<?= base_url('pilihakses') ?>" class="cta-button">LOGIN</a>
+                <a href="<?= base_url('register') ?>" class="cta-button">DAFTAR</a>
 
             </div>
             <div class="hero-visual">

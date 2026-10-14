@@ -21,14 +21,14 @@
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-sm-2 col-form-label">Email User XXX</label>
+            <label class="col-sm-2 col-form-label">Email </label>
             <div class="col-sm-10">
-                <label class="col-sm-5 col-form-label"><?= $listuser['email'] ?>:<?= $listuser['id'] ?></label>
+                <label class="col-sm-5 col-form-label"><?= $listuser['email'] ?></label>
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-sm-2 col-form-label">Email</label>
-            <div class="col-sm-5">
+            <label class="col-sm-2 col-form-label">Ubah Perangkat Daerah</label>
+            <div class="col-sm-10">
                 <?php
                 $wilayah = session()->get('wilayah');
                 if ($wilayah == null) {
@@ -44,14 +44,15 @@
                 if ($wilayah == 'tanggamus') {
                     $tgldata = $this->tglapbdtanggamus->tgldataaktif();
                     $listopdadmin = $this->sipdtanggamus->listopduserreg($tgldata['tanggal']);
-                }
-                echo '<select name="sub_unit" class="form-control">';
-                echo '<option value=" " >pilih sub unit</option>';
-                foreach ($listopdadmin as $row) {
-                    $selected = ($row['NAMA_UNIT_SKPD'] == session()->get('wilayah')) ? 'selected' : '';
-                    echo '<option value="' . $row['NAMA_UNIT_SKPD'] . '" ' . $selected . '>' . $row['NAMA_UNIT_SKPD'] . '</option>';
-                }
-                ?>
+                } ?>
+                <select name="sub_unit" class="form-control">
+                    <option value=" ">pilih sub unit</option>
+                    <?php foreach ($listopdadmin as $row) {
+                        $selected = ($row['NAMA_UNIT_SKPD'] == session()->get('wilayah')) ? 'selected' : '';
+                        echo '<option value="' . $row['NAMA_UNIT_SKPD'] . '" ' . $selected . '>' . $row['NAMA_UNIT_SKPD'] . '</option>';
+                    } ?>
+                </select>
+                <?= form_hidden('id', $listuser['id']) ?>
             </div>
 
         </div>
@@ -60,6 +61,8 @@
     <div class="card-footer">
         <button type="submit" class="btn btn-info">SIMPAN</button>
     </div>
+    <!-- /.card-footer -->
+
     <!-- /.card-footer -->
     <?= form_close(); ?>
 </div>

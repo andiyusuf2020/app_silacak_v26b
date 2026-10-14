@@ -199,7 +199,7 @@
                     headerSort: false
                 },
                 {
-                    title: 'Aktivitas Belanja',
+                    title: 'Aktivitas Belanja (',
                     field: 'jumlah_item_sro_terealisasi',
                     hozAlign: 'center',
                     minWidth: 130,

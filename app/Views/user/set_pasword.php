@@ -11,20 +11,51 @@
         <?php endforeach ?>
     </div>
 <?php } ?>
+<div class="card card-info">
+    <div class="card-header">
+        <h3 class="card-title">Horizontal Form</h3>
+    </div>
+    <!-- /.card-header -->
+    <!-- form start -->
+    <!-- form start -->
+    <?= form_open_multipart('' . $wilayah . '/' . $groupuser . '/opdsetpass', 'class="form-horizontal'); ?>
+    <?= csrf_field(); ?>
+    <?= form_hidden('id', $listuser['id']) ?>
+    <div class="card-body">
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Perangkat Daerah</label>
+            <div class="col-sm-10">
+                <label class="col-sm-5 col-form-label"><?= $listuser['sub_unit'] ?></label>
 
-<?= form_open_multipart('superadmin/setpassword'); ?>
-<?= csrf_field(); ?>
-<input type="hidden" name="id" class="id" value="<?= $id; ?>">
-<div class="form-group row">
-    <div class="col-6">
-        <input type="password" name="password" class="form-control form-control-user <?php if (session('errors.password')) : ?>is-invalid<?php endif ?>" placeholder="<?= lang('Auth.password') ?>" autocomplete="off">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Email </label>
+            <div class="col-sm-10">
+                <label class="col-sm-5 col-form-label"><?= $listuser['email'] ?></label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Username </label>
+            <div class="col-sm-10">
+                <label class="col-sm-5 col-form-label"><?= $listuser['username'] ?></label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Password </label>
+            <div class="col-6">
+                <input type="password" name="password" class="form-control form-control-user ">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Konfirmasi Password </label>
+            <div class="col-6">
+                <input type="password" name="pass_confirm" class="form-control form-control-user ">
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Simpan</button>
+        <?= form_close(); ?>
     </div>
 </div>
-<div class="form-group row">
-    <div class="col-6">
-        <input type="password" name="pass_confirm" class="form-control form-control-user <?php if (session('errors.pass_confirm')) : ?>is-invalid<?php endif ?>" placeholder="<?= lang('Auth.repeatPassword') ?>" autocomplete="off">
-    </div>
-</div>
-<button type="submit" class="btn btn-primary">Simpan</button>
-<?= form_close(); ?>
 <?= $this->endSection() ?>

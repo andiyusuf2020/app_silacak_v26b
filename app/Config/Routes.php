@@ -56,12 +56,8 @@ $routes->group('tanggamus/superadmin', ['filter' => 'role:superadmin'], function
     $routes->get('dataperopd', 'KabtanggamusController\AdminAdbangController::dataperopd');
     $routes->post('rekap/update_sro', 'KabtanggamusController\AdminAdbangController::update_sro');
     $routes->get('getChartDataOpdRangking', 'KabtanggamusController\AdminAdbangController::getChartDataOpdRangking');
-    $routes->get('daftaruser', 'UserController\UserKabController\UserController::index');
-    $routes->get('updateuser', 'UserController\UserKabController\UserController::updateuser');
-    $routes->post('groupset', 'UserController\UserKabController\UserController::changeGroup');
-
     $routes->post('uploadapbd', 'KabtanggamusController\AdminAdbangController::uploadapbd');
-    $routes->get('exportExcel', 'KabtanggamusController\AdminAdbangController::exportExcel');
+    $routes->get('exportExcelLrfkOpd', 'KabtanggamusController\AdminAdbangController::exportExcelLrfkOpd');
     $routes->get('realisasi/get-tren-bulanan', 'KabtanggamusController\AdminAdbangController::getTrenBulanan');
     $routes->get('realisasi/get-summary', 'KabtanggamusController\AdminAdbangController::getSummaryByPeriode'); // Endpoint AJAX Filter
     $routes->post('realisasi/store', 'KabtanggamusController\AdminAdbangController::storeangkas_ajax'); ///====for user adminadbang
@@ -70,28 +66,34 @@ $routes->group('tanggamus/superadmin', ['filter' => 'role:superadmin'], function
     $routes->post('realisasi/delete/(:num)', 'KabtanggamusController\AdminAdbangController::delete/$1');
     $routes->get('realisasi/data-list', 'KabtanggamusController\AdminAdbangController::listData');
     $routes->post('dashboard-stats/update', 'KabtanggamusController\AdminAdbangController::updatedatadashboard');
-
     $routes->get('realisasi/export-excel-pendapatan', 'KabtanggamusController\AdminAdbangController::exportExcelPendapatan');
     $routes->post('realisasi/export-pdf-pendapatan', 'KabtanggamusController\AdminAdbangController::exportPdfrealisasiPendapatan');
     $routes->get('tampillaporanperakun', 'KabtanggamusController\AdminAdbangController::getDataperAkun');
     $routes->post('cetakpdfrekap', 'KabtanggamusController\AdminAdbangController::cetakpdfrekapperakun');
+    $routes->get('daftaruser', 'UserController\Kabtanggamus\UserController::index');
+    $routes->get('updateuser', 'UserController\Kabtanggamus\UserController::updateuser');
+    $routes->post('groupset', 'UserController\Kabtanggamus\UserController::changeGroup');
+    $routes->post('opdset', 'UserController\Kabtanggamus\UserController::simpanubahopd');
+    $routes->post('opdsetpass', 'UserController\Kabtanggamus\UserController::setPassword');
+    $routes->post('anggaran-kas/store', 'KabtanggamusController\AdminAdbangController::storeangkas_ajax');
 });
 // $routes->get('realisasi', 'RealisasiController::index');
 $routes->get('rekap/get-data-json', 'KabtanggamusController\AdminAdbangController::getDataJsonPerAkun');
 $routes->get('realisasi/cetakPdf', 'KabtanggamusController\AdminAdbangController::cetakPdfPerAkun');
-$routes->get('realisasi/exportExcel', 'KabtanggamusController\AdminAdbangController::exportExcel');
+$routes->get('realisasi/exportExcel', 'export-pdf-pendapatan\AdminAdbangController::exportExcel');
+// $routes->post('anggaran-kas/store', 'KabtanggamusController\AdminAdbangController::storeangkas_ajax');
 
-$routes->post('anggaran-kas/store', 'KabtanggamusController\AdminAdbangController::storeangkas_ajax');
 // $routes->get('rekap', [RekapController::class, 'index']);
 $routes->get('rekap/exportXlsx', 'KabtanggamusController\AdminAdbangController::exportXlsx');
 $routes->get('rekap/exportPdf', 'KabtanggamusController\AdminAdbangController::exportPdf');
 $routes->get('rekap/getDataJson', 'KabtanggamusController\AdminAdbangController::getDataJson');
 $routes->post('tanggamus/realisasi/store', 'KabtanggamusController\AdminAdbangController::storeangkas_ajax'); ///====for user adminadbang
+
 $routes->group('tanggamus/Adminadbang', ['filter' => 'role:Adminadbang'], function ($routes) {
     $routes->get('', 'KabtanggamusController\AdminAdbangController::index');
     $routes->get('dataperopd', 'KabtanggamusController\AdminAdbangController::dataperopd');
-    $routes->get('daftaruser', 'UserController\UserKabController\UserController::index');
-    $routes->get('updateuser', 'UserController\UserKabController\UserController::updateuser');
+    $routes->get('daftaruser', 'UserController\Kabtanggamus\UserController::index');
+    $routes->get('updateuser', 'UserController\Kabtanggamus\UserController::updateuser');
     // $routes->post('uploadapbd', 'KabtanggamusController\AdminAdbangController::uploadapbd');
     $routes->get('exportExcel', 'KabtanggamusController\AdminAdbangController::exportExcel');
 });

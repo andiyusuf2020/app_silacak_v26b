@@ -76,7 +76,9 @@
 <body onload="window.print()">
 
     <div class="text-center">
-        <h3>PEMERINTAH DAERAH</h3>
+        <img src="<?= base_url() ?>cssportal/img_home/tanggamus.png" width="5%" alt="Logo Kabupaten/Kota" />
+        <h3>SEKRETARIAT PEMERINTAH DAERAH <?= strtoupper(session()->get('namawilayah')) ?></h3>
+        <h3>BAGIAN ADMINISTRASI PEMBANGUNAN</h3>
         <h4>LAPORAN REALISASI PENDAPATAN & BELANJA DAERAH</h4>
         <h4>TAHUN ANGGARAN <?= esc($tahun) ?></h4>
     </div>

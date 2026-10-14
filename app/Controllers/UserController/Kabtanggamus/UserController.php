@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\UserController\UserKabController;
+namespace App\Controllers\UserController\Kabtanggamus;
 
 use App\Controllers\BaseController;
 use App\Libraries\CryptoUrl;
@@ -11,7 +11,8 @@ use App\Models\UserModel\TaUserModel;
 use App\Models\UserModel\GroupUserModel;
 // use App\Models\adbangmodel\ProgKerjaModel as programkeramodel;
 // use App\Models\LrfkProvModel\SubKegModel; // as lrfkModel;
-use App\Models\DataApbdModel\RealApbdModel;
+// use App\Models\DataApbdModel\RealApbdModel;
+use App\Models\KabtanggamusModel\RealApbdModel;
 
 class UserController extends BaseController
 {
@@ -62,7 +63,11 @@ class UserController extends BaseController
 
             $user['update_token_opduser'] = CryptoUrl::encrypt([
                 'id'   => $user['id'],
-                'sub_unit' => $user['sub_unit']
+                'hal' => 'ubahopd',
+            ]);
+            $user['update_token_passuser'] = CryptoUrl::encrypt([
+                'id'   => $user['id'],
+                'hal' => 'ubahpass',
             ]);
             return $user;
         }, $data['listuser2']);
@@ -70,7 +75,7 @@ class UserController extends BaseController
         $data['datajson'] = preg_replace('/"([^"]+)"\s*:/', '$1:', $datauserx);
         // echo dd($data['groupuser'] . '//' . $data['wilayah'] . '//' . $data['groupmenu']);
         // return view('user/listusersuperadmin', $data);
-
+        // echo dd($data['datajson']);
         return view('KabtanggamusViews/Adminadbang/listusersuperadmin', $data);
     }
     public function updateuser()
@@ -94,6 +99,7 @@ class UserController extends BaseController
         $active = $payload['active'] ?? null;
         $idHapus = $payload['idhapus'] ?? null;
         $sub_unit = $payload['sub_unit'] ?? null;
+        $hal = $payload['hal'] ?? null;
         $groupModel = new GroupModel();
         //        $data['groups'] = $groupModel->findAll();
         $data = [
@@ -104,14 +110,15 @@ class UserController extends BaseController
             'titlepage' => 'Halaman UBAH RULE GROUP User SiTAPIS Perangkat Daerah',
             'listuser' => $this->tausermodel->listuser($userId),
         ];
-        if ($sub_unit) {
-            $dataX = [
-                'id' => $userId,
-                'sub_unit' => $sub_unit,
-            ];
-            // echo dd($dataX);
-            $this->tausermodel->update($userId, $dataX);
-            return redirect()->to(base_url('' . $data['wilayah'] . '/' . $data['groupuser'] . '/daftaruser'));
+        if ($hal == 'ubahopd') {
+            $data['titlepage'] = 'Halaman Ubah Perangkat Daerah User SiTAPIS-KAB<br>' . session()->get('namawilayah');
+
+            return view('user/set_opd', $data);
+        }
+        if ($hal == 'ubahpass') {
+            $data['titlepage'] = 'Halaman Ubah Password User SiTAPIS-KAB<br>' . session()->get('namawilayah');
+
+            return view('user/set_pasword', $data);
         }
         // echo dd($data['groups']);
         if ($idHapus) {
@@ -140,108 +147,121 @@ class UserController extends BaseController
             return redirect()->to(base_url('' . $data['wilayah'] . '/' . $data['groupuser'] . '/daftaruser'));
         }
     }
-    public function user()
-    {
-        $req = $this->request;
+    // public function user()
+    // {
+    //     $req = $this->request;
 
-        $this->ValidasiHash($req);
-        // Contoh penggunaan parameter
+    //     $this->ValidasiHash($req);
+    //     // Contoh penggunaan parameter
 
-        // $url = urldecode($req->getGet('url'));
-        $receivedParams = $req->getGet();
-        $url = base64_decode($receivedParams['url'] ?? '');
-        $action = $receivedParams['action'] ?? null;
-        $idUser = $receivedParams['idUser'] ?? null;
-        $Status = $receivedParams['Status'] ?? null;
-        $data['tahunaktif'] = session()->get('tahun');
-        $data['bulanaktif'] = session()->get('bulan');
-        $user = user();
-        if (logged_in()) {
-            $user = user();
-            $groupModel = new GroupModel();
-            $groupuser = $groupModel->getGroupsForUser($user->id);
-            foreach ($groupuser as $row) {
-                $namagroup = $row['name'];
-            }
-        }
-        if ($action == 'akftivasi') {
-            if ($Status == 0) {
-                $aktif = 1;
-            }
-            if ($Status == 1) {
-                $aktif = 0;
-            }
-            $data = [
-                'id' => $idUser,
-                'activate_hash' => null,
-                'active' => $aktif,
-            ];
+    //     // $url = urldecode($req->getGet('url'));
+    //     $receivedParams = $req->getGet();
+    //     $url = base64_decode($receivedParams['url'] ?? '');
+    //     $action = $receivedParams['action'] ?? null;
+    //     $idUser = $receivedParams['idUser'] ?? null;
+    //     $Status = $receivedParams['Status'] ?? null;
+    //     $data['tahunaktif'] = session()->get('tahun');
+    //     $data['bulanaktif'] = session()->get('bulan');
+    //     $user = user();
+    //     if (logged_in()) {
+    //         $user = user();
+    //         $groupModel = new GroupModel();
+    //         $groupuser = $groupModel->getGroupsForUser($user->id);
+    //         foreach ($groupuser as $row) {
+    //             $namagroup = $row['name'];
+    //         }
+    //     }
+    //     if ($action == 'akftivasi') {
+    //         if ($Status == 0) {
+    //             $aktif = 1;
+    //         }
+    //         if ($Status == 1) {
+    //             $aktif = 0;
+    //         }
+    //         $data = [
+    //             'id' => $idUser,
+    //             'activate_hash' => null,
+    //             'active' => $aktif,
+    //         ];
 
-            $this->tausermodel->update($idUser, $data);
-            return redirect()->to(base_url('lrfkadmin/usersitapis'));
-        }
-        if ($action == 'pass') {
+    //         $this->tausermodel->update($idUser, $data);
+    //         return redirect()->to(base_url('lrfkadmin/usersitapis'));
+    //     }
+    //     if ($action == 'pass') {
 
-            $data = [
-                'groupuser' => $namagroup,
-                'groupmenu' => $namagroup,
-                'datauser' => $this->tausermodel->listuser($user->id),
-                'titlepage' => 'Halaman Aktivasi User SiTAPIS Perangkat Daerah',
-                'id' => $idUser,
-                'title' => 'Update Password',
-                'titlepage' => 'Halaman UBAH PASSWORD User SiTAPIS Perangkat Daerah',
-            ];
-            $data['listuser'] = $this->tausermodel->listuser($idUser);
-            // echo dd($data['listuser']);
-            return view('user/set_pasword', $data);
-        }
-        if ($action == 'ubahgroup') {
-            $groupModel = new GroupModel();
-            $data['groups'] = $groupModel->findAll();
-            $data = [
-                'groups' => $groupModel->findAll(),
-                'groupuser' => $namagroup,
-                'groupmenu' => $namagroup,
+    //         $data = [
+    //             'groupuser' => $namagroup,
+    //             'groupmenu' => $namagroup,
+    //             'datauser' => $this->tausermodel->listuser($user->id),
+    //             'titlepage' => 'Halaman Aktivasi User SiTAPIS Perangkat Daerah',
+    //             'id' => $idUser,
+    //             'title' => 'Update Password',
+    //             'titlepage' => 'Halaman UBAH PASSWORD User SiTAPIS Perangkat Daerah',
+    //         ];
+    //         $data['listuser'] = $this->tausermodel->listuser($idUser);
+    //         // echo dd($data['listuser']);
+    //         return view('user/set_pasword', $data);
+    //     }
+    //     if ($action == 'ubahgroup') {
+    //         $groupModel = new GroupModel();
+    //         $data['groups'] = $groupModel->findAll();
+    //         $data = [
+    //             'groups' => $groupModel->findAll(),
+    //             'groupuser' => $namagroup,
+    //             'groupmenu' => $namagroup,
 
-                'titlepage' => 'Halaman UBAH RULE GROUP User SiTAPIS Perangkat Daerah',
-                'menu' => 'adminlrfk',
-                'listuser' => $this->tausermodel->listuser($idUser),
-            ];
-            echo dd($data['groupuser']);
-            return view('user/set_group', $data);
-        }
-        if ($action == 'ubahperangkatdaerah') {
-            $tahunaktif = session()->get('tahun');
-            $bulanaktif = session()->get('bulan');
+    //             'titlepage' => 'Halaman UBAH RULE GROUP User SiTAPIS Perangkat Daerah',
+    //             'menu' => 'adminlrfk',
+    //             'listuser' => $this->tausermodel->listuser($idUser),
+    //         ];
+    //         echo dd($data['groupuser']);
+    //         return view('user/set_group', $data);
+    //     }
+    //     if ($action == 'ubahperangkatdaerah') {
+    //         $tahunaktif = session()->get('tahun');
+    //         $bulanaktif = session()->get('bulan');
 
-            $data = [
-                // 'listopd' => $this->subkegmodel->listopd(),
-                'listopd' => $this->realapbdmodel->listopd(),
-                'groupuser' => $namagroup,
-                'groupmenu' => $namagroup,
-                'titlepage' => 'Halaman Ubah Perangkat Daerah User SiTAPIS Perangkat Daerah Provinsi Lampung',
-                'menu' => 'adminlrfk',
-                'listuser' => $this->tausermodel->listuser($idUser),
-            ];
-            // echo dd($data['listopd']);
-            // echo dd($tahunaktif . '//' . $bulanaktif);
-            return view('user/set_opdprov2', $data);
-        }
-    }
+    //         $data = [
+    //             // 'listopd' => $this->subkegmodel->listopd(),
+    //             'listopd' => $this->realapbdmodel->listopd(),
+    //             'groupuser' => $namagroup,
+    //             'groupmenu' => $namagroup,
+    //             'titlepage' => 'Halaman Ubah Perangkat Daerah User SiTAPIS Perangkat Daerah Provinsi Lampung',
+    //             'menu' => 'adminlrfk',
+    //             'listuser' => $this->tausermodel->listuser($idUser),
+    //         ];
+    //         // echo dd($data['listopd']);
+    //         // echo dd($tahunaktif . '//' . $bulanaktif);
+    //         return view('user/set_opdprov2', $data);
+    //     }
+    // }
     public function simpanubahopd()
     {
         $id = $this->request->getPost('id');
         // $listopd = $this->subkegmodel->listopd($this->request->getPost('nm_opd'));
-        $listopd = $this->realapbdmodel->dataopd($this->request->getPost('nm_opd'));
-        // echo dd($listopd);
+        $listopd = $this->realapbdmodel->dataopd($this->request->getPost('sub_unit'));
         $data = [
-            'kd_skpd' => $listopd['KODE_SKPD'],
-            'kd_sub_unit' => $listopd['KODE_UNIT_SKPD'],
-            'sub_unit' => $this->request->getPost('nm_opd'),
+            // 'groups' => $this->groupuser->listgroupkabkota(), //$groupModel->findAll(), //whereNotIn('name', 'superadmin')->get()->getResultArray(), //findAll(),
+            'groupuser' => session()->get('groupuser'),
+            'groupmenu' => session()->get('groupuser'),
+            'wilayah' =>  session()->get('wilayah'),
+            'titlepage' => 'Halaman Ubah OPD User SiTAPIS-KAB<br>' . session()->get('namawilayah'),
         ];
-        // echo dd($data);
-        $this->tausermodel->update($id, $data);
-        return redirect()->to(base_url('lrfkadmin/usersitapis'));
+        if ($listopd == null) {
+            return redirect()->to(base_url('' . $data['wilayah'] . '/' . $data['groupuser'] . '/daftaruser'));
+        } else {
+            $dataupdate = [
+                'kd_skpd' => $listopd['KODE_SKPD'],
+                'kd_sub_unit' => $listopd['KODE_UNIT_SKPD'],
+                'sub_unit' => $this->request->getPost('sub_unit'),
+            ];
+            // $data['kd_skpd'] = $listopd['KODE_SKPD'];
+            // $data['kd_sub_unit'] = $listopd['KODE_UNIT_SKPD '];
+            // $data['sub_unit'] = $this->request->getPost('sub_unit');
+
+            $this->tausermodel->update($id, $dataupdate);
+            return redirect()->to(base_url('' . $data['wilayah'] . '/' . $data['groupuser'] . '/daftaruser'));
+        }
     }
     public function changeGroup()
     {
@@ -265,31 +285,21 @@ class UserController extends BaseController
 
         // return redirect()->to(base_url('lrfkadmin/usersitapis'));
     }
-    public function changePassword($id = null)
-    {
-        if ($id == null) {
-            return redirect()->to(base_url('kabkotaviews/vdetail/user'));
-        } else {
-            $data = [
-                'id' => $id,
-                'title' => 'Update Password',
-            ];
-            //   return view('users/set_password', $data);
-            return view('kabkotaviews/vdetail/set_password', $data);
-        }
-    }
+    // public function changePassword($id = null)
+    // {
+    //     if ($id == null) {
+    //         return redirect()->to(base_url('kabkotaviews/vdetail/user'));
+    //     } else {
+    //         $data = [
+    //             'id' => $id,
+    //             'title' => 'Update Password',
+    //         ];
+    //         //   return view('users/set_password', $data);
+    //         return view('kabkotaviews/vdetail/set_password', $data);
+    //     }
+    // }
     public function setPassword()
     {
-        if (logged_in()) {
-            $user = user();
-            $groupModel = new GroupModel();
-            $groupuser = $groupModel->getGroupsForUser($user->id);
-            foreach ($groupuser as $row) {
-                $namagroup = $row['name'];
-            }
-
-            $useraktif =  $user->email;
-        }
         $id = $this->request->getVar('id');
         $rules = [
             'password'     => 'required|strong_password',
@@ -297,31 +307,38 @@ class UserController extends BaseController
         ];
         if (!$this->validate($rules)) {
             $data = [
-                'titlepage' => 'Halaman Aktivasi User SiTAPIS Perangkat Daerah',
-                // 'menu' => 'adminlrfk',
-                'groupuser' => $namagroup,
-                'groupmenu' => $namagroup,
-                'datauser' => $this->tausermodel->listuser($user->id),
+                'groupuser' => session()->get('groupuser'),
+                'groupmenu' => session()->get('groupuser'),
+                'wilayah' =>  session()->get('wilayah'),
+                'titlepage' => 'Halaman Ubah Password User SiTAPIS-KAB<br>' . session()->get('namawilayah'),
                 'id' => $id,
+                'listuser' => $this->tausermodel->listuser($id),
+
                 'validation' => $this->validator,
             ];
             return view('user/set_pasword', $data);
         } else {
-            $data = [];
-            $userModel = new UserModel();
+            if (logged_in()) {
+                $user = user();
+                $useraktif =  $user->email;
+            }
+
             $data = [
-                'titlepage' => 'Halaman Aktivasi User SiTAPIS Perangkat Daerah',
-                // 'menu' => 'adminlrfk',
-                'groupuser' => $namagroup,
-                'groupmenu' => $namagroup,
-                'datauser' => $this->tausermodel->listuser($user->id),
+                'titlepage' => 'Selamat datang ' . $useraktif . ' di Halaman Manajemen User Sistem Pelaporan SiTAPIS',
+                'wilayah' =>  session()->get('wilayah'),
+                'groupmenu' => session()->get('groupmenu'),
+                'groupuser' => session()->get('groupuser'),
+                'listuser2' => $this->tausermodel->listuser2(session()->get('wilayah'), null),
+            ];
+            $userModel = new UserModel();
+            $dataupdate = [
                 'password_hash' => Password::hash($this->request->getVar('password')),
                 'reset_hash' => null,
                 'reset_at' => null,
                 'reset_expires' => null,
             ];
-            $userModel->update($this->request->getVar('id'), $data);
-            return redirect()->to(base_url('lrfkadmin/usersitapis'));
+            $userModel->update($this->request->getVar('id'), $dataupdate);
+            return redirect()->to(base_url('' . $data['wilayah'] . '/' . $data['groupuser'] . '/daftaruser'));
         }
     }
     public function profile($id = Null)

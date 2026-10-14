@@ -815,7 +815,6 @@ class AdminAdbangController extends BaseController
         return $this->response->setJSON(['status' => 'error', 'message' => 'Gagal menghapus data.']);
     }
     // Halaman Utama Data Realisasi (Laporan & Grafik Gabungan)
-
     public function listData()
     {
 
@@ -945,7 +944,7 @@ class AdminAdbangController extends BaseController
         exit();
     }
 
-    // Export PDF (Print View)
+    // Export PDF (Print View Realisasi Pendapatan dan Belanja) menggunakan Dompdf
     public function exportPdfrealisasiPendapatan()
     {
         $tahun = $this->request->getGet('tahun') ?? date('Y');
@@ -1019,7 +1018,7 @@ class AdminAdbangController extends BaseController
      *  CRUD DATA ANGGARAN KAS PERANGKAT DAERAH
      * ==========================================================================
      */
-    public function storeangkas_ajax()
+    public function storeangkas_ajax_()
     {
         if (!$this->request->isAJAX()) {
             return $this->response->setStatusCode(405)->setJSON(['status' => 'error', 'message' => 'Method not allowed']);
@@ -1144,8 +1143,183 @@ class AdminAdbangController extends BaseController
 
         // return redirect()->to('/anggaran-kas')->with('success', 'Data Anggaran Kas berhasil disimpan!');
     }
+    public function storeangkas_ajax()
+    {
+        //Jika eror penyimaan  cek file format.php diconfig pastikan ada skrip ini
+        // TAMBAHKAN PROPERTI INI JIKA BELUM ADA DI CONFIG ANDA:
+        // public int $jsonEncodeOptions = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES;
+        // public int $jsonEncodeDepth = 512;
 
+        // Netralkan Output Buffer dari output PHP liar
+        if (ob_get_length()) {
+            ob_clean();
+        }
+        // Helper lokal untuk kirim respon JSON murni tanpa melewati Formatter CI4 yang bermasalah
+        $sendJson = function (int $statusCode, array $payload) {
+            return $this->response
+                ->setStatusCode($statusCode)
+                ->setHeader('Content-Type', 'application/json')
+                ->setBody(json_encode($payload, JSON_UNESCAPED_UNICODE));
+        };
+        try {
+            // 1. Validasi Input Server-Side
+            $rules = [
+                'perangkat_daerah_id' => 'required|numeric',
+                'tahun_anggaran'      => 'required|numeric|exact_length[4]',
+                'sub_kegiatan'        => 'required',
+                'pagu_anggaran'       => 'required',
+            ];
 
+            if (!$this->validate($rules)) {
+                return $sendJson(400, [
+                    'status'     => 'error',
+                    'message'    => 'Validasi gagal, harap periksa kembali inputan Anda.',
+                    'errors'     => $this->validator->getErrors(),
+                    'csrf_token' => csrf_hash()
+                ]);
+            }
+
+            // Helper Pembersih String Format Rupiah ke Float
+            $cleanRupiah = function ($val) {
+                if (empty($val)) return 0.00;
+                $cleaned = preg_replace('/[^0-9]/', '', (string)$val);
+                return round((float) $cleaned, 2);
+            };
+
+            $paguAnggaran = $cleanRupiah($this->request->getPost('pagu_anggaran'));
+            $inputBulanan = $this->request->getPost('anggaran_kas');
+
+            if (!is_array($inputBulanan)) {
+                return $sendJson(400, [
+                    'status'     => 'error',
+                    'message'    => 'Rincian anggaran bulanan tidak valid atau kosong.',
+                    'csrf_token' => csrf_hash()
+                ]);
+            }
+
+            $bulanList = [
+                'januari',
+                'februari',
+                'maret',
+                'april',
+                'mei',
+                'juni',
+                'juli',
+                'agustus',
+                'september',
+                'oktober',
+                'november',
+                'desember'
+            ];
+
+            $dataToSave = [
+                'perangkat_daerah_id' => (int) $this->request->getPost('perangkat_daerah_id'),
+                'tahun_anggaran'      => (int) $this->request->getPost('tahun_anggaran'),
+                'sub_kegiatan'        => trim((string) $this->request->getPost('sub_kegiatan')),
+                'pagu_anggaran'       => $paguAnggaran,
+            ];
+
+            $totalKas = 0.00;
+
+            foreach ($bulanList as $bulan) {
+                $nilaiBulan = isset($inputBulanan[$bulan]) ? $cleanRupiah($inputBulanan[$bulan]) : 0.00;
+                $dataToSave[$bulan] = $nilaiBulan;
+                $totalKas = round($totalKas + $nilaiBulan, 2);
+            }
+
+            $dataToSave['total_anggaran_kas'] = $totalKas;
+
+            // 2. Cek Balance Pagu DPA vs Total Anggaran Kas
+            if (abs($paguAnggaran - $totalKas) > 0.01) {
+                $paguFormatted  = "Rp " . number_format($paguAnggaran, 0, ',', '.');
+                $totalFormatted = "Rp " . number_format($totalKas, 0, ',', '.');
+
+                return $sendJson(422, [
+                    'status'     => 'error',
+                    'message'    => "Total Anggaran Kas ({$totalFormatted}) tidak balance dengan Pagu DPA ({$paguFormatted}).",
+                    'csrf_token' => csrf_hash()
+                ]);
+            }
+
+            // 3. Simpan ke Database
+            $insertStatus = $this->anggaranKasModel->insert($dataToSave);
+
+            if ($insertStatus === false) {
+                return $sendJson(500, [
+                    'status'     => 'error',
+                    'message'    => 'Gagal menyimpan data ke database.',
+                    'errors'     => $this->anggaranKasModel->errors(),
+                    'csrf_token' => csrf_hash()
+                ]);
+            }
+
+            return $sendJson(200, [
+                'status'     => 'success',
+                'message'    => 'Data Anggaran Kas berhasil disimpan!',
+                'csrf_token' => csrf_hash()
+            ]);
+        } catch (\Throwable $e) {
+            return $sendJson(500, [
+                'status'     => 'error',
+                'message'    => 'Server Exception: ' . $e->getMessage(),
+                'file'       => basename($e->getFile()),
+                'line'       => $e->getLine(),
+                'csrf_token' => csrf_hash()
+            ]);
+        }
+    }
+    // Tambahkan method ini di dalam class AnggaranKas Controller
+    public function exportPdfAngkas()
+    {
+        // Netralkan Output Buffer
+        if (ob_get_length()) {
+            ob_clean();
+        }
+
+        try {
+            // Ambil parameter data POST atau dari database (contoh mengambil data terakhir atau request spesifik)
+            $id = $this->request->getGet('id') ?? null;
+
+            // Contoh data dummy/request untuk cetak, Anda bisa sesuaikan query model Anda di sini
+            $data = [
+                'title'               => 'Dokumen Anggaran Kas',
+                'perangkat_daerah'    => $this->request->getGet('pd') ?? 'Dinas Pekerjaan Umum dan Penataan Ruang',
+                'tahun_anggaran'      => $this->request->getGet('tahun') ?? date('Y'),
+                'sub_kegiatan'        => $this->request->getGet('sub') ?? 'Pembangunan Infrastruktur Perkotaan',
+                'pagu_anggaran'       => (float) ($this->request->getGet('pagu') ?? 0),
+                'anggaran_kas'        => [
+                    'januari' => 10000000,
+                    'februari' => 15000000,
+                    'maret' => 20000000,
+                    'april' => 10000000,
+                    'mei' => 10000000,
+                    'juni' => 15000000,
+                    'juli' => 20000000,
+                    'agustus' => 25000000,
+                    'september' => 10000000,
+                    'oktober' => 10000000,
+                    'november' => 10000000,
+                    'desember' => 15000000
+                ]
+            ];
+
+            // Load Dompdf (Asumsi menggunakan dompdf/dompdf via composer)
+            $dompdf = new \Dompdf\Dompdf();
+
+            // Render HTML khusus untuk template PDF
+            $html = view('anggaran_kas/pdf_template', $data);
+
+            $dompdf->loadHtml($html);
+            $dompdf->setPaper('A4', 'portrait');
+            $dompdf->render();
+
+            // Stream file PDF langsung ke browser untuk di-download/print preview
+            $dompdf->stream("Anggaran_Kas_" . date('YmdHis') . ".pdf", ["Attachment" => false]);
+            exit();
+        } catch (\Throwable $e) {
+            return $this->response->setStatusCode(500)->setBody("Gagal membuat PDF: " . $e->getMessage());
+        }
+    }
 
     public function uploadapbd()
     {
@@ -1269,20 +1443,12 @@ class AdminAdbangController extends BaseController
     /**
      * Export Data Rekap ke Excel (.xlsx) dari Backend
      */
-    public function exportExcel()
+    public function exportExcelLrfkOpd()
     {
         $req = $this->request;
         $receivedParams = $req->getGet();
-        $wilayah = $receivedParams['wilayah'] ?? null;
-        $hal = $receivedParams['hal'] ?? null;
-        $action = $receivedParams['action'] ?? null;
         $kdSU = $receivedParams['kdSU'] ?? null;
         $bulan = $receivedParams['blndata'] ?? null;
-        $kdSK = $receivedParams['kdSK'] ?? null;
-
-        // $bulan = $this->request->getGet('bulan') ?? date('m');
-        // $kdSU  = $this->request->getGet('kd_su') ?? '';
-
         // Fetch Data menggunakan Model yang sama
         $rekap = $this->realapbdmodel->getRekapLengkapPerTingkatAmanlengkap($bulan, $kdSU);
         // echo dd($rekap);
@@ -1293,31 +1459,40 @@ class AdminAdbangController extends BaseController
         // Inisialisasi Spreadsheet
         $spreadsheet = new Spreadsheet();
         $sheet       = $spreadsheet->getActiveSheet();
-        $sheet->setTitle('Rekap Anggaran & SRO');
+        $sheet->setTitle('Laporan LRFK OPD ' . $bulan);
 
         // --- 1. HEADER JUDUL ---
         $sheet->mergeCells('A1:G1');
-        $sheet->setCellValue('A1', 'REKAPITULASI EFISIENSI ANGGARAN DAN CAPAIAN SRO');
+        $sheet->setCellValue('A1', 'LAPORAN REALISASI FISIK KEUANGAN & KINERJA PERANGKAT DAERAH (LRFK) - TAHUN '
+            . session()->get('tahun'));
         $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
         $sheet->mergeCells('A2:G2');
-        $sheet->setCellValue('A2', 'Bulan: ' . $bulan . ' | Filter SKPD: ' . ($kdSU ?: 'Semua SKPD'));
+        $sheet->setCellValue('A2', 'Bulan: ' . $bulan . ' | Nama SKPD: ' . ($kdSU ?: 'Semua SKPD'));
         $sheet->getStyle('A2')->getFont()->setItalic(true)->setSize(11);
         $sheet->getStyle('A2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
         // --- 2. HEADER TABEL ---
-        $headers = [
-            'A4' => 'Kode & Nama Hierarki',
-            'B4' => 'Anggaran (Rp)',
-            'C4' => 'Realisasi (Rp)',
-            'D4' => 'Capaian Realisasi (%)',
-            'E4' => 'Capaian SRO (%)',
-            'F4' => 'Efisiensi (%)',
-            'G4' => 'Status'
+        $headers1 = [
+            'A4' => 'Kode & Nama SKPD / Nama Program / Kegiatan / Sub Rincian Objek (Belanja) SRO',
+            'B4' => 'Pagu Anggaran(Rp)',
+            'C4' => 'Realisasi Anggaran(Rp)',
+            'D4' => 'Capaian Realisasi Anggaran (%)',
+            'E4' => 'Capaian Kinerja SRO',
+            'F4' => 'Nilai Efisiensi (%)',
+            'G4' => 'Status',
+
+            'A5' => '1',
+            'B5' => '2',
+            'C5' => '3',
+            'D5' => '4=(3/4)*100',
+            'E5' => '5',
+            'F5' => '6=(5-4)',
+            'G5' => 'Status (7=6 "-" Inefisien,"+" Efisien)'
         ];
 
-        foreach ($headers as $cell => $value) {
+        foreach ($headers1 as $cell => $value) {
             $sheet->setCellValue($cell, $value);
         }
 
@@ -1334,11 +1509,11 @@ class AdminAdbangController extends BaseController
                 'startColor' => ['rgb' => '212529'] // Dark Background
             ]
         ];
-        $sheet->getStyle('A4:G4')->applyFromArray($headerStyle);
+        $sheet->getStyle('A4:G5')->applyFromArray($headerStyle);
         $sheet->getRowDimension(4)->setRowHeight(28);
 
         // --- 3. POPULASI DATA HIERARKI ---
-        $row = 5;
+        $row = 6; // Mulai dari baris ke-6 setelah header
 
         foreach ($rekap as $skpd) {
             // Level 1: SKPD
@@ -1364,7 +1539,7 @@ class AdminAdbangController extends BaseController
                             $sheet->setCellValue('D' . $row, '-');
                             $sheet->setCellValue('E' . $row, '-');
                             $sheet->setCellValue('F' . $row, '-');
-                            $sheet->setCellValue('G' . $row, 'Detail SRO');
+                            $sheet->setCellValue('G' . $row, '-');
 
                             // Styling khusus level SRO
                             $sheet->getStyle('A' . $row)->getFont()->setItalic(true);

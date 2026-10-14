@@ -486,7 +486,7 @@
                 movableColumns: true,
                 columns: [{
                         title: '#',
-                        field: 'id',
+                        field: 'no',
                         width: 60,
                         headerSort: true
                     },
@@ -495,6 +495,12 @@
                         field: 'username',
                         headerFilter: 'input'
                     },
+                    {
+                        title: 'OPD',
+                        field: 'sub_unit',
+                        headerFilter: 'input'
+                    },
+
                     {
                         title: 'Email',
                         field: 'email',
@@ -573,7 +579,9 @@
                             const rowData = cell.getRow().getData();
 
                             return `
-                    <a href="updateuser?token=${rowData.update_token_groupuser}" class="btn btn-sm btn-primary">Update Role</a>
+                    <a href="updateuser?token=${rowData.update_token_groupuser}" class="btn btn-sm btn-primary">Update Role</a><br>
+                    <a href="updateuser?token=${rowData.update_token_opduser}" class="btn btn-sm btn-info">Update OPD</a><br>
+                    <a href="updateuser?token=${rowData.update_token_passuser}" class="btn btn-sm btn-warning">Update Password</a><br>
                     <a href="updateuser?token=${rowData.update_token_hapus}" class="btn btn-sm btn-danger">Delete</a>
                 `;
                         }

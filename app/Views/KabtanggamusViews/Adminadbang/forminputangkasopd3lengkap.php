@@ -31,8 +31,12 @@
             <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" id="csrf_input">
 
             <div class="card card-primary card-outline mb-4 shadow-sm">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0">Informasi Sub Kegiatan & Pagu</h5>
+                    <!-- Menu / Tombol Cetak PDF -->
+                    <button type="button" class="btn btn-danger btn-sm" id="btnCetakPdf">
+                        <i class="fa-solid fa-file-pdf me-1"></i> Cetak PDF (Dompdf)
+                    </button>
                 </div>
                 <div class="card-body">
                     <div class="row g-3">
@@ -299,7 +303,7 @@
             try {
                 let formData = new FormData(form);
 
-                let response = await fetch("<?= site_url('anggaran-kas/store') ?>", {
+                let response = await fetch("<?= site_url('' . $wilayah . '/' . $groupuser . '/anggaran-kas/store') ?>", {
                     method: "POST",
                     headers: {
                         "X-Requested-With": "XMLHttpRequest"

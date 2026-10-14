@@ -10,11 +10,11 @@
     <!-- Content Header -->
     <div class="content-header mb-3 print-hide">
         <div class="container-fluid d-flex justify-content-between align-items-center">
-            <h1 class="m-0 text-dark font-weight-bold">Rekap Laporan Efisiensi Anggaran & SRO</h1>
-            <ol class="breadcrumb mb-0">
+            <h1 class="m-0 text-dark font-weight-bold">Laporan Realisasi Fisik Keuangan & Kinerja Perangkat Daerah</h1>
+            <!-- <ol class="breadcrumb mb-0">
                 <li class="breadcrumb-item"><a href="#">Home</a></li>
                 <li class="breadcrumb-item active">Rekap Lengkap</li>
-            </ol>
+            </ol> -->
         </div>
     </div>
 
@@ -39,10 +39,10 @@
 
                         <!-- Action Buttons -->
                         <div class="col-md-7 col-12 text-md-end">
-                            <!-- Tombol Import XLS -->
+                            <!-- Tombol Import XLS
                             <button type="button" class="btn btn-outline-success me-1 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalImportExcel">
                                 <i class="fas fa-file-upload me-1"></i> Import XLS
-                            </button>
+                            </button> -->
 
                             <!-- Tombol Export XLS Data Tabel -->
                             <div class="btn-group me-1">
@@ -54,7 +54,7 @@
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li>
-                                        <a class="dropdown-menu-item dropdown-item" href="<?= hash_url('' . $wilayah . '/' . $groupuser . '/exportExcel', ['kdSU' => $nama_opd, 'blndata' => $blndata]) ?>">
+                                        <a class="dropdown-menu-item dropdown-item" href="<?= hash_url('' . $wilayah . '/' . $groupuser . '/exportExcelLrfkOpd', ['kdSU' => $nama_opd, 'blndata' => $blndata]) ?>">
                                             <i class="fas fa-download me-2 text-success"></i> Export All Data
                                         </a>
                                     </li>
@@ -91,13 +91,22 @@
                     <table class="table table-hover align-middle mb-0" id="rekapTable">
                         <thead class="table-dark">
                             <tr>
-                                <th style="width: 35%;">Kode & Nama Program / Kegiatan / SRO</th>
-                                <th class="text-end" style="width: 15%;">Anggaran (Rp)</th>
-                                <th class="text-end" style="width: 15%;">Realisasi (Rp)</th>
-                                <th class="text-center" style="width: 10%;">Capaian Realisasi</th>
-                                <th class="text-center" style="width: 10%;">Capaian SRO</th>
-                                <th class="text-center" style="width: 7%;">Efisiensi</th>
+                                <th style="width: 35%;">Kode & Nama SKPD / Nama Program / Kegiatan / Sub Rincian Objek (Belanja) SRO</th>
+                                <th class="text-end" style="width: 15%;">Pagu Anggaran(Rp)</th>
+                                <th class="text-end" style="width: 15%;">Realisasi Anggaran(Rp)</th>
+                                <th class="text-center" style="width: 10%;">Capaian Realisasi Anggaran (%)</th>
+                                <th class="text-center" style="width: 10%;">Capaian Kinerja SRO </th>
+                                <th class="text-center" style="width: 7%;">Nilai Efisiensi </th>
                                 <th class="text-center" style="width: 8%;">Status / Aksi</th>
+                            </tr>
+                            <tr>
+                                <th class="text-center" style="width: 35%;">1</th>
+                                <th class="text-center" style="width: 15%;">2</th>
+                                <th class="text-center" style="width: 15%;">3</th>
+                                <th class="text-center" style="width: 10%;">4</th>
+                                <th class="text-center" style="width: 10%;">5</th>
+                                <th class="text-center" style="width: 7%;">6=(5-4)</th>
+                                <th class="text-center" style="width: 8%;">7=6 '-' Inefisien,'+' Efisien</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -197,7 +206,7 @@
                                                         </td>
                                                         <td class="text-end"><?= number_format($sro['anggaran'], 0, ',', '.') ?></td>
                                                         <td class="text-end"><?= number_format($sro['realisasi'], 0, ',', '.') ?></td>
-                                                        <td class="text-center" colspan="3"><span class="text-muted small">- Detail Target SRO -</span></td>
+                                                        <td class="text-center" colspan="3"><span class="text-muted small"></span></td>
                                                         <td class="text-center print-hide">
                                                             <button type="button" class="btn btn-xs btn-outline-warning shadow-sm"
                                                                 title="Edit Realisasi SRO"
