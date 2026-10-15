@@ -985,11 +985,7 @@ class AdminAdbangController extends BaseController
             'data'   => $data
         ]);
     }
-    /*
-     * ==========================================================================
-     *  CRUD DATA ANGGARAN KAS PERANGKAT DAERAH
-     * ==========================================================================
-     */
+
 
 
     // METHOD BARU: Mengambil ringkasan data berdasarkan filter AJAX
@@ -1268,57 +1264,56 @@ class AdminAdbangController extends BaseController
             ]);
         }
     }
-    // Tambahkan method ini di dalam class AnggaranKas Controller
-    public function exportPdfAngkas()
+    /**
+     * Method untuk Export PDF anggaran kas menggunakan Dompdf
+     */
+    public function exportPdfAnggaranKas($id = null)
     {
-        // Netralkan Output Buffer
         if (ob_get_length()) {
             ob_clean();
         }
 
-        try {
-            // Ambil parameter data POST atau dari database (contoh mengambil data terakhir atau request spesifik)
-            $id = $this->request->getGet('id') ?? null;
+        // Cari data berdasarkan ID atau ambil record terbaru
+        $dataAnggaran = $id ? $this->anggaranKasModel->find($id) : $this->anggaranKasModel->orderBy('id', 'DESC')->first();
 
-            // Contoh data dummy/request untuk cetak, Anda bisa sesuaikan query model Anda di sini
-            $data = [
-                'title'               => 'Dokumen Anggaran Kas',
-                'perangkat_daerah'    => $this->request->getGet('pd') ?? 'Dinas Pekerjaan Umum dan Penataan Ruang',
-                'tahun_anggaran'      => $this->request->getGet('tahun') ?? date('Y'),
-                'sub_kegiatan'        => $this->request->getGet('sub') ?? 'Pembangunan Infrastruktur Perkotaan',
-                'pagu_anggaran'       => (float) ($this->request->getGet('pagu') ?? 0),
-                'anggaran_kas'        => [
-                    'januari' => 10000000,
-                    'februari' => 15000000,
-                    'maret' => 20000000,
-                    'april' => 10000000,
-                    'mei' => 10000000,
-                    'juni' => 15000000,
-                    'juli' => 20000000,
-                    'agustus' => 25000000,
-                    'september' => 10000000,
-                    'oktober' => 10000000,
-                    'november' => 10000000,
-                    'desember' => 15000000
-                ]
-            ];
-
-            // Load Dompdf (Asumsi menggunakan dompdf/dompdf via composer)
-            $dompdf = new \Dompdf\Dompdf();
-
-            // Render HTML khusus untuk template PDF
-            $html = view('anggaran_kas/pdf_template', $data);
-
-            $dompdf->loadHtml($html);
-            $dompdf->setPaper('A4', 'portrait');
-            $dompdf->render();
-
-            // Stream file PDF langsung ke browser untuk di-download/print preview
-            $dompdf->stream("Anggaran_Kas_" . date('YmdHis') . ".pdf", ["Attachment" => false]);
-            exit();
-        } catch (\Throwable $e) {
-            return $this->response->setStatusCode(500)->setBody("Gagal membuat PDF: " . $e->getMessage());
+        if (!$dataAnggaran) {
+            return $this->response->setStatusCode(404)->setBody('Data Anggaran Kas tidak ditemukan.');
         }
+
+        // Daftar Nama SKPD (Sesuai ID)
+        $namaPerangkatDaerah = [
+            1 => 'Dinas Pekerjaan Umum dan Penataan Ruang',
+            2 => 'Dinas Pendidikan dan Kebudayaan',
+            3 => 'Dinas Kesehatan'
+        ];
+
+        $data = [
+            'title'            => 'Dokumen Rencana Anggaran Kas',
+            'perangkat_daerah' => $namaPerangkatDaerah[$dataAnggaran['perangkat_daerah_id']] ?? 'Perangkat Daerah',
+            'tahun_anggaran'   => $dataAnggaran['tahun_anggaran'],
+            'sub_kegiatan'     => $dataAnggaran['sub_kegiatan'],
+            'pagu_anggaran'    => $dataAnggaran['pagu_anggaran'],
+            'data'             => $dataAnggaran
+        ];
+
+        // Konfigurasi Dompdf
+        $options = new Options();
+        $options->set('isRemoteEnabled', true);
+        $options->set('isHtml5ParserEnabled', true);
+
+        $dompdf = new Dompdf($options);
+
+        // Load View PDF Template
+        $html = view('KabtanggamusViews/Adminadbang/pdf_laporan_angkas', $data);
+
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        // Stream PDF ke browser
+        $filename = "Anggaran_Kas_" . url_title($data['sub_kegiatan'], '_', true) . "_" . date('YmdHis') . ".pdf";
+        $dompdf->stream($filename, ["Attachment" => false]);
+        exit();
     }
 
     public function uploadapbd()
