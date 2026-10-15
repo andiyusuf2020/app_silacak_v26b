@@ -99,8 +99,6 @@
 
     <!-- Kop Header -->
     <div class="kop-header text-center">
-        <img src="<?= base_url() ?>cssportal/img_home/tanggamus.png" width="5%" alt="Logo Kabupaten/Kota" />
-
         <h3>PEMERINTAH PROVINSI</h3>
         <h4>ANGGARAN KAS PERANGKAT DAERAH</h4>
         <p style="margin: 0; font-size: 10pt;">TAHUN ANGGARAN <?= $tahun_anggaran ?></p>

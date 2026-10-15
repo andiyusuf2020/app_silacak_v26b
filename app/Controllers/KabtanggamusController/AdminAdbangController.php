@@ -179,7 +179,8 @@ class AdminAdbangController extends BaseController
             // $dataa['list_anggaran'] = $this->anggaranKasModel->findAll();
             $data['list_anggaran'] = $this->anggaranKasModel->findAll();
             // $data['dataopdadmin'] = $this->realapbdmodel->getCapaianKinerjaDenganGeometri($data['tahun'], $data['tglaktif']);
-            return view('KabtanggamusViews/Adminadbang/forminputangkasopd3lengkap', $data);
+            // return view('KabtanggamusViews/Adminadbang/forminputangkasopd3lengkap', $data);
+            return view('KabtanggamusViews/Adminadbang/forminputangkasopd3lengkap2', $data);
             // return view('KabtanggamusViews/Adminadbang/forminputangkasopd2', $data);
         } elseif ($hal == 'datapbj') {
             $data['dataopdadmin'] = $this->realapbdmodel->getCapaianKinerjaDenganGeometri($data['tahun'], $data['tglaktif']);
@@ -505,19 +506,22 @@ class AdminAdbangController extends BaseController
     {
         $idSro = $this->request->getPost('id_sro');
         $realisasi = $this->request->getPost('realisasi');
+        $anggaran = $this->request->getPost('anggaran');
+        // echo dd($idSro . '-' . $realisasi . '-' . $anggaran);
+        if ($realisasi > $anggaran) {
+            return redirect()->back()->with('error', 'Realisasi tidak boleh melebihi anggaran.');
+        } else {
+            // Proses update ke database sesuai model Anda
+            $this->realapbdmodel->update($idSro, ['TOTAL_REALISASI' => $realisasi]);
 
-        // Proses update ke database sesuai model Anda
-        $this->realapbdmodel->update($idSro, ['TOTAL_REALISASI' => $realisasi]);
-        // echo dd($idSro . '-' . $realisasi);
-        return redirect()->back()->with('success', 'Data realisasi SRO berhasil diperbarui.');
+            return redirect()->back()->with('success', 'Data realisasi SRO berhasil diperbarui.');
+        }
     }
     public function getDataJson()
     {
         // $bulan = $this->request->getGet('bulan') ?? date('m');
         $jadwalaktif = $this->jadwalmodel->jadwalaktifskrg();
-
         $dataRekap = $this->realapbdmodel->getRekapPerSKPD($jadwalaktif['bulan']);
-
         return $this->response->setJSON($dataRekap);
     }
 

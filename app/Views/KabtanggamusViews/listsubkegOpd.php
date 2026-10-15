@@ -86,7 +86,22 @@
                         </button>
                     </div>
                 </div>
-
+                <div class="mb-3">
+                    <?php if (session()->getFlashdata('success')): ?>
+                        <div class="alert alert-success" role="alert">
+                            <ul>
+                                <p><?= session()->getFlashdata('success') ?></p>
+                            </ul>
+                        </div>
+                    <?php endif; ?>
+                    <?php if (session()->getFlashdata('error')): ?>
+                        <div class="alert alert-danger" role="alert">
+                            <ul>
+                                <p><?= session()->getFlashdata('error') ?></p>
+                            </ul>
+                        </div>
+                    <?php endif; ?>
+                </div>
                 <div class="card-body p-0 table-responsive">
                     <table class="table table-hover align-middle mb-0" id="rekapTable">
                         <thead class="table-dark">
@@ -304,6 +319,8 @@
                         <div class="col-md-6 mb-3">
                             <label for="edit_realisasi" class="form-label fw-bold">Realisasi SRO (Rp)</label>
                             <input type="number" class="form-control fw-bold" id="edit_realisasi" name="realisasi" min="0" step="1" required>
+                            <input type="hidden" id="anggaran_sro" name="anggaran">
+
                         </div>
                     </div>
                 </div>
@@ -497,7 +514,7 @@
 
         // Set nilai realisasi saat ini
         document.getElementById('edit_realisasi').value = data.realisasi;
-
+        document.getElementById('anggaran_sro').value = data.anggaran;
         // Tampilkan Modal via Bootstrap 5
         const modalEdit = new bootstrap.Modal(document.getElementById('modalEditSro'));
         modalEdit.show();
