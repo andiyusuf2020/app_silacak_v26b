@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class AnggaranKasModel extends Model
 {
-    protected $table            = 'anggaran_kas';
+    protected $table            = 'kabtanggamus_anggaran_kas';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
@@ -16,6 +16,8 @@ class AnggaranKasModel extends Model
 
     protected $allowedFields    = [
         'perangkat_daerah_id',
+        'kode_sub_unit',
+        'sub_unit',
         'tahun_anggaran',
         'sub_kegiatan',
         'pagu_anggaran',
@@ -37,5 +39,9 @@ class AnggaranKasModel extends Model
     public function simpan($data)
     {
         return $this->insert($data);
+    }
+    public function updatedata($id, $data)
+    {
+        return $this->update($id, $data);
     }
 }

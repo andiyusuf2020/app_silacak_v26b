@@ -115,7 +115,7 @@
                     </ul>
                     <ul class="nav nav-treeview">
                         <li class="nav-item"> <a
-                                href="<?= hash_url(' ' . $wilayah . '/' . $groupuser, ['hal' => 'angkasopd']);
+                                href="<?= hash_url(' ' . $wilayah . '/' . $groupuser, ['hal' => 'listopdangkas']);
                                         ?>" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
                                 <p>Anggaran Kas Opd <br> Perangkat Daerah</p>
@@ -170,7 +170,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="nav-header">MANAJEMEN BPKAD</li>
+                <!-- <li class="nav-header">MANAJEMEN BPKAD</li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon bi bi-clipboard-fill"></i>
@@ -197,7 +197,7 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li> -->
 
             </ul>
             <!--end::Sidebar Menu-->

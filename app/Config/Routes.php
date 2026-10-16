@@ -77,6 +77,7 @@ $routes->group('tanggamus/superadmin', ['filter' => 'role:superadmin'], function
     $routes->post('opdsetpass', 'UserController\Kabtanggamus\UserController::setPassword');
     $routes->post('anggaran-kas/store', 'KabtanggamusController\AdminAdbangController::storeangkas_ajax');
     $routes->get('anggaran-kas/export-pdf', 'KabtanggamusController\AdminAdbangController::exportPdfAnggaranKas');
+    $routes->get('anggaran-kas/export-pdf-admin', 'KabtanggamusController\AdminAdbangController::exportPdfLaporanAngkasAdmin');
 });
 // $routes->get('realisasi', 'RealisasiController::index');
 $routes->get('rekap/get-data-json', 'KabtanggamusController\AdminAdbangController::getDataJsonPerAkun');

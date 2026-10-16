@@ -44,112 +44,119 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label for="perangkat_daerah" class="form-label fw-bold">Perangkat Daerah (SKPD)</label>
-                            <select class="form-select" id="perangkat_daerah" name="perangkat_daerah_id" required>
+                            <!-- <select class="form-select" id="perangkat_daerah" name="perangkat_daerah_id" required>
                                 <option value="">-- Pilih Perangkat Daerah --</option>
                                 <option value="1">Dinas Pekerjaan Umum dan Penataan Ruang</option>
                                 <option value="2">Dinas Pendidikan dan Kebudayaan</option>
                                 <option value="3">Dinas Kesehatan</option>
-                            </select>
+                            </select> -->
+                            <input type="text" disabled class="form-control" id="perangkat_daerah" name="perangkat_daerah_id" value="<?= $sub_unit_skpd ?>">
+                            <input type="hidden" name="sub_unit" value="<?= $sub_unit_skpd ?>">
+                            <input type="hidden" name="id" value="<?= ($listdataangkasopd['id']) ?? null ?>">
+                            <input type="hidden" name="perangkat_daerah_id" value="<?= $kdUS ?>">
+
                         </div>
                         <div class="col-md-6">
                             <label for="tahun_anggaran" class="form-label fw-bold">Tahun Anggaran</label>
-                            <input type="number" class="form-control" id="tahun_anggaran" name="tahun_anggaran" value="<?= date('Y') ?>" required>
+                            <input disabled type="number" class="form-control" id="tahun_anggaran" name="tahun_anggaran" value="<?= $tahunaktif ?>" required>
+                            <input type="hidden" name="tahun_anggaran" value="<?= $tahunaktif ?>">
                         </div>
-                        <div class="col-md-6">
-                            <label for="sub_kegiatan" class="form-label fw-bold">Sub Kegiatan</label>
-                            <input type="text" class="form-control" id="sub_kegiatan" name="sub_kegiatan" placeholder="Masukkan Kode / Nama Sub Kegiatan" required>
-                        </div>
+                        <!-- <div class="col-md-6">
+                            <label for="sub_kegiatan" class="form-label fw-bold">Sub Kegiatan</label> -->
+                        <input value="<?= $sub_unit_skpd ?>" type="hidden" class="form-control" id="sub_kegiatan" name="sub_kegiatan" placeholder="Masukkan Kode / Nama Sub Kegiatan" required>
+                        <input type="hidden" name="sub_kegiatan" value="<?= $sub_unit_skpd ?>">
+                        <!-- </div> -->
                         <div class="col-md-6">
                             <label for="pagu_anggaran" class="form-label fw-bold">Total Pagu DPA (Rp)</label>
-                            <input type="text" class="form-control month-input fw-bold text-primary fs-6" id="pagu_anggaran" name="pagu_anggaran" value="0" placeholder="0" required autocomplete="off">
+                            <input disabled type="text" class="form-control month-input fw-bold text-primary fs-6" id="pagu_anggaran" name="pagu_anggaran" value="<?= number_format($total_anggaran, 0, '.', '') ?>" placeholder="0" required autocomplete="off">
+                            <input type="hidden" name="pagu_anggaran" value="<?= number_format($total_anggaran, 0, '.', '') ?>">
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Card Form Anggaran Kas Bulanan -->
-            <div class="card card-outline card-info shadow-sm mb-4">
-                <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
-                    <h5 class="card-title mb-0">Rincian Penarikan Kas Bulanan</h5>
-                    <div class="d-flex align-items-center gap-2">
-                        <!-- Tombol Otomatis Bagi Rata -->
-                        <button type="button" class="btn btn-sm btn-outline-success" id="btnBagiRata">
-                            <i class="fa-solid fa-divide me-1"></i> Bagi Rata 12 Bulan
-                        </button>
-                        <span class="badge bg-secondary fs-6" id="status-selisih">Pagu DPA Belum Diisi</span>
+                <!-- Card Form Anggaran Kas Bulanan -->
+                <div class="card card-outline card-info shadow-sm mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <h5 class="card-title mb-0">Rincian Penarikan Kas Bulanan</h5>
+                        <div class="d-flex align-items-center gap-2">
+                            <!-- Tombol Otomatis Bagi Rata -->
+                            <button type="button" class="btn btn-sm btn-outline-success" id="btnBagiRata">
+                                <i class="fa-solid fa-divide me-1"></i> Bagi Rata 12 Bulan
+                            </button>
+                            <span class="badge bg-secondary fs-6" id="status-selisih">Pagu DPA Belum Diisi</span>
+                        </div>
                     </div>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-bordered align-middle mb-0" id="tableAnggaranKas">
-                            <thead class="table-dark text-center">
-                                <tr>
-                                    <th style="width: 20%;">Triwulan</th>
-                                    <th style="width: 20%;">Bulan</th>
-                                    <th style="width: 35%;">Nilai Anggaran Kas (Rp)</th>
-                                    <th style="width: 25%;">Subtotal Triwulan (Rp)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                $months = [
-                                    1 => ['Januari', 'Februari', 'Maret'],
-                                    2 => ['April', 'Mei', 'Juni'],
-                                    3 => ['Juli', 'Agustus', 'September'],
-                                    4 => ['Oktober', 'November', 'Desember']
-                                ];
-                                foreach ($months as $tw => $bulanList):
-                                    foreach ($bulanList as $index => $bulan):
-                                        $keyBulan = strtolower($bulan);
-                                ?>
-                                        <tr>
-                                            <?php if ($index === 0): ?>
-                                                <td rowspan="4" class="text-center fw-bold align-middle bg-light">
-                                                    TRIWULAN <?= $tw ?>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-bordered align-middle mb-0" id="tableAnggaranKas">
+                                <thead class="table-dark text-center">
+                                    <tr>
+                                        <th style="width: 20%;">Triwulan</th>
+                                        <th style="width: 20%;">Bulan</th>
+                                        <th style="width: 35%;">Nilai Anggaran Kas (Rp)</th>
+                                        <th style="width: 25%;">Subtotal Triwulan (Rp)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $months = [
+                                        1 => ['Januari', 'Februari', 'Maret'],
+                                        2 => ['April', 'Mei', 'Juni'],
+                                        3 => ['Juli', 'Agustus', 'September'],
+                                        4 => ['Oktober', 'November', 'Desember']
+                                    ];
+                                    foreach ($months as $tw => $bulanList):
+                                        foreach ($bulanList as $index => $bulan):
+                                            $keyBulan = strtolower($bulan);
+                                    ?>
+                                            <tr>
+                                                <?php if ($index === 0): ?>
+                                                    <td rowspan="4" class="text-center fw-bold align-middle bg-light">
+                                                        TRIWULAN <?= $tw ?>
+                                                    </td>
+                                                <?php endif; ?>
+                                                <td class="fw-semibold"><?= $bulan ?></td>
+                                                <td>
+                                                    <input type="text"
+                                                        name="anggaran_kas[<?= $keyBulan ?>]"
+                                                        id="kas_<?= $keyBulan ?>"
+                                                        class="form-control month-input input-kas tw-<?= $tw ?>"
+                                                        data-tw="<?= $tw ?>"
+                                                        placeholder="0"
+                                                        value="<?= isset($listdataangkasopd[$keyBulan]) ? number_format($listdataangkasopd[$keyBulan], 0, ',', '.') : '0' ?>"
+                                                        autocomplete="off">
                                                 </td>
-                                            <?php endif; ?>
-                                            <td class="fw-semibold"><?= $bulan ?></td>
-                                            <td>
-                                                <input type="text"
-                                                    name="anggaran_kas[<?= $keyBulan ?>]"
-                                                    id="kas_<?= $keyBulan ?>"
-                                                    class="form-control month-input input-kas tw-<?= $tw ?>"
-                                                    data-tw="<?= $tw ?>"
-                                                    placeholder="0"
-                                                    value="0"
-                                                    autocomplete="off">
-                                            </td>
-                                            <?php if ($index === 0): ?>
-                                                <td rowspan="3" class="text-end fw-bold align-middle bg-subtotal text-success" id="subtotal-tw-<?= $tw ?>">
-                                                    Rp 0
-                                                </td>
-                                            <?php endif; ?>
+                                                <?php if ($index === 0): ?>
+                                                    <td rowspan="3" class="text-end fw-bold align-middle bg-subtotal text-success" id="subtotal-tw-<?= $tw ?>">
+                                                        Rp 0
+                                                    </td>
+                                                <?php endif; ?>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                        <tr class="bg-subtotal">
+                                            <td colspan="2" class="text-end text-uppercase">Total Triwulan <?= $tw ?></td>
+                                            <td class="text-end text-success fw-bold" id="total-tw-cell-<?= $tw ?>">Rp 0</td>
                                         </tr>
                                     <?php endforeach; ?>
-                                    <tr class="bg-subtotal">
-                                        <td colspan="2" class="text-end text-uppercase">Total Triwulan <?= $tw ?></td>
-                                        <td class="text-end text-success fw-bold" id="total-tw-cell-<?= $tw ?>">Rp 0</td>
+                                </tbody>
+                                <tfoot>
+                                    <tr class="bg-grandtotal">
+                                        <th colspan="2" class="text-end">TOTAL ANGGARAN KAS (TAHUNAN)</th>
+                                        <th class="text-end text-primary fs-5" id="grand-total">Rp 0</th>
+                                        <th></th>
                                     </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                            <tfoot>
-                                <tr class="bg-grandtotal">
-                                    <th colspan="2" class="text-end">TOTAL ANGGARAN KAS (TAHUNAN)</th>
-                                    <th class="text-end text-primary fs-5" id="grand-total">Rp 0</th>
-                                    <th></th>
-                                </tr>
-                            </tfoot>
-                        </table>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer d-flex justify-content-end gap-2">
+                        <button type="button" class="btn btn-secondary" id="btnReset"><i class="fa-solid fa-rotate-left me-1"></i> Reset</button>
+                        <button type="submit" class="btn btn-primary" id="btnSimpan">
+                            <span class="spinner-border spinner-border-sm me-1 d-none" id="btnSpinner" role="status"></span>
+                            <i class="fa-solid fa-floppy-disk me-1" id="btnIcon"></i> Simpan Data
+                        </button>
                     </div>
                 </div>
-                <div class="card-footer d-flex justify-content-end gap-2">
-                    <button type="button" class="btn btn-secondary" id="btnReset"><i class="fa-solid fa-rotate-left me-1"></i> Reset</button>
-                    <button type="submit" class="btn btn-primary" id="btnSimpan">
-                        <span class="spinner-border spinner-border-sm me-1 d-none" id="btnSpinner" role="status"></span>
-                        <i class="fa-solid fa-floppy-disk me-1" id="btnIcon"></i> Simpan Data
-                    </button>
-                </div>
-            </div>
         </form>
 
     </div>
@@ -313,7 +320,7 @@
             try {
                 let formData = new FormData(form);
 
-                let response = await fetch("<?= site_url('anggaran-kas/store') ?>", {
+                let response = await fetch("<?= base_url('' . $wilayah . '/' . $groupuser . '/anggaran-kas/store') ?>", {
                     method: "POST",
                     headers: {
                         "X-Requested-With": "XMLHttpRequest"
@@ -351,12 +358,12 @@
                             // Buka Tab Baru untuk Mengunduh/Cetak PDF
                             window.open("<?= site_url('anggaran-kas/export-pdf/') ?>" + result.id, '_blank');
                         }
-
+                        location.reload();
                         // Reset Form setelah selesai
-                        form.reset();
-                        inputPagu.value = '0';
-                        inputsKas.forEach(input => input.value = '0');
-                        calculateTotals();
+                        // form.reset();
+                        // inputPagu.value = '0';
+                        // inputsKas.forEach(input => input.value = '0');
+                        // calculateTotals();
                     });
                 } else {
                     let errorMessage = result.message || 'Terjadi kesalahan sistem saat menyimpan data.';

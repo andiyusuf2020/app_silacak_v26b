@@ -25,6 +25,7 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use PhpOffice\PhpSpreadsheet\Calculation\MathTrig\Base;
 
 class AdminAdbangController extends BaseController
 {
@@ -167,26 +168,53 @@ class AdminAdbangController extends BaseController
         $this->ValidasiHash($req);
         if ($hal == 'apbdopd') {
             return view('KabtanggamusViews/Adminadbang/listtgldata', $data);
-
-            // $data['dataopdadmin'] = $this->realapbdmodel->getCapaianKinerjaDenganGeometri($tgldata);
-            // return view('KabtanggamusViews/Adminadbang/apbdopd', $data);
         } elseif ($hal == 'uploadapbd') {
-            // $data['status'] = 'apbd';
-            // $data['title'] = 'Upload Realisasi APBD dari Data excel SIPD';
-            // $data['validation'] = \Config\Services::validation();
             return view('KabtanggamusViews/Adminadbang/upload_form', $data);
+        } elseif ($hal == 'tambahdataangkasopd') {
+            $data['dataopdadmin'] = $this->realapbdmodel->getRekapSubSkpd(session()->get('tglaktif'));
+            // Hanya enkripsi 'id' dan 'name'
+            $dataopdapbds = array_map(function ($dataopdapbd) {
+                $dataopdapbd['angkas_token'] = CryptoUrl::encrypt([
+                    'hal'     => 'angkasopd',
+                    'kdUS'   => $dataopdapbd['KODE_UNIT_SKPD'],
+                    'kdSU'   => $dataopdapbd['NAMA_UNIT_SKPD'],
+                    'total_anggaran' => $dataopdapbd['total_anggaran'],
+                    'blndata' => $dataopdapbd['BULAN'],
+                    'tgldata' => session()->get('tglaktif')
+                ]);
+                return $dataopdapbd;
+            }, $data['dataopdadmin']);
+            $datauserx = json_encode($dataopdapbds);
+            $data['datajson'] = preg_replace('/"([^"]+)"\s*:/', '$1:', $datauserx);
+            // echo dd($dataopdapbds);
+            return view('KabtanggamusViews/Adminadbang/listopdangkas', $data);
+        } elseif ($hal == 'listopdangkas') {
+            $data['anggaran'] = $this->anggaranKasModel->findAll();
+            $dataangkasopds = array_map(function ($dataangkasopd) use ($data, $jadwalaktif) {
+                $dataangkasopd['hash'] = CryptoUrl::encrypt([
+                    'hal'     => 'angkasopd',
+                    'kdUS' => $dataangkasopd['perangkat_daerah_id'],
+                    'kdSU' => $dataangkasopd['sub_unit'],
+                    'total_anggaran' => $dataangkasopd['pagu_anggaran'],
+                    'blndata' => $jadwalaktif['bulan'],
+                    'tgldata' => session()->get('tglaktif')
+
+                ]);
+                $dataangkasopd['hashidhapusdata'] = CryptoUrl::encrypt([
+                    'idhapusangkas'   => $dataangkasopd['id'],
+                ]);
+                return $dataangkasopd;
+            }, $data['anggaran']);
+            $data['anggaran'] = $dataangkasopds;
+            // echo dd($dataangkasopds);
+            return view('KabtanggamusViews/Adminadbang/listopdangkas2', $data);
         } elseif ($hal == 'angkasopd') {
-            // $dataa['list_anggaran'] = $this->anggaranKasModel->findAll();
             $data['list_anggaran'] = $this->anggaranKasModel->findAll();
-            // $data['dataopdadmin'] = $this->realapbdmodel->getCapaianKinerjaDenganGeometri($data['tahun'], $data['tglaktif']);
-            // return view('KabtanggamusViews/Adminadbang/forminputangkasopd3lengkap', $data);
             return view('KabtanggamusViews/Adminadbang/forminputangkasopd3lengkap2', $data);
-            // return view('KabtanggamusViews/Adminadbang/forminputangkasopd2', $data);
         } elseif ($hal == 'datapbj') {
             $data['dataopdadmin'] = $this->realapbdmodel->getCapaianKinerjaDenganGeometri($data['tahun'], $data['tglaktif']);
             return view('KabtanggamusViews/Adminadbang/datapbj', $data);
         } elseif ($hal == 'jadwal') {
-
             $data['jadwalaktif'] = $this->jadwalmodel->jadwalaktifskrg();
             //tanggal data pada tabel apbd
             $data['tglapbd'] = $this->realapbdmodel->tgldata();
@@ -294,22 +322,15 @@ class AdminAdbangController extends BaseController
             $data['akun'] = $akun;
             $data['rekapData'] = $rekapData;
             // echo dd($data['rekapData']);
-            return view('KabtanggamusViews/Adminadbang/laporanlrfkopdperakun2', $data);
+            return view('KabtanggamusViews/Adminadbang/laporanlrfkopdperakun3', $data);
         }
-
         if ($hal == 'gantibulanaktif') {
-
             return view('KabtanggamusViews/Adminadbang/v_listjadwal', $data);
-            //echo dd($data['jadwal']);
         }
         if ($hal == 'editbulanaktif') {
-            // $idAwal = $data['jadwalaktif']['id'] ?? null;
-            // $tahun = $data['jadwalaktif']['tahun'] ?? null;
-            // $bulan = $data['jadwalaktif']['bulan'] ?? null;
             $idAwal = $jadwalaktif['id'] ?? null;
             $tahun = $jadwalaktif['tahun'] ?? null;
             $bulan = $jadwalaktif['bulan'] ?? null;
-            //   echo $idUbah;
             $nonaktifbln = [
                 'id' => $idAwal,
                 'tahun' => $tahun,
@@ -454,20 +475,25 @@ class AdminAdbangController extends BaseController
         }
 
         // Dekripsi & Validasi Token (Maksimal 15 menit)
-        $payload = CryptoUrl::decrypt($token, 900);
+        $payload = CryptoUrl::decrypt($token, 1800); // 1800 detik = 30 menit
 
         if (!$payload) {
             return redirect()->back()->with('error', 'Akses ditolak: Token tidak valid atau telah kadaluwarsa.');
         }
 
         // Ekstrak data hasil dekripsi (hanya ID dan Name)
-        $kdSU   = $payload['kdSU'];
-        $blndata = $payload['blndata'];
+        $kdUS   = $payload['kdUS'] ?? null;
+        $kdSU   = $payload['kdSU'] ?? null;
+        $blndata = $payload['blndata'] ?? null;
+        $tgldata = $payload['tgldata'] ?? null;
+        $hal = $payload['hal'] ?? null;
+        $total_anggaran = $payload['total_anggaran'] ?? null;
+
+        $idhapusangkas = $payload['idhapusangkas'] ?? null;
         $user = user();
         $groupModel = new GroupModel();
         $groupuser = $groupModel->getGroupsForUser($user->id);
         $jadwalaktif = $this->jadwalmodel->jadwalaktifskrg();
-
 
         $data =
             [
@@ -479,6 +505,7 @@ class AdminAdbangController extends BaseController
                 'datauser' => $user->sub_unit,
                 'tglaktif' => session()->get('tglaktif'),
                 'nama_opd' => $kdSU,
+                'tgldata' => $tgldata,
                 // 'rekap' => $this->realapbdmodel->getRekapLengkapPerTingkatAmanlengkapperOPDperProgram($blndata),
                 // 'rekap' => $this->realapbdmodel->getRekapLengkapPerTingkatAmanlengkap($blndata, $kdSU),
                 // 'rekap' => $this->realapbdmodel->getRekapLengkapPerTingkatAman($blndata, $kdSU),
@@ -491,15 +518,26 @@ class AdminAdbangController extends BaseController
                 'validation' => \Config\Services::validation()
 
             ];
-        // echo dd($blndata . '-' . $kdSU);
-        // $data['rekap'] = $this->realapbdmodel->getRekapLengkapPerTingkat($blndata, $kdSU);
-        // echo dd($data['rekap']);
-        // return view('KabtanggamusViews/listsubkeg7', $data);
-        //* return view('KabtanggamusViews/listsubkeg6', $data);
-        // return view('KabtanggamusViews/listsubkeg5', $data);
-        // return view('KabtanggamusViews/listsubkeg4', $data);
-        // return view('KabtanggamusViews/listsubkeg3', $data);
-        // return view('KabtanggamusViews/listsubkeg2', $data);
+        if ($hal == 'angkasopd') {
+            // echo dd($kdSU . '-' . $blndata . '-' . $tgldata);
+            $data['kdUS'] = $kdUS;
+            $data['sub_unit_skpd'] = $kdSU;
+            $data['bulan'] = $blndata;
+            $data['tanggal'] = $tgldata;
+            $data['total_anggaran'] = $total_anggaran;
+            // $data['dataopdadmin'] = $this->realapbdmodel->getRekapSubSkpd($tgldata);
+            $data['listdataangkasopd'] = $this->anggaranKasModel->where('perangkat_daerah_id', $kdUS)
+                ->where('tahun_anggaran', $data['tahunaktif'])->where('sub_unit', $kdSU)->first();
+            // ->findAll();
+            // echo dd($data['listdataangkasopd']);
+
+            return view('KabtanggamusViews/Adminadbang/forminputangkasopd3lengkap2', $data);
+        }
+        // echo dd($payload['idhapusangkas']);
+        if ($idhapusangkas) {
+            $this->anggaranKasModel->delete($idhapusangkas);
+            return redirect()->back();
+        }
         return view('KabtanggamusViews/listsubkegOpd', $data);
     }
     public function update_sro()
@@ -1018,43 +1056,6 @@ class AdminAdbangController extends BaseController
      *  CRUD DATA ANGGARAN KAS PERANGKAT DAERAH
      * ==========================================================================
      */
-    public function storeangkas_ajax_()
-    {
-        if (!$this->request->isAJAX()) {
-            return $this->response->setStatusCode(405)->setJSON(['status' => 'error', 'message' => 'Method not allowed']);
-        }
-
-        $items = $this->request->getPost('items');
-        $tahun = $this->request->getPost('tahun_anggaran');
-        $bulan = $this->request->getPost('bulan');
-
-        if (empty($items) || !is_array($items)) {
-            return $this->response->setJSON(['status' => 'error', 'message' => 'Data tidak boleh kosong.']);
-        }
-
-        $batchData = [];
-        foreach ($items as $item) {
-            $anggaran  = str_replace(['.', ','], ['', '.'], $item['anggaran'] ?? '0');
-            $realisasi = str_replace(['.', ','], ['', '.'], $item['realisasi'] ?? '0');
-
-            $batchData[] = [
-                'tahun_anggaran' => $tahun,
-                'bulan'          => $bulan,
-                'jenis'          => $item['jenis'] ?? 'Pendapatan',
-                'kode_rekening'  => $item['kode_rekening'] ?? '',
-                'uraian'         => $item['uraian'] ?? '',
-                'anggaran'       => floatval($anggaran),
-                'realisasi'      => floatval($realisasi),
-            ];
-        }
-
-        if ($this->realisasiPendapatanModel->insertBatch($batchData)) {
-            return $this->response->setJSON(['status' => 'success', 'message' => 'Data realisasi berhasil disimpan!']);
-        }
-
-        return $this->response->setJSON(['status' => 'error', 'message' => 'Gagal menyimpan data.']);
-    }
-
     public function storeangkas()
     {
         // 1. Validasi Input Server-Side
@@ -1145,6 +1146,7 @@ class AdminAdbangController extends BaseController
     }
     public function storeangkas_ajax()
     {
+
         //Jika eror penyimaan  cek file format.php diconfig pastikan ada skrip ini
         // TAMBAHKAN PROPERTI INI JIKA BELUM ADA DI CONFIG ANDA:
         // public int $jsonEncodeOptions = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES;
@@ -1164,8 +1166,9 @@ class AdminAdbangController extends BaseController
         try {
             // 1. Validasi Input Server-Side
             $rules = [
-                'perangkat_daerah_id' => 'required|numeric',
+                'perangkat_daerah_id' => 'required',
                 'tahun_anggaran'      => 'required|numeric|exact_length[4]',
+                'sub_unit'              => 'required',
                 'sub_kegiatan'        => 'required',
                 'pagu_anggaran'       => 'required',
             ];
@@ -1213,8 +1216,9 @@ class AdminAdbangController extends BaseController
             ];
 
             $dataToSave = [
-                'perangkat_daerah_id' => (int) $this->request->getPost('perangkat_daerah_id'),
+                'perangkat_daerah_id' => trim((string) $this->request->getPost('perangkat_daerah_id')),
                 'tahun_anggaran'      => (int) $this->request->getPost('tahun_anggaran'),
+                'sub_unit'            => trim((string) $this->request->getPost('sub_unit')),
                 'sub_kegiatan'        => trim((string) $this->request->getPost('sub_kegiatan')),
                 'pagu_anggaran'       => $paguAnggaran,
             ];
@@ -1242,8 +1246,13 @@ class AdminAdbangController extends BaseController
             }
 
             // 3. Simpan ke Database
-            $insertStatus = $this->anggaranKasModel->insert($dataToSave);
-
+            // echo dd($dataToSave);
+            $id_angkas = (int) $this->request->getPost('id');
+            if ($id_angkas == null) {
+                $insertStatus = $this->anggaranKasModel->simpan($dataToSave);
+            } else {
+                $insertStatus = $this->anggaranKasModel->updatedata($id_angkas, $dataToSave);
+            }
             if ($insertStatus === false) {
                 return $sendJson(500, [
                     'status'     => 'error',
@@ -1319,7 +1328,22 @@ class AdminAdbangController extends BaseController
         $dompdf->stream($filename, ["Attachment" => false]);
         exit();
     }
+    public function exportPdfLaporanAngkasAdmin()
+    {
+        // $model = new \App\Models\AnggaranKasModel();
+        $data['anggaran'] = $this->anggaranKasModel->findAll();
 
+        // $html = view('Kab/pdflaporanangkasopd', $data);
+        $html = view('KabtanggamusViews/Adminadbang/pdflaporanangkasopd', $data);
+
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'landscape');
+        $dompdf->render();
+
+        // Stream file PDF langsung ke browser
+        $dompdf->stream("laporan_anggaran_kas.pdf", ["Attachment" => false]);
+    }
     public function uploadapbd()
     {
         ini_set('max_execution_time', 0);
