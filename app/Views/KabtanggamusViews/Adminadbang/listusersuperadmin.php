@@ -238,6 +238,10 @@
         if (!($wilayah != null || $groupuser != null || $groupmenu != null)) {
             return redirect()->to(base_url('logout'));
         }
+        if ($wilayah == 'tanggamus' && $groupuser == 'Adminadbang') {
+            echo view('template/_part/menukabtanggamus/menuadminadbang');
+        }
+
         if (!($wilayah != '' || $groupuser != '' || $groupmenu != '')) {
             return redirect()->to(base_url('logout'));
         }

@@ -216,6 +216,9 @@
         if ($wilayah == 'tanggamus' && $groupuser == 'superadmin') {
             echo view('template/_part/menukabtanggamus/menusuperadmin');
         }
+        if ($wilayah == 'tanggamus' && $groupuser == 'Adminadbang') {
+            echo view('template/_part/menukabtanggamus/menuadminadbang');
+        }
         if (!($wilayah != '' || $groupuser != '' || $groupmenu != '')) {
             return redirect()->to(base_url('logout'));
         }
