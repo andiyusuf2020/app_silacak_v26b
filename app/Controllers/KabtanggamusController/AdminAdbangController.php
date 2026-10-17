@@ -555,6 +555,12 @@ class AdminAdbangController extends BaseController
             return redirect()->back()->with('success', 'Data realisasi SRO berhasil diperbarui.');
         }
     }
+    /**====================================================================
+     *     CRUD untuk rekap laporan capaian  SKPD
+
+     * ================================================
+     */
+
     public function getDataJson()
     {
         // $bulan = $this->request->getGet('bulan') ?? date('m');
@@ -563,33 +569,59 @@ class AdminAdbangController extends BaseController
         return $this->response->setJSON($dataRekap);
     }
 
-    public function exportXlsx()
+    public function exportXlsxRekapSKPD()
     {
-        $bulan = $this->request->getGet('bulan') ?? date('m');
+        $varbulan = $this->request->getGet('bulan') ?? date('m');
+
+        // Mapping nama bulan / triwulan
         $months = [
-            1 => 'Januari',
-            2 => 'Februari',
-            3 => 'Maret',
-            4 => 'April',
-            5 => 'Mei',
-            6 => 'Juni',
-            7 => 'Juli',
-            8 => 'Agustus',
-            9 => 'September',
+            1  => 'Januari',
+            2  => 'Februari',
+            3  => 'Maret',
+            4  => 'April',
+            5  => 'Mei',
+            6  => 'Juni',
+            7  => 'Juli',
+            8  => 'Agustus',
+            9  => 'September',
             10 => 'Oktober',
             11 => 'November',
-            12 => 'Desember'
+            12 => 'Desember',
+            13 => 'Triwulan I (Maret)',
+            14 => 'Triwulan II (Juni)',
+            15 => 'Triwulan III (September)',
+            16 => 'Triwulan IV (Desember)',
         ];
-        $data['bulan_nama'] = $months[(int)$bulan] ?? 'Bulan Tidak Valid';
 
-        $dataRekap = $this->realapbdmodel->getRekapPerSKPD($data['bulan_nama']);
+        $intBulan = (int)$varbulan;
+        $bulanNama = $months[$intBulan] ?? 'Bulan Tidak Valid';
+
+        // Penentuan kode bulan untuk filter query data (01-12)
+        if ($intBulan >= 13 && $intBulan <= 16) {
+            $mapTriwulanBulan = [
+                13 => '03',
+                14 => '06',
+                15 => '09',
+                16 => '12',
+            ];
+            $bulan = $mapTriwulanBulan[$intBulan];
+        } else {
+            $bulan = str_pad($varbulan, 2, '0', STR_PAD_LEFT);
+        }
+
+        // Validasi format bulan (harus 01-12)
+        if (!preg_match('/^(0[1-9]|1[0-2])$/', $bulan)) {
+            return redirect()->back()->with('error', 'Akses ditolak: Parameter bulan tidak valid.');
+        }
+
+        $dataRekap = $this->realapbdmodel->getRekapPerSKPD($bulanNama);
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
         // Judul Header Spreadsheet
-        $sheet->setCellValue('A1', 'REKAPITULASI CAPAIAN DAN EFISIENSI PER SKPD');
-        $sheet->setCellValue('A2', 'BULAN: ' . $data['bulan_nama']);
+        $sheet->setCellValue('A1', 'REKAPITULASI CAPAIAN KINERJA DAN EFISIENSI ANGGARAN PER SKPD');
+        $sheet->setCellValue('A2', 'SAMPAI BULAN: ' . strtoupper($bulanNama));
         $sheet->mergeCells('A1:J1');
         $sheet->mergeCells('A2:J2');
         $sheet->getStyle('A1:A2')->getFont()->setBold(true)->setSize(12);
@@ -601,11 +633,11 @@ class AdminAdbangController extends BaseController
             'NAMA SKPD',
             'ANGGARAN (Rp)',
             'REALISASI (Rp)',
-            'TOTAL SRO',
-            'SRO NOL',
-            'CAPAIAN REALISASI (%)',
-            'CAPAIAN SRO (%)',
-            'STATUS EFISIENSI'
+            'JUMLAH OUTPUT SUB-RINCIAN-OBJEK   BELANJA',
+            'JUMLAH OUTPUT SUB-RINCIAN-OBJEK  BELANJA  YANG TERLAKSANA',
+            'CAPAIAN  REALISASI ANGGARAN (%)',
+            'CAPAIAN  KINERJA  OUTPUT BELANJA',
+            'KATEGORI EFISIENSI'
         ];
 
         $col = 'A';
@@ -619,8 +651,11 @@ class AdminAdbangController extends BaseController
         $sheet->getStyle('A4:J4')->getFill()
             ->setFillType(Fill::FILL_SOLID)
             ->getStartColor()->setARGB('D9E1F2');
-        $sheet->getStyle('A4:J4')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-
+        // $sheet->getStyle('A4:J4')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER)->setWrapText(true);;
+        $sheet->getStyle('A4:J4')->getAlignment()
+            ->setHorizontal(Alignment::HORIZONTAL_CENTER)
+            ->setVertical(Alignment::VERTICAL_CENTER) // Opsional: agar di tengah secara vertikal juga
+            ->setWrapText(true);
         // Isi Data
         $rowNum = 5;
         $no = 1;
@@ -671,10 +706,108 @@ class AdminAdbangController extends BaseController
         $writer->save('php://output');
         exit;
     }
-
-    public function exportPdf()
+    public function exportPdfRekapSKPD()
     {
-        $bulan = $this->request->getGet('bulan') ?? date('m');
+        $varbulan = $this->request->getGet('bulan') ?? date('m');
+
+        // Mapping nama bulan / triwulan
+        $months = [
+            1  => 'Januari',
+            2  => 'Februari',
+            3  => 'Maret',
+            4  => 'April',
+            5  => 'Mei',
+            6  => 'Juni',
+            7  => 'Juli',
+            8  => 'Agustus',
+            9  => 'September',
+            10 => 'Oktober',
+            11 => 'November',
+            12 => 'Desember',
+            13 => 'Triwulan I (Maret)',
+            14 => 'Triwulan II (Juni)',
+            15 => 'Triwulan III (September)',
+            16 => 'Triwulan IV (Desember)',
+        ];
+
+        $intBulan = (int)$varbulan;
+        $bulanNama = $months[$intBulan] ?? 'Bulan Tidak Valid';
+
+        // Penentuan kode bulan untuk filter query data (01-12)
+        if ($intBulan >= 13 && $intBulan <= 16) {
+            $mapTriwulanBulan = [
+                13 => '03',
+                14 => '06',
+                15 => '09',
+                16 => '12',
+            ];
+            $bulan = $mapTriwulanBulan[$intBulan];
+        } else {
+            $bulan = str_pad($varbulan, 2, '0', STR_PAD_LEFT);
+        }
+
+        // Validasi format bulan (harus 01-12)
+        if (!preg_match('/^(0[1-9]|1[0-2])$/', $bulan)) {
+            return redirect()->back()->with('error', 'Akses ditolak: Parameter bulan tidak valid.');
+        }
+
+        $dataRekap = $this->realapbdmodel->getRekapPerSKPD($bulanNama);
+
+        // --- PROSES PEMBACAAN LOGO PEMDA KE BASE64 ---
+        // Pastikan file logo tersimpan di FCPATH (folder 'public/assets/images/logo-tanggamus.png' atau sesuaikan path-nya)
+        $pathLogo = FCPATH . 'cssportal/img_home/tanggamus.png';
+        $logoBase64 = '';
+
+        if (file_exists($pathLogo)) {
+            $type = pathinfo($pathLogo, PATHINFO_EXTENSION);
+            $dataImg = file_get_contents($pathLogo);
+            $logoBase64 = 'data:image/' . $type . ';base64,' . base64_encode($dataImg);
+        }
+
+        $data = [
+            'title'      => 'Rekapitulasi Per SKPD',
+            'bulan_nama' => $bulanNama,
+            'dataRekap'  => $dataRekap,
+            'logo'       => $logoBase64, // Dikirim ke view
+        ];
+
+        $html = view('KabtanggamusViews/Adminadbang/laporanlrfkopdpdf', $data);
+
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+
+        $dompdf = new Dompdf($options);
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'landscape');
+        $dompdf->render();
+
+        $dompdf->stream("Rekap_SKPD_Bulan_{$bulan}.pdf", ["Attachment" => true]);
+        exit;
+    }
+    public function exportPdfRekapSKPDX()
+    {
+        $varbulan = $this->request->getGet('bulan') ?? date('m');
+        if ($varbulan == '13') {
+            $bulan = '03'; // Jika bulan 13, set ke Maret (03)
+            $data['bulan_nama'] = 'Triwulan I (Maret)';
+        } else if ($varbulan == '14') {
+            $bulan = '06'; // Jika bulan 14, set ke Juni (06)
+            $data['bulan_nama'] = 'Triwulan II (Juni)';
+        } else if ($varbulan == '15') {
+            $bulan = '09'; // Jika bulan 15, set ke September (09)
+            $data['bulan_nama'] = 'Triwulan III (September)';
+        } else if ($varbulan == '16') {
+            $bulan = '12'; // Jika bulan 16, set ke Desember (12)
+            $data['bulan_nama'] = 'Triwulan IV (Desember)';
+        } else {
+            $bulan = str_pad($varbulan, 2, '0', STR_PAD_LEFT); // Pastikan bulan dalam format 2 digit
+        }
+        if (!preg_match('/^(0[1-9]|1[0-2])$/', $bulan)) { // Contoh regex untuk 01-12
+            // show_error('Akses ditolak: Parameter bulan tidak valid.', 403);
+            return redirect()->back()->with('error', 'Akses ditolak: Parameter bulan tidak valid.');
+        }
+
         $months = [
             1 => 'Januari',
             2 => 'Februari',
@@ -687,15 +820,29 @@ class AdminAdbangController extends BaseController
             9 => 'September',
             10 => 'Oktober',
             11 => 'November',
-            12 => 'Desember'
+            12 => 'Desember',
+            13 => 'Triwulan I (Maret)',
+            14 => 'Triwulan II (Juni)',
+            15 => 'Triwulan III (September)',
+            16 => 'Triwulan IV (Desember)'
         ];
         $data['bulan_nama'] = $months[(int)$bulan] ?? 'Bulan Tidak Valid';
         $dataRekap = $this->realapbdmodel->getRekapPerSKPD($data['bulan_nama']);
+        if ($varbulan == '13') {
+            $data['bulan_nama'] = 'Triwulan I (Maret)';
+        } else if ($varbulan == '14') {
+            $data['bulan_nama'] = 'Triwulan II (Juni)';
+        } else if ($varbulan == '15') {
+            $data['bulan_nama'] = 'Triwulan III (September)';
+        } else if ($varbulan == '16') {
+            $data['bulan_nama'] = 'Triwulan IV (Desember)';
+        }
         $data = [
             'title'     => 'Rekapitulasi Per SKPD',
-            'bulan'     => $bulan,
+            'bulan_nama' => $data['bulan_nama'],
             'dataRekap' => $dataRekap,
         ];
+
         // echo dd($data['bulan_nama']);
         $html = view('KabtanggamusViews/Adminadbang/laporanlrfkopdpdf', $data);
         $options = new Options();
@@ -784,7 +931,42 @@ class AdminAdbangController extends BaseController
      *  CRUD DATA REALISASI PENDAPATAN DAN BELANJA
      * ==========================================================================
      */
+    public function storependapatan()
+    {
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(405)->setJSON(['status' => 'error', 'message' => 'Method not allowed']);
+        }
 
+        $items = $this->request->getPost('items');
+        $tahun = $this->request->getPost('tahun_anggaran');
+        $bulan = $this->request->getPost('bulan');
+
+        if (empty($items) || !is_array($items)) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Data tidak boleh kosong.']);
+        }
+
+        $batchData = [];
+        foreach ($items as $item) {
+            $anggaran  = str_replace(['.', ','], ['', '.'], $item['anggaran'] ?? '0');
+            $realisasi = str_replace(['.', ','], ['', '.'], $item['realisasi'] ?? '0');
+
+            $batchData[] = [
+                'tahun_anggaran' => $tahun,
+                'bulan'          => $bulan,
+                'jenis'          => $item['jenis'] ?? 'Pendapatan',
+                'kode_rekening'  => $item['kode_rekening'] ?? '',
+                'uraian'         => $item['uraian'] ?? '',
+                'anggaran'       => floatval($anggaran),
+                'realisasi'      => floatval($realisasi),
+            ];
+        }
+
+        if ($this->realisasiPendapatanModel->insertBatch($batchData)) {
+            return $this->response->setJSON(['status' => 'success', 'message' => 'Data realisasi berhasil disimpan!']);
+        }
+
+        return $this->response->setJSON(['status' => 'error', 'message' => 'Gagal menyimpan data.']);
+    }
     // 2. Endpoint AJAX - Ambil Detail Single Data untuk Modal Edit
     public function getDetail($id = null)
     {

@@ -61,7 +61,7 @@ $routes->group('tanggamus/superadmin', ['filter' => 'role:superadmin'], function
     $routes->get('exportExcelLrfkOpd', 'KabtanggamusController\AdminAdbangController::exportExcelLrfkOpd');
     $routes->get('realisasi/get-tren-bulanan', 'KabtanggamusController\AdminAdbangController::getTrenBulanan');
     $routes->get('realisasi/get-summary', 'KabtanggamusController\AdminAdbangController::getSummaryByPeriode'); // Endpoint AJAX Filter
-    $routes->post('realisasi/store', 'KabtanggamusController\AdminAdbangController::storeangkas_ajax'); ///====for user adminadbang
+    $routes->post('realisasi/store', 'KabtanggamusController\AdminAdbangController::storependapatan'); ///====for user adminadbang
     $routes->get('realisasi/get-detail/(:num)', 'KabtanggamusController\AdminAdbangController::getDetail/$1');
     $routes->post('realisasi/update/(:num)', 'KabtanggamusController\AdminAdbangController::update/$1');
     $routes->post('realisasi/delete/(:num)', 'KabtanggamusController\AdminAdbangController::delete/$1');
@@ -79,6 +79,8 @@ $routes->group('tanggamus/superadmin', ['filter' => 'role:superadmin'], function
     $routes->post('anggaran-kas/store', 'KabtanggamusController\AdminAdbangController::storeangkas_ajax');
     $routes->get('anggaran-kas/export-pdf', 'KabtanggamusController\AdminAdbangController::exportPdfAnggaranKas');
     $routes->get('anggaran-kas/export-pdf-admin', 'KabtanggamusController\AdminAdbangController::exportPdfLaporanAngkasAdmin');
+    $routes->get('rekap/exportXlsx', 'KabtanggamusController\AdminAdbangController::exportXlsxRekapSKPD');
+    $routes->get('rekap/exportPdf', 'KabtanggamusController\AdminAdbangController::exportPdfRekapSKPD');
 });
 
 $routes->group('tanggamus/Adminadbang', ['filter' => 'role:Adminadbang'], function ($routes) {
@@ -90,7 +92,7 @@ $routes->group('tanggamus/Adminadbang', ['filter' => 'role:Adminadbang'], functi
     $routes->get('exportExcelLrfkOpd', 'KabtanggamusController\AdminAdbangController::exportExcelLrfkOpd');
     $routes->get('realisasi/get-tren-bulanan', 'KabtanggamusController\AdminAdbangController::getTrenBulanan');
     $routes->get('realisasi/get-summary', 'KabtanggamusController\AdminAdbangController::getSummaryByPeriode'); // Endpoint AJAX Filter
-    $routes->post('realisasi/store', 'KabtanggamusController\AdminAdbangController::storeangkas_ajax'); ///====for user adminadbang
+    $routes->post('realisasi/store', 'KabtanggamusController\AdminAdbangController::storependapatan'); ///====for user adminadbang
     $routes->get('realisasi/get-detail/(:num)', 'KabtanggamusController\AdminAdbangController::getDetail/$1');
     $routes->post('realisasi/update/(:num)', 'KabtanggamusController\AdminAdbangController::update/$1');
     $routes->post('realisasi/delete/(:num)', 'KabtanggamusController\AdminAdbangController::delete/$1');
@@ -108,6 +110,8 @@ $routes->group('tanggamus/Adminadbang', ['filter' => 'role:Adminadbang'], functi
     $routes->post('anggaran-kas/store', 'KabtanggamusController\AdminAdbangController::storeangkas_ajax');
     $routes->get('anggaran-kas/export-pdf', 'KabtanggamusController\AdminAdbangController::exportPdfAnggaranKas');
     $routes->get('anggaran-kas/export-pdf-admin', 'KabtanggamusController\AdminAdbangController::exportPdfLaporanAngkasAdmin');
+    $routes->get('rekap/exportXlsx', 'KabtanggamusController\AdminAdbangController::exportXlsxRekapSKPD');
+    $routes->get('rekap/exportPdf', 'KabtanggamusController\AdminAdbangController::exportPdfRekapSKPD');
 });
 
 // $routes->get('realisasi', 'RealisasiController::index');
@@ -117,8 +121,8 @@ $routes->get('realisasi/exportExcel', 'export-pdf-pendapatan\AdminAdbangControll
 // $routes->post('anggaran-kas/store', 'KabtanggamusController\AdminAdbangController::storeangkas_ajax');
 
 // $routes->get('rekap', [RekapController::class, 'index']);
-$routes->get('rekap/exportXlsx', 'KabtanggamusController\AdminAdbangController::exportXlsx');
-$routes->get('rekap/exportPdf', 'KabtanggamusController\AdminAdbangController::exportPdf');
+// $routes->get('rekap/exportXlsx', 'KabtanggamusController\AdminAdbangController::exportXlsxRekapSKPD');
+// $routes->get('rekap/exportPdf', 'KabtanggamusController\AdminAdbangController::exportPdfRekapSKPD');
 $routes->get('rekap/getDataJson', 'KabtanggamusController\AdminAdbangController::getDataJson');
 $routes->post('tanggamus/realisasi/store', 'KabtanggamusController\AdminAdbangController::storeangkas_ajax'); ///====for user adminadbang
 

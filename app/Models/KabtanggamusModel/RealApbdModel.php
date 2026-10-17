@@ -137,7 +137,7 @@ class RealApbdModel extends Model
                 'capaian_realisasi' => $capaianReal,
                 'capaian_sro'       => $capaianSro,
                 'efisiensi'         => $efisiensi,
-                'status_efisiensi'  => ($efisiensi < 0) ? 'Inefisien' : 'Efisien'
+                'status_efisiensi'  => ($capaianSro == 0) ? 'No Data' : (($efisiensi < 0) ? 'Inefisien' : 'Efisien')
             ];
         }
 

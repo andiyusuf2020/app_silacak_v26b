@@ -55,28 +55,47 @@
             color: #16a34a;
             font-weight: bold;
         }
+
+        .logo-container {
+            width: 80px;
+            text-align: center;
+        }
+
+        .logo-container img {
+            width: 70px;
+            height: auto;
+        }
     </style>
 </head>
 
 <body>
-
-    <h2>REKAPITULASI CAPAIAN DAN EFISIENSI PER SKPD</h2>
-    <h4>BULAN: <?= esc($bulan) ?></h4>
-    <p style="font-style: italic; font-size: 9px;">*Data diurutkan berdasarkan Capaian SRO Terendah</p>
-
     <table>
         <thead>
             <tr>
-                <th width="3%">No</th>
-                <th width="10%">Kode</th>
-                <th>Nama SKPD</th>
-                <th width="12%">Anggaran</th>
-                <th width="12%">Realisasi</th>
-                <th width="5%">SRO</th>
-                <th width="6%">SRO Nol</th>
-                <th width="10%">Capaian Realisasi</th>
-                <th width="10%">Capaian SRO</th>
-                <th width="8%">Status</th>
+                <th class="logo-container" colspan="2">
+                    <?php if (!empty($logo)): ?>
+                        <img src="<?= $logo; ?>" alt="Logo Pemda">
+                    <?php endif; ?>
+                </th>
+                <th class="header-text" colspan="8">
+                    <h2>PEMERINTAH <?= strtoupper(session()->get('namawilayah')) ?></h2>
+                    <h2>BAGIAN ADMINISTRASI PEMBANGUNAN SEKRETARIAT DAERAH <?= strtoupper(session()->get('namawilayah')) ?></h2>
+                    <h2>REKAPITULASI CAPAIAN KINERJA DAN EFISIENSI ANGGARAN PER SKPD</h2>
+                    <h4>SAMPAI BULAN: <?= strtoupper($bulan_nama) ?></h4>
+                    <!-- <p style="font-style: italic; font-size: 9px;">*Data diurutkan berdasarkan Capaian Kinerja Output Belanja Tertinggi</p> -->
+                </th>
+            </tr>
+            <tr>
+                <th width="3%">NO</th>
+                <th width="10%">KODE</th>
+                <th>NAMA SKPD</th>
+                <th width="12%">ANGGARAN (Rp)</th>
+                <th width="12%">REALISASI (Rp)</th>
+                <th width="5%">JUMLAH OUTPUT<br> SUB-RINCIAN-OBJEK<br> BELANJA</th>
+                <th width="6%">JUMLAH OUTPUT <br>SUB-RINCIAN-OBJEK <br>BELANJA YANG <br>TERLAKSANA</th>
+                <th width="10%">CAPAIAN <br>REALISASI <br>ANGGARAN (%)</th>
+                <th width="10%">CAPAIAN <br>KINERJA <br>OUTPUT BELANJA</th>
+                <th width="8%">KATEGORI EFISIENSI</th>
             </tr>
         </thead>
         <tbody>
@@ -105,6 +124,7 @@
             <?php endif; ?>
         </tbody>
     </table>
+    <p style="font-style: italic; font-size: 9px;">*Data diurutkan berdasarkan Capaian Kinerja Output Belanja Tertinggi</p>
 
 </body>
 

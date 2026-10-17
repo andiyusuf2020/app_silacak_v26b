@@ -128,8 +128,9 @@
                     formatter: function(cell) {
                         const rowData = cell.getRow().getData();
                         const token = rowData.angkas_token || '';
-                        if (groupUser === 'superadmin') {
-                            return `<a href="superadmin/dataperopd?token=${token}" class="btn btn-sm btn-primary">Detail</a>`;
+                        if (groupUser === 'superadmin' ||
+                            groupUser === 'Adminadbang') {
+                            return `<a href="${groupUser}/dataperopd?token=${token}" class="btn btn-sm btn-primary">Detail</a>`;
                         } else {
                             return `<span class="text-muted">Tidak ada aksi</span>`;
                         }

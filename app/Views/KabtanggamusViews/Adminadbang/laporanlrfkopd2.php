@@ -12,6 +12,18 @@
                     <div class="input-group input-group-sm style-filter">
                         <span class="input-group-text bg-white"><i class="bi bi-calendar3"></i></span>
                         <select name="bulan" id="selectBulan" class="form-select">
+                            <option value="13">
+                                TRIWULAN 1
+                            </option>
+                            <option value="14">
+                                TRIWULAN 2
+                            </option>
+                            <option value="15">
+                                TRIWULAN 3
+                            </option>
+                            <option value="16">
+                                TRIWULAN 4
+                            </option>
                             <?php for ($i = 1; $i <= 12; $i++): ?>
                                 <?php $b = str_pad($i, 2, '0', STR_PAD_LEFT); ?>
                                 <option value="<?= $b ?>" <?= $b == $bulan ? 'selected' : '' ?>>
@@ -115,7 +127,13 @@
 <!-- CDN JS Tabulator & Chart.js -->
 <script src="https://unpkg.com/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+<script>
+    const CONFIG = {
+        getDataJson: "<?= base_url('' . $wilayah . '/' . $groupuser . '/rekap/getDataJson') ?>",
+        exportXlsx: "<?= base_url('' . $wilayah . '/' . $groupuser . '/rekap/exportXlsx') ?>",
+        exportPdf: "<?= base_url('' . $wilayah . '/' . $groupuser . '/rekap/exportPdf') ?>"
+    };
+</script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         let rawData = <?= json_encode($dataRekap) ?>;
@@ -166,38 +184,40 @@
                     formatter: cell => "Rp " + new Intl.NumberFormat("id-ID").format(cell.getValue())
                 },
                 {
-                    title: "TOTAL SRO",
+                    title: "JUMLAH<br>OUTPUT<br>SUB-RINCIAN-OBJEK <br> BELANJA",
                     field: "sro",
                     hozAlign: "center",
                     headerHozAlign: "center",
-                    width: 110
+                    // width: 110
                 },
                 {
-                    title: "SRO NOL",
+                    title: "JUMLAH<br>OUTPUT<br>SUB-RINCIAN-OBJEK <br> BELANJA<br> YANG TERLAKSANA",
                     field: "sro_nol",
                     hozAlign: "center",
                     headerHozAlign: "center",
-                    width: 100
+                    // width: 100
                 },
                 {
-                    title: "CAPAIAN REALISASI",
+                    title: "CAPAIAN <br>REALISASI <br>ANGGARAN (%)",
                     field: "capaian_realisasi",
                     hozAlign: "center",
                     headerHozAlign: "center",
+                    width: 100,
                     formatter: cell => cell.getValue().toFixed(2) + "%"
                 },
                 {
-                    title: "CAPAIAN SRO",
+                    title: "CAPAIAN <br>KINERJA<br> OUTPUT BELANJA",
                     field: "capaian_sro",
                     hozAlign: "center",
                     headerHozAlign: "center",
+                    width: 100,
                     formatter: function(cell) {
                         let val = cell.getValue().toFixed(2);
                         return `<span class="badge bg-warning text-dark font-monospace">${val}%</span>`;
                     }
                 },
                 {
-                    title: "STATUS",
+                    title: "KATEGORI<br> EFISIENSI",
                     field: "status_efisiensi",
                     hozAlign: "center",
                     headerHozAlign: "center",
@@ -287,15 +307,29 @@
                 }
             });
         }
-
         // Render statistik awal
         updateDashboardMetrics(rawData);
 
         // 4. AJAX Update saat Mengubah Filter Bulan
         document.getElementById("selectBulan").addEventListener("change", function() {
-            let bulan = this.value;
-            fetch(`<?= base_url('rekap/getDataJson') ?>?bulan=${bulan}`)
-                .then(response => response.json())
+            // let bulan = this.value;
+            // fetch(`<?= base_url('rekap/getDataJson') ?>?bulan=${bulan}`)
+            //     .then(response => response.json())
+            //     .then(resData => {
+            //         table.setData(resData);
+            //         updateDashboardMetrics(resData);
+            //     })
+            //     .catch(err => console.error("Gagal memperbarui data:", err));
+            // Amankan parameter dengan encodeURIComponent untuk mencegah manipulasi URL
+            let bulan = encodeURIComponent(this.value);
+
+            fetch(`${CONFIG.getDataJson}?bulan=${bulan}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Gagal terhubung ke server (HTTP " + response.status + ")");
+                    }
+                    return response.json();
+                })
                 .then(resData => {
                     table.setData(resData);
                     updateDashboardMetrics(resData);
@@ -304,14 +338,24 @@
         });
 
         // 5. Ekspor XLSX & PDF
+        // document.getElementById("btnExportXlsx").addEventListener("click", function() {
+        //     let bulan = document.getElementById("selectBulan").value;
+        //     window.location.href = `<?= base_url('rekap/exportXlsx') ?>?bulan=${bulan}`;
+        // });
+
+        // document.getElementById("btnExportPdf").addEventListener("click", function() {
+        //     let bulan = document.getElementById("selectBulan").value;
+        //     window.open(`<?= base_url('rekap/exportPdf') ?>?bulan=${bulan}`, "_blank");
+        // });
+        // 5. Ekspor XLSX & PDF
         document.getElementById("btnExportXlsx").addEventListener("click", function() {
-            let bulan = document.getElementById("selectBulan").value;
-            window.location.href = `<?= base_url('rekap/exportXlsx') ?>?bulan=${bulan}`;
+            let bulan = encodeURIComponent(document.getElementById("selectBulan").value);
+            window.location.href = `${CONFIG.exportXlsx}?bulan=${bulan}`;
         });
 
         document.getElementById("btnExportPdf").addEventListener("click", function() {
-            let bulan = document.getElementById("selectBulan").value;
-            window.open(`<?= base_url('rekap/exportPdf') ?>?bulan=${bulan}`, "_blank");
+            let bulan = encodeURIComponent(document.getElementById("selectBulan").value);
+            window.open(`${CONFIG.exportPdf}?bulan=${bulan}`, "_blank");
         });
     });
 </script>

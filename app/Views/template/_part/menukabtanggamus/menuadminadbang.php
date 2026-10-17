@@ -57,7 +57,7 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon bi bi-box-seam-fill"></i>
                         <p>
-                            Data Master
+                            Data Setting App
                             <i class="nav-arrow bi bi-chevron-right"></i>
                         </p>
                     </a>
@@ -92,7 +92,7 @@
                                 href="<?= hash_url(' ' . $wilayah . '/' . $groupuser, ['hal' => 'apbdopd']);
                                         ?>" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
-                                <p>Laporan Capaian Kinerja <br> Anggaran SKPD</p>
+                                <p>Data Capaian Kinerja <br> Anggaran SKPD</p>
                             </a>
                         </li>
                     </ul>
@@ -101,7 +101,7 @@
                             <a href="<?= hash_url(' ' . $wilayah . '/' . $groupuser, ['hal' => 'pendapatan']);
                                         ?>" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
-                                <p>Lap.Total Pendapatan <br>dan Belanja perBulan <br> APBD</p>
+                                <p>Data Total Pendapatan <br>dan Belanja APBD perBulan <br> </p>
                             </a>
                         </li>
                     </ul>
@@ -139,7 +139,7 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon bi bi-clipboard-fill"></i>
                         <p>
-                            LAPORAN RFK OPD
+                            REKAPITULASI CAPAIAN <br> KINERJA SKPD <br> & APBD</b>
                             <i class="nav-arrow bi bi-chevron-right"></i>
                         </p>
                     </a>
@@ -148,7 +148,7 @@
                                 href="<?= hash_url(' ' . $wilayah . '/' . $groupuser, ['hal' => 'laporanrfkopd']);
                                         ?>" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
-                                <p>LRFK per<br>Perangkat Daerah</p>
+                                <p>Capaian Kinerja <br>SKPD</p>
                             </a>
                         </li>
                     </ul>
@@ -157,7 +157,7 @@
                                 href="<?= hash_url(' ' . $wilayah . '/' . $groupuser, ['hal' => 'laporanrfkopdperjenis']);
                                         ?>" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
-                                <p>LRFK per<br>Program perOPD</p>
+                                <p>Anggaran & Realisasi<br>per-Akun APBD</p>
                             </a>
                         </li>
                     </ul>
