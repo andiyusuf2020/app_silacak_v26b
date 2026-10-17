@@ -51,10 +51,10 @@ class AdminAdbangController extends BaseController
         $this->jadwalmodel = new JadwalModel();
         $this->tausermodel = new TaUserModel();
         $this->anggaranKasModel = new AnggaranKasModel();
-        if (session()->get('wilayah') == 'tanggamus') {
+        if (session()->get('wilayah') == 'tanggamus' || session()->get('wilayah') == 'provinsi') {
             $this->realapbdmodel = new sipdtanggamusmodel();
         }
-        if (session()->get('wilayah') == 'lampungutara') {
+        if (session()->get('wilayah') == 'lampungutara' || session()->get('wilayah') == 'provinsi') {
             $this->realapbdmodel = new sipdlampuramodel();
         }
 
@@ -85,7 +85,11 @@ class AdminAdbangController extends BaseController
         // $data['jadwalaktif'] = $this->jadwalmodel->jadwalaktifskrg();
         // echo dd($user);
         if (session()->get('wilayah') != $user->wilayah) {
-            echo dd('salah');
+            $data = [
+                'title1' => 'Anda tidak memiliki hak akses untuk halaman ini',
+                // 'title2' => 
+            ];
+            return view('hakakses', $data);
         }
 
         $data =

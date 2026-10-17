@@ -202,7 +202,8 @@
         <div class="row justify-content-md-center">
             <div class="col-md-6 col-sm-12 text-center">
                 <div role="alert">
-                    <a class="alert-link" href="<?php echo base_url(); ?>" <img class="img-fluid" style="max-height: 175px;" src="<?php echo base_url('admin/dist'); ?>/img/logositapis.png" alt>
+                    <a class="alert-link" href="<?= hash_url('/', ['wilayah' => 'provinsi']) ?>">
+                        <img class="img-fluid" style="max-height: 175px;" src="<?php echo base_url('admin/dist'); ?>/img/logositapis.png" alt>
                         <h3 class="header-title">
                             <font color="yellow">
                                 <p> SILAKAN PILIH WILAYAH ANDA

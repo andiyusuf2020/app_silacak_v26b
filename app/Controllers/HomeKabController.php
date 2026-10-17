@@ -15,7 +15,11 @@ class HomeKabController extends BaseController
             return view('index');
         }
         $this->ValidasiHash($req);
-
+        if ($wilayah == 'provinsi') {
+            session()->set('wilayah', 'provinsi');
+            session()->set('namawilayah', 'Provinsi Lampung');
+            return redirect()->to(base_url('tanggamus'));
+        }
         if ($wilayah == 'lambar') {
             return view('maintenis/soon');
             // session()->set('wilayah', 'lambar');
