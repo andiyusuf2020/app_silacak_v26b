@@ -5,7 +5,8 @@ namespace App\Controllers\KabtanggamusController;
 use App\Controllers\Sipkabkota\SuperadminController;
 
 use \Myth\Auth\Authorization\GroupModel;
-use App\Models\KabtanggamusModel\RealApbdModel;
+use App\Models\KabtanggamusModel\RealApbdModel as sipdtanggamusmodel;
+use App\Models\KablampuraModel\RealApbdModel as sipdlampuramodel;
 use App\Models\KabtanggamusModel\JadwalModel;
 use App\Models\KabtanggamusModel\AnggaranKasModel;
 use App\Models\KabtanggamusModel\RealisasiPendapatanModel;
@@ -50,7 +51,13 @@ class AdminAdbangController extends BaseController
         $this->jadwalmodel = new JadwalModel();
         $this->tausermodel = new TaUserModel();
         $this->anggaranKasModel = new AnggaranKasModel();
-        $this->realapbdmodel = new RealApbdModel();
+        if (session()->get('wilayah') == 'tanggamus') {
+            $this->realapbdmodel = new sipdtanggamusmodel();
+        }
+        if (session()->get('wilayah') == 'lampungutara') {
+            $this->realapbdmodel = new sipdlampuramodel();
+        }
+
         $this->tglapbdmodel = new TglApbdModel();
         $this->excelmodel = new ExcelApbdModel();
         $this->realisasiPendapatanModel = new RealisasiPendapatanModel();
@@ -77,6 +84,10 @@ class AdminAdbangController extends BaseController
         $jadwalaktif = $this->jadwalmodel->jadwalaktifskrg();
         // $data['jadwalaktif'] = $this->jadwalmodel->jadwalaktifskrg();
         // echo dd($user);
+        if (session()->get('wilayah') != $user->wilayah) {
+            echo dd('salah');
+        }
+
         $data =
             [
                 'wilayah' => session()->get('wilayah'),

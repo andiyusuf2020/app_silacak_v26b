@@ -38,10 +38,10 @@ class HomeKabController extends BaseController
             // session()->set('namawilayah', 'Kabupaten Lampung Tengah');
             // return redirect()->to(base_url('lampungtengah'));
         } elseif ($wilayah === 'lampungutara') {
-            return view('maintenis/soon');
-            // session()->set('wilayah', 'lampungutara');
-            // session()->set('namawilayah', 'Kabupaten Lampung Utara');
-            // return redirect()->to(base_url('lampungutara'));
+            // return view('maintenis/soon');
+            session()->set('wilayah', 'lampungutara');
+            session()->set('namawilayah', 'Kabupaten Lampung Utara');
+            return redirect()->to(base_url('lampungutara'));
         } elseif ($wilayah === 'mesuji') {
             return view('maintenis/soon');
             // session()->set('wilayah', 'mesuji');
