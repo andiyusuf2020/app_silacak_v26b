@@ -110,7 +110,7 @@
                                 <th class="text-end" style="width: 15%;">Pagu Anggaran(Rp)</th>
                                 <th class="text-end" style="width: 15%;">Realisasi Anggaran(Rp)</th>
                                 <th class="text-center" style="width: 10%;">Capaian Realisasi Anggaran (%)</th>
-                                <th class="text-center" style="width: 10%;">Capaian Kinerja SRO </th>
+                                <th class="text-center" style="width: 10%;">Capaian Kinerja Output</th>
                                 <th class="text-center" style="width: 7%;">Nilai Efisiensi </th>
                                 <th class="text-center" style="width: 8%;">Status / Aksi</th>
                             </tr>

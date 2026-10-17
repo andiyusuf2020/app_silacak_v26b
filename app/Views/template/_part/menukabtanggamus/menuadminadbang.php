@@ -83,25 +83,25 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon bi bi-clipboard-fill"></i>
                         <p>
-                            DATA APBD
+                            DATA CAPAIAN KINERJA <br> & APBD
                             <i class="nav-arrow bi bi-chevron-right"></i>
                         </p>
                     </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item"> <a
+                                href="<?= hash_url(' ' . $wilayah . '/' . $groupuser, ['hal' => 'apbdopd']);
+                                        ?>" class="nav-link">
+                                <i class="nav-icon bi bi-circle"></i>
+                                <p>Laporan Capaian Kinerja <br> Anggaran SKPD</p>
+                            </a>
+                        </li>
+                    </ul>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a href="<?= hash_url(' ' . $wilayah . '/' . $groupuser, ['hal' => 'pendapatan']);
                                         ?>" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
                                 <p>Lap.Total Pendapatan <br>dan Belanja perBulan <br> APBD</p>
-                            </a>
-                        </li>
-                    </ul>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item"> <a
-                                href="<?= hash_url(' ' . $wilayah . '/' . $groupuser, ['hal' => 'apbdopd']);
-                                        ?>" class="nav-link">
-                                <i class="nav-icon bi bi-circle"></i>
-                                <p>Laporan RFK <br> Perangkat Daerah</p>
                             </a>
                         </li>
                     </ul>

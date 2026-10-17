@@ -86,7 +86,7 @@
                                 borderWidth: 1
                             },
                             {
-                                label: 'Capaian Sub Rincian Objek (%)',
+                                label: 'Capaia Rincian Output Belanja (%)',
                                 data: CapaianSRO,
                                 backgroundColor: 'rgba(25, 135, 84, 0.7)',
                                 borderColor: 'rgba(25, 135, 84, 1)',
@@ -199,9 +199,10 @@
                     headerSort: false
                 },
                 {
-                    title: 'Aktivitas Belanja (',
+                    title: 'Belanja <br>Terealisasi <br>/Jmlh Belanja (',
                     field: 'jumlah_item_sro_terealisasi',
                     hozAlign: 'center',
+
                     minWidth: 130,
                     formatter: function(cell) {
                         const row = cell.getRow().getData();
@@ -220,7 +221,7 @@
                         const rowData = cell.getRow().getData();
                         const token = rowData.update_token || '';
                         return `
-                    <a href="superadmin/dataperopd?token=${rowData.update_token}" class="btn btn-sm btn-primary">detail</a>
+                    <a href="<?= $groupuser ?>/dataperopd?token=${rowData.update_token}" class="btn btn-sm btn-primary">detail</a>
                 `;
                     }
                 }
