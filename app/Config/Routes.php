@@ -42,7 +42,7 @@ $routes->get('lampungutara', 'KabtanggamusController\HomeController::dashboard')
 //     $routes->get('profile', 'Silacak\HomeRfk::profile');
 //     $routes->post('simpanprofile', 'Silacak\HomeRfk::simpanprofile');
 // });
-$routes->group('lampungutara/superadmin', ['filter' => 'role:superadmin'], function ($routes) {
+$routes->group('lampungutara/Adminadbang', ['filter' => 'role:Adminadbang'], function ($routes) {
     $routes->get('', 'KabtanggamusController\AdminAdbangController::index');
     $routes->get('dataperopd', 'KabtanggamusController\AdminAdbangController::dataperopd');
     $routes->post('rekap/update_sro', 'KabtanggamusController\AdminAdbangController::update_sro');
