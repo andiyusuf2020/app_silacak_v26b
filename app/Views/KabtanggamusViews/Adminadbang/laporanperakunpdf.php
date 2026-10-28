@@ -172,7 +172,7 @@
                 <td><strong>Klasifikasi</strong></td>
                 <td>: <?= esc(strtoupper($akun ?? 'nama_akun')) ?></td>
                 <td><strong>Status Dokumen</strong></td>
-                <td>: Resmi / Komputerisasi (SIPKD)</td>
+                <td>: Resmi / Komputerisasi (SiTAPIS-KAB)</td>
             </tr>
         </table>
     </div>
@@ -239,7 +239,7 @@
     </table>
 
     <div class="footer-note">
-        Dokumen ini dicetak otomatis dari sistem pengelolaan keuangan daerah.
+        Dokumen ini dicetak otomatis dari sistem pelaporan SiTAPIS-KAB Kabupaten Tanggamus.
     </div>
 
 </body>

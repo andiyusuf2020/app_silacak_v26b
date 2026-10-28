@@ -203,7 +203,7 @@
             <!-- contenrow -->
             <ul class="d-flex justify-content-center flex-wrap">
                 <li>
-                    <a class="normal" style="cursor: pointer;" href="<?php echo base_url($wilayah . '/useropdlrfk'); ?>">
+                    <a class="normal" style="cursor: pointer;" href="<?php echo base_url($wilayah . '/skpdkab'); ?>">
                         <img src="<?php echo base_url('cssportal/img_home'); ?>/sitapis-kab-2.png" alt>
                         <div class="caption"><strong>LAPORAN KEUANGAN CAPAIAN KINERJA(LKCK) </strong> </div>
                     </a>

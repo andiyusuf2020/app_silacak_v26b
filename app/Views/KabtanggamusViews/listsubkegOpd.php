@@ -45,26 +45,20 @@
                             </button> -->
 
                             <!-- Tombol Export XLS Data Tabel -->
-                            <div class="btn-group me-1">
-                                <button type="button" class="btn btn-success shadow-sm" onclick="exportTableToExcel('rekapTable', 'Rekap_Anggaran_SRO')">
-                                    <i class="fas fa-file-excel me-1"></i> Export XLS (Tabel)
-                                </button>
-                                <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <span class="visually-hidden">Toggle Dropdown</span>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    <li>
-                                        <a class="dropdown-menu-item dropdown-item" href="<?= hash_url('' . $wilayah . '/' . $groupuser . '/exportExcelLrfkOpd', ['kdSU' => $nama_opd, 'blndata' => $blndata]) ?>">
-                                            <i class="fas fa-download me-2 text-success"></i> Export All Data
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
+                            <!-- <div class="btn-group me-1"> -->
+                            <button type="button" class="btn btn-outline-success me-1">
+                                <a href="<?= hash_url(
+                                                '' . $wilayah . '/' . $groupuser . '/exportExcelLrfkOpd',
+                                                ['kdSU' => $nama_opd, 'blndata' => $blndata]
+                                            ) ?>" class="nav-link">Export All Data (xlsx)
+                                </a>
+                            </button>
+                            <!-- </div> -->
 
                             <!-- Tombol Cetak PDF (Hanya Tabel) -->
-                            <button type="button" class="btn btn-danger shadow-sm" onclick="printTableOnly()">
+                            <!-- <button type="button" class="btn btn-danger shadow-sm" onclick="printTableOnly()">
                                 <i class="fas fa-print me-1"></i> Cetak PDF (Tabel Data)
-                            </button>
+                            </button> -->
                         </div>
 
                     </div>

@@ -46,6 +46,7 @@
                                 <thead class="table-dark text-center">
                                     <tr>
                                         <th>No</th>
+                                        <th>Aksi</th>
                                         <th>Sub Unit / Kegiatan</th>
                                         <th>Tahun</th>
                                         <th>Pagu Anggaran</th>
@@ -62,7 +63,6 @@
                                         <th>November</th>
                                         <th>Desember</th>
                                         <th>Total Kas</th>
-                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -71,6 +71,15 @@
                                         foreach ($anggaran as $row): ?>
                                             <tr>
                                                 <td class="text-center"><?= $no++ ?></td>
+                                                <td class="text-center">
+                                                    <a href="<?= base_url('' . $wilayah . '/' . $groupuser . '/dataperopd?token=' . $row['hash']) ?>" class="btn btn-warning btn-sm" title="Edit">
+                                                        <i class="bi bi-pencil-square"></i>
+                                                    </a>
+                                                    <a href="<?= base_url('' . $wilayah . '/' . $groupuser . '/dataperopd?token=' . $row['hashidhapusdata']) ?>" class="btn btn-warning btn-sm" title="Edit">
+                                                        <i class="bi bi-trash"></i>
+                                                    </a>
+                                                </td>
+
                                                 <td>
                                                     <strong><?= esc($row['sub_unit']) ?></strong><br>
                                                     <small class="text-muted">Kegiatan: <?= esc($row['sub_kegiatan']) ?></small>
@@ -90,14 +99,6 @@
                                                 <td class="text-end">Rp <?= number_format($row['november'], 2, ',', '.') ?></td>
                                                 <td class="text-end">Rp <?= number_format($row['desember'], 2, ',', '.') ?></td>
                                                 <td class="text-end fw-bold text-success">Rp <?= number_format($row['total_anggaran_kas'], 2, ',', '.') ?></td>
-                                                <td class="text-center">
-                                                    <a href="<?= base_url('' . $wilayah . '/' . $groupuser . '/dataperopd?token=' . $row['hash']) ?>" class="btn btn-warning btn-sm" title="Edit">
-                                                        <i class="bi bi-pencil-square"></i>
-                                                    </a>
-                                                    <a href="<?= base_url('' . $wilayah . '/' . $groupuser . '/dataperopd?token=' . $row['hashidhapusdata']) ?>" class="btn btn-warning btn-sm" title="Edit">
-                                                        <i class="bi bi-trash"></i>
-                                                    </a>
-                                                </td>
                                             </tr>
                                         <?php endforeach; ?>
                                     <?php else: ?>

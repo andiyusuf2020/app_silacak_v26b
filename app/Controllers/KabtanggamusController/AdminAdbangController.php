@@ -436,7 +436,7 @@ class AdminAdbangController extends BaseController
             'rekapData' => $rekapData
 
         ];
-        return view('KabtanggamusViews/Adminadbang/laporanlrfkopdperakun3', $data);
+        return view('KabtanggamusViews/Adminadbang/laporanlrfkopdperakun3Pdf', $data);
     }
     public function cetakpdfrekapperakun()
     {
@@ -447,7 +447,7 @@ class AdminAdbangController extends BaseController
         // Ambil data rekapitulasi berdasarkan filter yang sama
         $rekapData = $this->realapbdmodel->getRekapRealisasiAkun($bulan, $akun);
         // Path lokal file logo Anda
-        $pathLogo = FCPATH . 'cssportal/img_home/lampung.png';
+        $pathLogo = FCPATH . 'cssportal/img_home/tanggamus.png';
         $logoBase64 = '';
 
         // Cek apakah file logo benar-benar ada

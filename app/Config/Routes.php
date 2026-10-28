@@ -116,7 +116,7 @@ Route for Kab Tanggamus SiTAPIS-KAB tahun 2026 =================================
 $routes->get('tanggamus', 'KabtanggamusController\HomeController::dashboard');
 
 ///====for user superadmin
-$routes->group('tanggamus/superadmin', ['filter' => 'role:superadmin'], function ($routes) {
+$routes->group('tanggamus/skpdkab', ['filter' => 'role:skpdkab'], function ($routes) {
     $routes->get('', 'KabtanggamusController\AdminAdbangController::index');
     $routes->get('dataperopd', 'KabtanggamusController\AdminAdbangController::dataperopd');
     $routes->post('rekap/update_sro', 'KabtanggamusController\AdminAdbangController::update_sro');
