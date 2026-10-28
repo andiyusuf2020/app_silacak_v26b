@@ -77,9 +77,9 @@
                 <img src="<?= base_url() ?>cssportal/img_home/tanggamus.png" width="25%" alt="Logo Kabupaten/Kota" />
                 <img src="<?= base_url() ?>cssportal/img_home/sitapis-kab.png" width="40%" alt="Logo Kabupaten/Kota" />
 
-                <h1>Kab. <?= session()->get('wilayah') ?><br>Dashboard</h1>
+                <h2>Kab. <?= strtoupper(session()->get('wilayah')) ?><br>Dashboard</h2>
                 <p>
-                    Penyampaian Resume Data Administrasi Pembangunan <?= session()->get('namawilayah') ?> yang
+                    Penyampaian Resume Data Administrasi Pembangunan <?= strtoupper($namawilayah) ?> yang
                     selaras antara Pemerintah Pusat, Provinsi, dan Kabupaten/Kota melalui
                     <strong>SiTAPIS-KAB</strong> (Sistem Data Pengendalian dan Informasi - Kabupaten/Kota)
                 </p>

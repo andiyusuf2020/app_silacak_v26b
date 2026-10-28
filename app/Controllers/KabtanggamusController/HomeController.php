@@ -27,7 +27,6 @@ class HomeController extends BaseController
     public function dashboard()
     {
         // session()->set('tahun', date('Y'));
-
         $tgldata = $this->tglapbdmodel->tgldataaktif();
         session()->set('tglaktif', $tgldata['tanggal']);
         $tahun = date('Y');
@@ -47,8 +46,6 @@ class HomeController extends BaseController
         // //     'trenBulanan'  => $trenBulanan
         // // ]);
         // return view('KabtanggamusViews/Adminadbang/form_inputpendapatan', $data);
-
-
         $tahunSelected = $this->request->getGet('tahun') ?? date('Y');
         $bulanSelected = $this->request->getGet('bulan') ?? 'all';
 
@@ -56,7 +53,7 @@ class HomeController extends BaseController
         $data['dataRealisasi'] = $dataRealisasi;
         $data['tahunSelected'] = $tahunSelected;
         $data['bulanSelected'] = $bulanSelected;
-        // return view('realisasi/data_list', [
+        $data['namawilayah'] = session()->get('namawilayah');        // return view('realisasi/data_list', [
 
         return view('KabtanggamusViews/dashboard', $data);
     }
