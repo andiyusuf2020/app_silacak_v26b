@@ -581,13 +581,12 @@
                         width: 180,
                         formatter: function(cell) {
                             const rowData = cell.getRow().getData();
-                            if (rowData.group_name == 'skpdkab') {
+                            if (rowData.groupuser == 'skpdkab') {
                                 return `
                                     <a href="updateuser?token=${rowData.update_token_passuser}" class="btn btn-sm btn-warning">Update Password</a><br>
                                 `;
-
-
-                            } else {
+                            }
+                            if (rowData.groupuser == 'Adminadbang') {
                                 return `
                                     <a href="updateuser?token=${rowData.update_token_groupuser}" class="btn btn-sm btn-primary">Update Role</a><br>
                                     <a href="updateuser?token=${rowData.update_token_opduser}" class="btn btn-sm btn-info">Update OPD</a><br>

@@ -141,7 +141,6 @@ $routes->group('tanggamus/skpdkab', ['filter' => 'role:skpdkab'], function ($rou
     $routes->get('updateuser', 'UserController\Kabtanggamus\UserController::updateuser');
     $routes->post('groupset', 'UserController\Kabtanggamus\UserController::changeGroup');
     $routes->post('opdset', 'UserController\Kabtanggamus\UserController::simpanubahopd');
-    $routes->post('opdsetpass', 'UserController\Kabtanggamus\UserController::setPassword');
     $routes->post('anggaran-kas/store', 'KabtanggamusController\AdminAdbangController::storeangkas_ajax');
     $routes->get('anggaran-kas/export-pdf', 'KabtanggamusController\AdminAdbangController::exportPdfAnggaranKas');
     $routes->get('anggaran-kas/export-pdf-admin', 'KabtanggamusController\AdminAdbangController::exportPdfLaporanAngkasAdmin');

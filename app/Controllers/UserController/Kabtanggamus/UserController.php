@@ -60,7 +60,8 @@ class UserController extends BaseController
         $users = array_map(function ($user) {
             $user['update_token_groupuser'] = CryptoUrl::encrypt([
                 'id'   => $user['id'],
-                'name' => $user['username']
+                'name' => $user['username'],
+
             ]);
             $user['update_token_aktif'] = CryptoUrl::encrypt([
                 'id'   => $user['id'],
@@ -78,8 +79,10 @@ class UserController extends BaseController
                 'id'   => $user['id'],
                 'hal' => 'ubahpass',
             ]);
+            $user['groupuser'] =  session()->get('groupuser');
             return $user;
         }, $data['listuser2']);
+        // echo dd($users);
         $datauserx = json_encode($users);
         $data['datajson'] = preg_replace('/"([^"]+)"\s*:/', '$1:', $datauserx);
         // echo dd($data['groupuser'] . '//' . $data['wilayah'] . '//' . $data['groupmenu']);
