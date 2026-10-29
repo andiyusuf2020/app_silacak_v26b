@@ -1617,7 +1617,10 @@ class AdminAdbangController extends BaseController
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4', 'landscape');
         $dompdf->render();
-
+        // 1. Bersihkan buffer output agar tidak ada karakter tersembunyi
+        if (ob_get_length()) {
+            ob_end_clean();
+        }
         // Stream file PDF langsung ke browser
         $dompdf->stream("laporan_anggaran_kas.pdf", ["Attachment" => false]);
     }
