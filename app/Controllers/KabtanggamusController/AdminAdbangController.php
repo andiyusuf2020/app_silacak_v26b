@@ -548,6 +548,15 @@ class AdminAdbangController extends BaseController
 
         // Output file PDF (Stream / Download langsung di browser)
         $dompdf->stream("Rekap_Realisasi_Anggaran.pdf", ["Attachment" => false]);
+
+        // 2. Ambil output PDF sebagai string biner
+        $pdfOutput = $dompdf->output();
+
+        // 3. Kirim melalui Response CodeIgniter dengan header PDF yang bersih
+        return $this->response
+            ->setHeader('Content-Type', 'application/pdf')
+            ->setHeader('Content-Disposition', 'inline; filename="Rekap_Realisasi_Anggaran.pdf"')
+            ->setBody($pdfOutput);
     }
     public function dataperopd()
     {
