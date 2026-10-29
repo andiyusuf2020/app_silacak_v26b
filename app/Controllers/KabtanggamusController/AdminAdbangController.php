@@ -1623,6 +1623,15 @@ class AdminAdbangController extends BaseController
         }
         // Stream file PDF langsung ke browser
         $dompdf->stream("laporan_anggaran_kas.pdf", ["Attachment" => false]);
+
+        // 2. Ambil output PDF sebagai string biner
+        $pdfOutput = $dompdf->output();
+
+        // 3. Kirim melalui Response CodeIgniter dengan header PDF yang bersih
+        return $this->response
+            ->setHeader('Content-Type', 'application/pdf')
+            ->setHeader('Content-Disposition', 'inline; filename="laporan-anggaran.pdf"')
+            ->setBody($pdfOutput);
     }
     public function uploadapbd()
     {
