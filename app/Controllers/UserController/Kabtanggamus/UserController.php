@@ -11,7 +11,7 @@ use App\Models\UserModel\TaUserModel;
 use App\Models\UserModel\GroupUserModel;
 // use App\Models\adbangmodel\ProgKerjaModel as programkeramodel;
 // use App\Models\LrfkProvModel\SubKegModel; // as lrfkModel;
-// use App\Models\DataApbdModel\RealApbdModel;
+use App\Models\KabtanggamusModel\TglApbdModel;
 use App\Models\KabtanggamusModel\RealApbdModel;
 
 class UserController extends BaseController
@@ -20,7 +20,7 @@ class UserController extends BaseController
     protected $tausermodel;
     // protected $Programkerjamodel;
     protected $keyword;
-    // protected $subkegmodel;
+    protected $tglapbd;
     protected $groupuser;
     protected $realapbdmodel;
 
@@ -29,7 +29,7 @@ class UserController extends BaseController
         helper(['form']);
         $this->tausermodel = new TaUserModel();
         // $this->Programkerjamodel = new programkeramodel();
-        // $this->subkegmodel = new SubKegModel();
+        $this->tglapbd = new TglApbdModel();
         $this->realapbdmodel = new RealApbdModel();
         $this->groupuser = new GroupUserModel();
     }
@@ -40,12 +40,21 @@ class UserController extends BaseController
             $user = user();
             $useraktif =  $user->email;
         }
+        $idUser = $user->id;
+        if (session()->get('groupuser') == 'Adminadbang') {
+            $datauser = $this->tausermodel->listuser2(session()->get('wilayah'), null);
+        }
+        if (session()->get('groupuser') == 'skpdkab') {
+            $datauser = $this->tausermodel->listuser2(session()->get('wilayah'), $idUser);
+        }
+        // echo dd($datauser);
         $data = [
             'titlepage' => 'Selamat datang ' . $useraktif . ' di Halaman Manajemen User Sistem Pelaporan SiTAPIS',
             'wilayah' =>  session()->get('wilayah'),
             'groupmenu' => session()->get('groupmenu'),
             'groupuser' => session()->get('groupuser'),
-            'listuser2' => $this->tausermodel->listuser2(session()->get('wilayah'), null),
+            'listuser2' => $datauser, //$this->tausermodel->listuser2(session()->get('wilayah'), null),
+            'tglapbdaktif' => $this->tglapbd->tgldataaktif()
         ];
         // Hanya enkripsi 'id' dan 'name'
         $users = array_map(function ($user) {
@@ -109,6 +118,7 @@ class UserController extends BaseController
             'wilayah' =>  session()->get('wilayah'),
             'titlepage' => 'Halaman UBAH RULE GROUP User SiTAPIS Perangkat Daerah',
             'listuser' => $this->tausermodel->listuser($userId),
+            'tglapbdaktif' => $this->tglapbd->tgldataaktif(),
         ];
         if ($hal == 'ubahopd') {
             $data['titlepage'] = 'Halaman Ubah Perangkat Daerah User SiTAPIS-KAB<br>' . session()->get('namawilayah');
@@ -315,6 +325,7 @@ class UserController extends BaseController
                 'listuser' => $this->tausermodel->listuser($id),
 
                 'validation' => $this->validator,
+                'tglapbdaktif' => $this->tglapbd->tgldataaktif(),
             ];
             return view('user/set_pasword', $data);
         } else {

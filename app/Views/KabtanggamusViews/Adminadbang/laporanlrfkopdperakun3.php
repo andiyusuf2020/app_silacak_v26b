@@ -17,7 +17,8 @@
                     <p class="text-muted text-sm m-0">Monitoring data anggaran dan realisasi berdasarkan periode dan klasifikasi akun.</p>
                 </div>
                 <div class="col-sm-6 text-sm-end mt-2 mt-sm-0 d-flex justify-content-sm-end align-items-center gap-2">
-                    <span class="badge bg-primary px-3 py-2 fs-6 shadow-sm">Periode Bulan: <?= esc($bulan ?? 'Semua') ?></span>
+                    <span class="badge bg-primary px-3 py-2 fs-6 shadow-sm">Periode Bulan: <?= esc($bulan ?? 'Semua') ?>
+                    </span>
 
                     <!-- Tombol Cetak PDF -->
                     <button type="button" class="btn btn-danger shadow-sm px-3" id="btnExportPdf">

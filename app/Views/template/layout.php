@@ -213,8 +213,9 @@
         /*
         * Menu untuk kabupaten tanggamus===========================
         */
-        if ($wilayah == 'tanggamus' && $groupuser == 'superadmin') {
-            echo view('template/_part/menukabtanggamus/menusuperadmin');
+        if ($wilayah == 'tanggamus' && $groupuser == 'skpdkab') {
+            // echo dd($groupuser);
+            echo view('template/_part/menukabtanggamus/menuopdkab');
         }
         if ($wilayah == 'tanggamus' && $groupuser == 'Adminadbang') {
             echo view('template/_part/menukabtanggamus/menuadminadbang');

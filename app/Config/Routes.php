@@ -123,6 +123,8 @@ $routes->group('tanggamus/skpdkab', ['filter' => 'role:skpdkab'], function ($rou
     $routes->get('getChartDataOpdRangking', 'KabtanggamusController\AdminAdbangController::getChartDataOpdRangking');
     $routes->post('uploadapbd', 'KabtanggamusController\AdminAdbangController::uploadapbd');
     $routes->get('exportExcelLrfkOpd', 'KabtanggamusController\AdminAdbangController::exportExcelLrfkOpd');
+    $routes->post('exportExcelLrfkOpd', 'KabtanggamusController\AdminAdbangController::exportExcelLrfkOpd');
+
     $routes->get('realisasi/get-tren-bulanan', 'KabtanggamusController\AdminAdbangController::getTrenBulanan');
     $routes->get('realisasi/get-summary', 'KabtanggamusController\AdminAdbangController::getSummaryByPeriode'); // Endpoint AJAX Filter
     $routes->post('realisasi/store', 'KabtanggamusController\AdminAdbangController::storependapatan'); ///====for user adminadbang

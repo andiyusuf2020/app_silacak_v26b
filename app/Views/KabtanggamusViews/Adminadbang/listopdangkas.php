@@ -128,12 +128,14 @@
                     formatter: function(cell) {
                         const rowData = cell.getRow().getData();
                         const token = rowData.angkas_token || '';
-                        if (groupUser === 'superadmin' ||
-                            groupUser === 'Adminadbang') {
-                            return `<a href="${groupUser}/dataperopd?token=${token}" class="btn btn-sm btn-primary">Detail</a>`;
-                        } else {
-                            return `<span class="text-muted">Tidak ada aksi</span>`;
-                        }
+                        // if (groupUser === 'superadmin' ||
+                        //     groupUser === 'Adminadbang') {
+                        //     return `<a href="${groupUser}/dataperopd?token=${token}" class="btn btn-sm btn-primary">Detail</a>`;
+                        // } else {
+                        //     return `<span class="text-muted">Tidak ada aksi</span>`;
+                        // }
+                        return `<a href="${groupUser}/dataperopd?token=${token}" class="btn btn-sm btn-primary">Detail</a>`;
+
                         //         return `
                         //     <a href="superadmin/dataperopd?token=${rowData.angkas_token}" class="btn btn-sm btn-primary">detail</a>
                         // `;

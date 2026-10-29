@@ -77,30 +77,39 @@ class TaUserModel extends Model
     {
         // Jika $id diisi, kembalikan satu baris data saja
         if ($id !== null) {
-            return $this->where('id', $id)
+            // return $this->where('id', $id)
+            //     ->where('wilayah', $wilayah)
+            //     ->get()
+            //     ->getRowArray();
+            $result = $this->select('users.id, sub_unit, email, username, active, created_at')
+                ->select("users.link = '" . base_url('lrfkadmin/manajemenuser/') . "' as linka")
+                ->select('auth_groups.name as group_name')
+                ->join('auth_groups_users', 'users.id = auth_groups_users.user_id')
+                ->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id')
+                ->where('users.id', $id)
                 ->where('wilayah', $wilayah)
+                ->where('deleted_at', null)
                 ->get()
-                ->getRowArray();
+                ->getResultArray();
+        } else {
+
+            // Ambil data dari database
+            $result = $this->select('users.id, sub_unit, email, username, active, created_at')
+                ->select("users.link = '" . base_url('lrfkadmin/manajemenuser/') . "' as linka")
+                ->select('auth_groups.name as group_name')
+                ->join('auth_groups_users', 'users.id = auth_groups_users.user_id')
+                ->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id')
+                ->where('wilayah', $wilayah)
+                ->where('deleted_at', null)
+                ->get()
+                ->getResultArray();
         }
-
-        // Ambil data dari database
-        $result = $this->select('users.id, sub_unit, email, username, active, created_at')
-            ->select("users.link = '" . base_url('lrfkadmin/manajemenuser/') . "' as linka")
-            ->select('auth_groups.name as group_name')
-            ->join('auth_groups_users', 'users.id = auth_groups_users.user_id')
-            ->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id')
-            ->where('wilayah', $wilayah)
-            ->where('deleted_at', null)
-            ->get()
-            ->getResultArray();
-
         // Tambahkan nomor urut secara otomatis (mulai dari 1)
         $no = 1;
         foreach ($result as &$row) {
             $row['no'] = $no++;
         }
         unset($row); // Putus referensi pointer
-
         return $result;
     }
     public function getDataUser($name)

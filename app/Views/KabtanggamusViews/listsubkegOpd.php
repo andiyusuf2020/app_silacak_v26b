@@ -46,13 +46,27 @@
 
                             <!-- Tombol Export XLS Data Tabel -->
                             <!-- <div class="btn-group me-1"> -->
-                            <button type="button" class="btn btn-outline-success me-1">
-                                <a href="<?= hash_url(
-                                                '' . $wilayah . '/' . $groupuser . '/exportExcelLrfkOpd',
-                                                ['kdSU' => $nama_opd, 'blndata' => $blndata]
-                                            ) ?>" class="nav-link">Export All Data (xlsx)
-                                </a>
-                            </button>
+                            <?php if ($groupuser == 'Adminadbang') { ?>
+                                <button type="button" class="btn btn-outline-success me-1">
+                                    <a href="<?= hash_url(
+                                                    '' . $wilayah . '/' . $groupuser . '/exportExcelLrfkOpd',
+                                                    ['kdSU' => $nama_opd, 'blndata' => $blndata]
+                                                ) ?>" class="nav-link">Export All Data (xlsx)
+                                    </a>
+                                </button>
+
+                            <?php }
+                            if ($groupuser == 'skpdkab') { ?>
+                                <button type="button" class="btn btn-outline-success me-1">
+                                    <a href="<?= hash_url(
+                                                    '' . $wilayah . '/' . $groupuser . '',
+                                                    ['hal' => 'pilihbulancetak', 'kdSU' => $nama_opd]
+                                                ) ?>" class="nav-link">Pilih Periode Cetak
+                                    </a>
+                                </button>
+                            <?php }
+                            ?>
+
                             <!-- </div> -->
 
                             <!-- Tombol Cetak PDF (Hanya Tabel) -->
