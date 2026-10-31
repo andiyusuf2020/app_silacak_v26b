@@ -240,6 +240,17 @@
         if ($wilayah == 'lampungselatan' && $groupuser == 'Adminadbang') {
             echo view('template/_part/menukabtanggamus/menuadminadbang');
         }
+        /*
+        * Menu untuk kabupaten tuba barat================================
+        */
+        if ($wilayah == 'tulangbawangbarat' && $groupuser == 'skpdkab') {
+            // echo dd($groupuser);
+            echo view('template/_part/menukabtanggamus/menuopdkab');
+        }
+        if ($wilayah == 'tulangbawangbarat' && $groupuser == 'Adminadbang') {
+            echo view('template/_part/menukabtanggamus/menuadminadbang');
+        }
+
         if (!($wilayah != '' || $groupuser != '' || $groupmenu != '')) {
             return redirect()->to(base_url('logout'));
         }
@@ -301,7 +312,7 @@
             <!--begin::Copyright-->
             <strong>
                 Copyright &copy; <?php echo date('Y'); ?>&nbsp;
-                <a href="https://adbang.lampungprov.go.id/e-tapis/" class="text-decoration-none">Bagian Administrasi Pembangunan Setda Kabupaten ......</a>.
+                <a href="https://adbang.lampungprov.go.id/e-tapis/" class="text-decoration-none">Bagian Administrasi Pembangunan Setda <?= session()->get('namawilayah') ?></a>.
             </strong>
             <!--end::Copyright-->
         </footer>

@@ -271,6 +271,16 @@
         if ($wilayah == 'lampungselatan' && $groupuser == 'Adminadbang') {
             echo view('template/_part/menukabtanggamus/menuadminadbang');
         }
+        /*
+        * Menu untuk kabupaten tuba barat================================
+        */
+        if ($wilayah == 'tulangbawangbarat' && $groupuser == 'skpdkab') {
+            // echo dd($groupuser);
+            echo view('template/_part/menukabtanggamus/menuopdkab');
+        }
+        if ($wilayah == 'tulangbawangbarat' && $groupuser == 'Adminadbang') {
+            echo view('template/_part/menukabtanggamus/menuadminadbang');
+        }
 
         ?>
         <!--end::Sidebar-->

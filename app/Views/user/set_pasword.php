@@ -16,13 +16,8 @@
         <h3 class="card-title">Horizontal Form</h3>
     </div>
     <!-- /.card-header -->
-    <?php
-    if ($groupuser  == 'superadmin') {
-        form_open_multipart('' . $wilayah . '/opdsetpass', 'class="form-horizontal');
-    } else {
-        form_open_multipart('' . $wilayah . '/' . $groupuser . '/opdsetpass', 'class="form-horizontal');
-    }
-    ?>
+    <?= form_open_multipart('' . $wilayah . '/' . $groupuser . '/opdsetpass', 'class="form-horizontal'); ?>
+
     <?= csrf_field(); ?>
     <?= form_hidden('id', $listuser['id']) ?>
     <div class="card-body">

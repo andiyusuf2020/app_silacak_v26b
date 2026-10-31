@@ -6,7 +6,7 @@
         <div class="col-sm-6 offset-sm-3">
 
             <div class="card">
-                <h2 class="card-header"><?= lang('Auth.register') ?></h2>
+                <h2 class="card-header"><?= esc('Anda Registrasi Akun di ') . session()->get('namawilayah')  ?></h2>
                 <div class="card-body">
 
                     <?= view('App\Views\Auth\_message_block') ?>

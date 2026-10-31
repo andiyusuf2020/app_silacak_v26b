@@ -26,9 +26,9 @@ $routes->get('/', 'HomeKabController::index');
 $routes->get('pilihakses', 'HomeKabController::pilihakses');
 $routes->post('simpantahun', 'HomeKabController::simpantahun');
 
-// $routes->get('provinsi', 'KabtanggamusController\HomeController::dashboard');
-$routes->group('provinsi', ['filter' => 'role:superadmin'], function ($routes) {
-    $routes->get('', 'UserController\Kabtanggamus\UserController::index');
+$routes->get('provinsi', 'HomeKabController::provinsi');
+$routes->group('provinsi/superadmin', ['filter' => 'role:superadmin'], function ($routes) {
+    // $routes->get('', 'UserController\Kabtanggamus\UserController::index');
     $routes->get('daftaruser', 'UserController\Kabtanggamus\UserController::index');
     $routes->get('updateuser', 'UserController\Kabtanggamus\UserController::updateuser');
     $routes->post('groupset', 'UserController\Kabtanggamus\UserController::changeGroup');
@@ -50,6 +50,36 @@ $routes->get('tulangbawang', 'HomeKabController::tulangbawang');
  */
 $routes->get('tulangbawangbarat', 'KabtanggamusController\HomeController::dashboard');
 $routes->group('tulangbawangbarat/Adminadbang', ['filter' => 'role:Adminadbang'], function ($routes) {
+    $routes->get('', 'KabtbbController\AdminAdbangController::index');
+    $routes->get('dataperopd', 'KabtbbController\AdminAdbangController::dataperopd');
+    $routes->post('rekap/update_sro', 'KabtbbController\AdminAdbangController::update_sro');
+    $routes->get('getChartDataOpdRangking', 'KabtbbController\AdminAdbangController::getChartDataOpdRangking');
+    $routes->post('uploadapbd', 'KabtbbController\AdminAdbangController::uploadapbd');
+    $routes->post('exportExcelLrfkOpd', 'KabtbbController\AdminAdbangController::exportExcelLrfkOpd');
+    $routes->get('realisasi/get-tren-bulanan', 'KabtbbController\AdminAdbangController::getTrenBulanan');
+    $routes->get('realisasi/get-summary', 'KabtbbController\AdminAdbangController::getSummaryByPeriode'); // Endpoint AJAX Filter
+    $routes->post('realisasi/store', 'KabtbbController\AdminAdbangController::storependapatan'); ///====for user adminadbang
+    $routes->get('realisasi/get-detail/(:num)', 'KabtbbController\AdminAdbangController::getDetail/$1');
+    $routes->post('realisasi/update/(:num)', 'KabtbbController\AdminAdbangController::update/$1');
+    $routes->post('realisasi/delete/(:num)', 'KabtbbController\AdminAdbangController::delete/$1');
+    $routes->get('realisasi/data-list', 'KabtbbController\AdminAdbangController::listData');
+    $routes->post('dashboard-stats/update', 'KabtbbController\AdminAdbangController::updatedatadashboard');
+    $routes->get('realisasi/export-excel-pendapatan', 'KabtbbController\AdminAdbangController::exportExcelPendapatan');
+    $routes->post('realisasi/export-pdf-pendapatan', 'KabtbbController\AdminAdbangController::exportPdfrealisasiPendapatan');
+    $routes->get('tampillaporanperakun', 'KabtbbController\AdminAdbangController::getDataperAkun');
+    $routes->post('cetakpdfrekap', 'KabtbbController\AdminAdbangController::cetakpdfrekapperakun');
+    $routes->get('daftaruser', 'UserController\Kabtanggamus\UserController::index');
+    $routes->get('updateuser', 'UserController\Kabtanggamus\UserController::updateuser');
+    $routes->post('groupset', 'UserController\Kabtanggamus\UserController::changeGroup');
+    $routes->post('opdset', 'UserController\Kabtanggamus\UserController::simpanubahopd');
+    $routes->post('opdsetpass', 'UserController\Kabtanggamus\UserController::setPassword');
+    $routes->post('anggaran-kas/store', 'KabtbbController\AdminAdbangController::storeangkas_ajax');
+    $routes->get('anggaran-kas/export-pdf', 'KabtbbController\AdminAdbangController::exportPdfAnggaranKas');
+    $routes->get('anggaran-kas/export-pdf-admin', 'KabtbbController\AdminAdbangController::exportPdfLaporanAngkasAdmin');
+    $routes->get('rekap/exportXlsx', 'KabtbbController\AdminAdbangController::exportXlsxRekapSKPD');
+    $routes->get('rekap/exportPdf', 'KabtbbController\AdminAdbangController::exportPdfRekapSKPD');
+});
+$routes->group('tulangbawangbarat/skpdkab', ['filter' => 'role:skpdkab'], function ($routes) {
     $routes->get('', 'KabtbbController\AdminAdbangController::index');
     $routes->get('dataperopd', 'KabtbbController\AdminAdbangController::dataperopd');
     $routes->post('rekap/update_sro', 'KabtbbController\AdminAdbangController::update_sro');

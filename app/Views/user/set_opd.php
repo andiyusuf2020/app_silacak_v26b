@@ -7,15 +7,7 @@
     <div class="card-header">
         <h3 class="card-title">Horizontal Form</h3>
     </div>
-    <!-- /.card-header -->
-    <?php
-    if ($groupuser == 'superadmin') {
-        form_open_multipart('' . $wilayah . '/opdset', 'class="form-horizontal');
-    } else {
-        form_open_multipart('' . $wilayah . '/' . $groupuser . '/opdset', 'class="form-horizontal');
-    }
-    ?>
-
+    <?= form_open_multipart('' . $wilayah . '/' . $groupuser . '/opdset', 'class="form-horizontal'); ?>
     <?= csrf_field(); ?>
     <div class="card-body">
         <div class="form-group row">
@@ -50,6 +42,9 @@
                 use App\Models\KablamselModel\RealApbdModel as sipdlamsel;
                 use App\Models\KablamselModel\TglApbdModel as  tglapbdlamsel;
 
+                use App\Models\KabtbbModel\RealApbdModel as sipdTbb;
+                use App\Models\KabtbbModel\TglApbdModel as  tglapbdTbb;
+
                 if ($wilayah == 'tanggamus') {
                     $this->sipd = new sipdtanggamus();
                     $this->tglapbd = new tglapbdtanggamus();
@@ -64,6 +59,11 @@
                 if ($wilayah == 'lampungselatan') {
                     $this->sipd = new sipdlamsel();
                     $this->tglapbd = new tglapbdlamsel();
+                    // $tgldata = $this->tglapbdtanggamus->tgldataaktif();
+                }
+                if ($wilayah == 'tulangbawangbarat') {
+                    $this->sipd = new sipdTbb();
+                    $this->tglapbd = new tglapbdTbb();
                     // $tgldata = $this->tglapbdtanggamus->tgldataaktif();
                 }
                 $tgldata = $this->tglapbd->tgldataaktif();

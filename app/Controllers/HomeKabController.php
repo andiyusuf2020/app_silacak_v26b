@@ -128,6 +128,12 @@ class HomeKabController extends BaseController
             return view('index'); // Redirect to the index page as a fallback
         }
     }
+    public function provinsi()
+    {
+        session()->set('wilayah', 'provinsi');
+        session()->set('groupuser', 'superadmin');
+        return redirect()->to(base_url(session()->get('wilayah') . '/' . session()->get('groupuser') . '/daftaruser'));
+    }
     public function pilihakses()
     {
         $wilayah = session()->get('wilayah');

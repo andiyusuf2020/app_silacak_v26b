@@ -10,11 +10,7 @@
     <!-- /.card-header -->
     <!-- form start -->
     <!-- form start -->
-    <? if ($groupuser == 'superdamin') { ?>
-        <?= form_open_multipart('' . $wilayah . '/groupset', 'class="form-horizontal'); ?>
-    <? } else { ?>
-        <?= form_open_multipart('' . $wilayah . '/' . $groupuser . '/groupset', 'class="form-horizontal'); ?>
-    <? } ?>
+    <?= form_open_multipart('' . $wilayah . '/' . $groupuser . '/groupset', 'class="form-horizontal'); ?>
     <?= csrf_field(); ?>
     <div class="card-body">
         <div class="form-group row">

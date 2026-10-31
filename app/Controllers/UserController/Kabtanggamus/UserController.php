@@ -82,9 +82,9 @@ class UserController extends BaseController
         if ($groupuser[0]['name'] == 'superadmin') {
 
             $datauser = $this->tausermodel->listuser2(null, null);
-            session()->set('wilayah', 'provinsi');
+            // session()->set('wilayah', 'provinsi');
             session()->set('groupmenu', 'menusuperadmin');
-            session()->set('groupuser', 'superadmin');
+            // session()->set('groupuser', 'superadmin');
             $tgl = date('d-m-Y');
         }
         // echo dd($datauser);
@@ -197,11 +197,7 @@ class UserController extends BaseController
         // echo dd($data['groups']);
         if ($idHapus) {
             $this->tausermodel->delete($idHapus);
-            if (session()->get('groupuser') == 'superadmin') {
-                return redirect()->to(base_url('' . $data['wilayah'] . '/daftaruser'));
-            } else {
-                return redirect()->to(base_url('' . $data['wilayah'] . '/' . $data['groupuser'] . '/daftaruser'));
-            }
+            return redirect()->to(base_url('' . $data['wilayah'] . '/' . $data['groupuser'] . '/daftaruser'));
         }
         if ($active == null) {
             // echo dd($data['groupuser']);
@@ -220,11 +216,7 @@ class UserController extends BaseController
             ];
             // echo dd($dataX);
             $this->tausermodel->update($userId, $dataX);
-            if (session()->get('groupuser') == 'superadmin') {
-                return redirect()->to(base_url('' . $data['wilayah'] . '/daftaruser'));
-            } else {
-                return redirect()->to(base_url('' . $data['wilayah'] . '/' . $data['groupuser'] . '/daftaruser'));
-            }
+            return redirect()->to(base_url('' . $data['wilayah'] . '/' . $data['groupuser'] . '/daftaruser'));
         }
     }
     public function simpanubahopd()
@@ -258,11 +250,7 @@ class UserController extends BaseController
             // $data['sub_unit'] = $this->request->getPost('sub_unit');
 
             $this->tausermodel->update($id, $dataupdate);
-            if (session()->get('groupuser') == 'superadmin') {
-                return redirect()->to(base_url('' . $data['wilayah'] . '/daftaruser'));
-            } else {
-                return redirect()->to(base_url('' . $data['wilayah'] . '/' . $data['groupuser'] . '/daftaruser'));
-            }
+            return redirect()->to(base_url('' . $data['wilayah'] . '/' . $data['groupuser'] . '/daftaruser'));
         }
     }
     public function changeGroup()
@@ -283,12 +271,8 @@ class UserController extends BaseController
             'titlepage' => 'Halaman UBAH RULE GROUP User SiTAPIS Perangkat Daerah',
             'listuser' => $this->tausermodel->listuser($userId),
         ];
-        echo dd($data['groupuser']);
-        if (session()->get('groupuser') == 'superadmin') {
-            return redirect()->to(base_url('' . $data['wilayah'] . '/daftaruser'));
-        } else {
-            return redirect()->to(base_url('' . $data['wilayah'] . '/' . $data['groupuser'] . '/daftaruser'));
-        }
+        // echo dd($data['groupuser']);
+        return redirect()->to(base_url('' . $data['wilayah'] . '/' . $data['groupuser'] . '/daftaruser'));
     }
     public function setPassword()
     {

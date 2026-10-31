@@ -26,7 +26,18 @@
                             <i class="bi bi-box-arrow-right me-1" aria-hidden="true"></i>
                             LOGOUT
                         </a>
+
                     </li>
+                    <li class="nav-item d-none d-md-block">
+                        <a href="<?= base_url(session()->get('wilayah')); ?>" class="nav-link">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            <i class="bi bi-grid-1x2 me-1" aria-hidden="true"></i>
+                            <?= session()->get('namawilayah') ?>
+                        </a>
+
+
+                    </li>
+
                 </ul>
                 <!--end::Start Navbar Links-->
 
