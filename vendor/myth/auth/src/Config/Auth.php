@@ -16,7 +16,8 @@ class Auth extends BaseConfig
      *
      * @var string
      */
-    public $defaultUserGroup;
+    // public $defaultUserGroup;
+    public $defaultUserGroup = 'skpdkab';
 
     /**
      * --------------------------------------------------------------------

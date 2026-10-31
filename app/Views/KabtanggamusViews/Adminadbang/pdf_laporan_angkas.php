@@ -99,7 +99,7 @@
 
     <!-- Kop Header -->
     <div class="kop-header text-center">
-        <h3>PEMERINTAH PROVINSI</h3>
+        <h3>PEMERINTAH <?= session()->get('namawilayah') ?></h3>
         <h4>ANGGARAN KAS PERANGKAT DAERAH</h4>
         <p style="margin: 0; font-size: 10pt;">TAHUN ANGGARAN <?= $tahun_anggaran ?></p>
     </div>

@@ -58,7 +58,7 @@ class RealApbdModel extends Model
     protected $updatedField = 'UPDATE_AT';
 
 
-    public function getRekapRealisasiAkun($bulan, $akun)
+    public function getRekapRealisasiAkun($bulan, $akun, $tahun)
     {
         $builder = $this->db->table($this->table);
 
@@ -87,6 +87,7 @@ class RealApbdModel extends Model
 
         if (!empty($bulan)) {
             $builder->where('bulan', $bulan);
+            $builder->where('TAHUN', $tahun);
         }
 
         $builder->groupBy([$dataview]);
@@ -132,7 +133,7 @@ class RealApbdModel extends Model
 
         return $builder->get()->getResultArray();
     }
-    public function getRekapPerSKPD($bulan)
+    public function getRekapPerSKPD($bulan, $tahun)
     {
         // 1. Ambil & kelompokkan data langsung di level SKPD
         $data = $this->select('
@@ -144,6 +145,7 @@ class RealApbdModel extends Model
             SUM(CASE WHEN TOTAL_REALISASI = 0 THEN 1 ELSE 0 END) AS total_sro_nol
         ')
             ->where('BULAN', $bulan)
+            ->where('TAHUN', $tahun)
             ->groupBy(['KODE_UNIT_SKPD', 'NAMA_UNIT_SKPD'])
             ->get()
             ->getResultArray();
@@ -1348,57 +1350,60 @@ class RealApbdModel extends Model
     public function getRekapSubSkpd($tgl)
     {
         return $this->builder()
-            ->select('*,
-        -- 1. Jumlah total item NAMA SRO
-        COUNT(DISTINCT nama_sro) AS jumlah_item_sro,
-        
-        -- 2. Jumlah item NAMA SRO yang terealisasi (> 0)
-        COUNT(DISTINCT CASE WHEN total_realisasi > 0 THEN nama_sro ELSE NULL END) AS jumlah_item_sro_terealisasi,
-        
-        -- 3. Jumlah item NAMA SRO yang total realisasinya 0
-        COUNT(DISTINCT CASE WHEN total_realisasi = 0 THEN nama_sro ELSE NULL END) AS jumlah_item_sro_realisasi_nol,
-        
-        -- 4. Jumlah Total Anggaran
-        SUM(total_anggaran) AS total_anggaran,
-        
-        -- 5. Total Realisasi
-        SUM(total_realisasi) AS total_realisasi,
-        
-        -- 6. Persentase Capaian Realisasi Anggaran
-        ROUND(
-            CASE 
-                WHEN SUM(total_anggaran) > 0 
-                THEN (SUM(total_realisasi) / SUM(total_anggaran)) * 100 
-                ELSE 0 
-            END, 2
-        ) AS persen_capaian_anggaran,
-        
-        -- 7. Persentase Capaian Jumlah Item SRO Terealisasi
-        ROUND(
-            CASE 
-                WHEN COUNT(DISTINCT nama_sro) > 0 
-                THEN (COUNT(DISTINCT CASE WHEN total_realisasi > 0 THEN nama_sro ELSE NULL END) / COUNT(DISTINCT nama_sro)) * 100 
-                ELSE 0 
-            END, 2
-        ) AS persen_capaian_sro,
+            ->select('
+                *,
+                
+                -- 1. Jumlah item NAMA SRO yang total_anggarannya tidak 0 (> 0)
+                COUNT(DISTINCT CASE WHEN total_anggaran > 0 THEN nama_sro ELSE NULL END) AS jumlah_item_sro,
+                
+                -- 2. Jumlah item NAMA SRO yang terealisasi (> 0)
+                COUNT(DISTINCT CASE WHEN total_realisasi > 0 THEN nama_sro ELSE NULL END) AS jumlah_item_sro_terealisasi,
+                
+                -- 3. Jumlah item NAMA SRO yang total realisasinya 0
+                COUNT(DISTINCT CASE WHEN total_realisasi = 0 THEN nama_sro ELSE NULL END) AS jumlah_item_sro_realisasi_nol,
+                
+                -- 4. Jumlah Total Anggaran
+                SUM(total_anggaran) AS total_anggaran,
+                
+                -- 5. Total Realisasi
+                SUM(total_realisasi) AS total_realisasi,
+                
+                -- 6. Persentase Capaian Realisasi Anggaran
+                ROUND(
+                    CASE 
+                        WHEN SUM(total_anggaran) > 0 
+                        THEN (SUM(total_realisasi) / SUM(total_anggaran)) * 100 
+                        ELSE 0 
+                    END, 2
+                ) AS persen_capaian_anggaran,
+                
+                -- 7. Persentase Capaian Jumlah Item SRO Terealisasi 
+                -- (Dibandingkan dengan jumlah item SRO yang anggarannya > 0)
+                ROUND(
+                    CASE 
+                        WHEN COUNT(DISTINCT CASE WHEN total_anggaran > 0 THEN nama_sro ELSE NULL END) > 0 
+                        THEN (COUNT(DISTINCT CASE WHEN total_realisasi > 0 THEN nama_sro ELSE NULL END) / COUNT(DISTINCT CASE WHEN total_anggaran > 0 THEN nama_sro ELSE NULL END)) * 100 
+                        ELSE 0 
+                    END, 2
+                ) AS persen_capaian_sro,
 
-        -- 8. Capaian Efisiensi (% Capaian SRO - % Capaian Anggaran)
-        ROUND(
-            (
-                CASE 
-                    WHEN COUNT(DISTINCT nama_sro) > 0 
-                    THEN (COUNT(DISTINCT CASE WHEN total_realisasi > 0 THEN nama_sro ELSE NULL END) / COUNT(DISTINCT nama_sro)) * 100 
-                    ELSE 0 
-                END
-            ) - (
-                CASE 
-                    WHEN SUM(total_anggaran) > 0 
-                    THEN (SUM(total_realisasi) / SUM(total_anggaran)) * 100 
-                    ELSE 0 
-                END
-            ), 2
-        ) AS capaian_efisiensi
-    ')
+                -- 8. Capaian Efisiensi (% Capaian SRO - % Capaian Anggaran)
+                ROUND(
+                    (
+                        CASE 
+                            WHEN COUNT(DISTINCT CASE WHEN total_anggaran > 0 THEN nama_sro ELSE NULL END) > 0 
+                            THEN (COUNT(DISTINCT CASE WHEN total_realisasi > 0 THEN nama_sro ELSE NULL END) / COUNT(DISTINCT CASE WHEN total_anggaran > 0 THEN nama_sro ELSE NULL END)) * 100 
+                            ELSE 0 
+                        END
+                    ) - (
+                        CASE 
+                            WHEN SUM(total_anggaran) > 0 
+                            THEN (SUM(total_realisasi) / SUM(total_anggaran)) * 100 
+                            ELSE 0 
+                        END
+                    ), 2
+                ) AS capaian_efisiensi
+            ')
             ->where('CREATE_AT', $tgl)
             ->groupBy('nama_unit_skpd')
             ->orderBy('persen_capaian_anggaran', 'DESC')
@@ -1406,7 +1411,6 @@ class RealApbdModel extends Model
             ->get()
             ->getResultArray();
     }
-
 
     public function getRekapSubSkpdperOPD($tgl, $kdSU)
     {
@@ -1471,7 +1475,7 @@ class RealApbdModel extends Model
             ->get()
             ->getResultArray();
     }
-    public function getRekapSubSkpdRangking($tgl)
+    public function getRekapSubSkpdRangking($tgl, $tahun)
     {
         return $this->builder()
             ->select('*,
@@ -1526,6 +1530,7 @@ class RealApbdModel extends Model
         ) AS capaian_efisiensi
     ')
             ->where('CREATE_AT', $tgl)
+            ->where('TAHUN', $tahun)
             ->groupBy('nama_unit_skpd')
             ->orderBy('persen_capaian_anggaran', 'DESC')
             ->limit(10)
@@ -1533,7 +1538,7 @@ class RealApbdModel extends Model
             ->getResultArray();
     }
 
-    public function getRekapSubSkpdRangkingperOpd($tgl, $kdSU)
+    public function getRekapSubSkpdRangkingperOpd($tgl, $kdSU, $tahun)
     {
         return $this->builder()
             ->select('*,
@@ -1588,6 +1593,7 @@ class RealApbdModel extends Model
         ) AS capaian_efisiensi
     ')
             ->where('CREATE_AT', $tgl)
+            ->where('TAHUN', $tahun)
             ->where('KODE_UNIT_SKPD', $kdSU)
             ->groupBy('nama_unit_skpd')
             ->orderBy('persen_capaian_anggaran', 'DESC')

@@ -151,7 +151,7 @@
                     <?php endif; ?>
                 </td>
                 <td style="width: 85%;" class="instansi-title">
-                    <h4>Pemerintah Kabupaten Tanggamus</h4>
+                    <h4>Pemerintah <?= session()->get('namawilayah') ?></h4>
                     <h2>Rencana Anggaran dan Pendapatan Belanja Daerah (APBD)</h2>
                     <p>Laporan Rekapitulasi Realisasi Anggaran Berdasarkan Klasifikasi Akun</p>
                     <p><?= $nama_opd ?>

@@ -205,7 +205,7 @@
                 <li>
                     <a class="normal" style="cursor: pointer;" href="<?php echo base_url($wilayah . '/skpdkab'); ?>">
                         <img src="<?php echo base_url('cssportal/img_home'); ?>/sitapis-kab-2.png" alt>
-                        <div class="caption"><strong>LAPORAN KEUANGAN CAPAIAN KINERJA(LKCK) </strong> </div>
+                        <div class="caption"><strong>SKPD KAB/KOTA </strong> </div>
                     </a>
                 </li>
                 <li>

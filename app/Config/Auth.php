@@ -16,7 +16,7 @@ class Auth extends \Myth\Auth\Config\Auth
      * @var string
      */
     // public $defaultUserGroup;
-    public $defaultUserGroup = 'useropdrfk';
+    public $defaultUserGroup = 'skpdkab';
     /**
      * --------------------------------------------------------------------
      * Landing Route

@@ -8,9 +8,14 @@
         <h3 class="card-title">Horizontal Form</h3>
     </div>
     <!-- /.card-header -->
-    <!-- form start -->
-    <!-- form start -->
-    <?= form_open_multipart('' . $wilayah . '/' . $groupuser . '/opdset', 'class="form-horizontal'); ?>
+    <?php
+    if ($groupuser == 'superadmin') {
+        form_open_multipart('' . $wilayah . '/opdset', 'class="form-horizontal');
+    } else {
+        form_open_multipart('' . $wilayah . '/' . $groupuser . '/opdset', 'class="form-horizontal');
+    }
+    ?>
+
     <?= csrf_field(); ?>
     <div class="card-body">
         <div class="form-group row">
@@ -39,12 +44,31 @@
                 use App\Models\KabtanggamusModel\RealApbdModel as sipdtanggamus;
                 use App\Models\KabtanggamusModel\TglApbdModel as  tglapbdtanggamus;
 
-                $this->sipdtanggamus = new sipdtanggamus();
-                $this->tglapbdtanggamus = new tglapbdtanggamus();
+                use App\Models\KablampuraModel\RealApbdModel as sipdlampura;
+                use App\Models\KablampuraModel\TglApbdModel as  tglapbdlampura;
+
+                use App\Models\KablamselModel\RealApbdModel as sipdlamsel;
+                use App\Models\KablamselModel\TglApbdModel as  tglapbdlamsel;
+
                 if ($wilayah == 'tanggamus') {
-                    $tgldata = $this->tglapbdtanggamus->tgldataaktif();
-                    $listopdadmin = $this->sipdtanggamus->listopduserreg($tgldata['tanggal']);
-                } ?>
+                    $this->sipd = new sipdtanggamus();
+                    $this->tglapbd = new tglapbdtanggamus();
+                    // $tgldata = $this->tglapbd->tgldataaktif();
+                    // $listopdadmin = $this->sipd->listopduserreg($tgldata['tanggal']);
+                }
+                if ($wilayah == 'lampungutara') {
+                    $this->sipd = new sipdlampura();
+                    $this->tglapbd = new tglapbdlampura();
+                    // $tgldata = $this->tglapbdtanggamus->tgldataaktif();
+                }
+                if ($wilayah == 'lampungselatan') {
+                    $this->sipd = new sipdlamsel();
+                    $this->tglapbd = new tglapbdlamsel();
+                    // $tgldata = $this->tglapbdtanggamus->tgldataaktif();
+                }
+                $tgldata = $this->tglapbd->tgldataaktif();
+                $listopdadmin = $this->sipd->listopduserreg($tgldata['tanggal']);
+                ?>
                 <select name="sub_unit" class="form-control">
                     <option value=" ">pilih sub unit</option>
                     <?php foreach ($listopdadmin as $row) {

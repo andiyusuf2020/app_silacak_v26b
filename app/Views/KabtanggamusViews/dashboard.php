@@ -74,10 +74,10 @@
 
         <div class="hero-content">
             <div class="hero-text">
-                <img src="<?= base_url() ?>cssportal/img_home/tanggamus.png" width="25%" alt="Logo Kabupaten/Kota" />
+                <img src="<?= base_url() ?><?= $logokabkota ?>" width="25%" alt="Logo Kabupaten/Kota" />
                 <img src="<?= base_url() ?>cssportal/img_home/sitapis-kab.png" width="40%" alt="Logo Kabupaten/Kota" />
 
-                <h2>Kab. <?= strtoupper(session()->get('wilayah')) ?><br>Dashboard</h2>
+                <h2><?= strtoupper(session()->get('namawilayah')) ?><br>Dashboard</h2>
                 <p>
                     Penyampaian Resume Data Administrasi Pembangunan <?= strtoupper($namawilayah) ?> yang
                     selaras antara Pemerintah Pusat, Provinsi, dan Kabupaten/Kota melalui
@@ -117,9 +117,9 @@
         <div class="dashboard-container">
             <div align="center">
                 <!-- <h2 class="section-title">Capaian Program Unggulan</h2> -->
-                <img style="max-height: 200px;" src="<?php echo base_url('cssportal/img_home'); ?>/bupati_tanggamus.jpg" alt="Bupati">
+                <img style="max-height: 200px;" src="<?php echo base_url(); ?><?= $logobupati ?>" alt="Bupati">
 
-                <img style="max-height: 200px;" src="<?php echo base_url('cssportal/img_home'); ?>/wakil_bup_tanggamus.jpg" alt="Wakil Bupati">
+                <img style="max-height: 200px;" src="<?php echo base_url(); ?><?= $logowakil  ?>" alt="Wakil Bupati">
             </div>
             <!-- <h2 class="section-title">Program Unggulan Bupati dan Wakil Bupati</h2><br> -->
             <h2 class="section-title">

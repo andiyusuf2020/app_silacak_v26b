@@ -307,7 +307,7 @@
                         </a>
                     </li>
                     <li onclick="showModals()">
-                        <a class="normal" style="cursor: pointer;" href="<?= hash_url('/', ['wilayah' => 'tulangbawangkabupaten']) ?>">
+                        <a class="normal" style="cursor: pointer;" href="<?= hash_url('/', ['wilayah' => 'tulangbawangbarat']) ?>">
                             <img src="<?php echo base_url('cssportal/img_home'); ?>/tbb.png" alt>
                             <div class="caption">TULANG BAWANG BARAT</div>
                             <div class="info">

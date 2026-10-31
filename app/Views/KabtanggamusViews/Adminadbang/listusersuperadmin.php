@@ -251,6 +251,26 @@
         if ($wilayah == 'tanggamus' && $groupuser == 'skpdkab') {
             echo view('template/_part/menukabtanggamus/menuopdkab');
         }
+        /*
+        * Menu untuk kabupaten lampungutara===========================
+        */
+        if ($wilayah == 'lampungutara' && $groupuser == 'skpdkab') {
+            // echo dd($groupuser);
+            echo view('template/_part/menukabtanggamus/menuopdkab');
+        }
+        if ($wilayah == 'lampungutara' && $groupuser == 'Adminadbang') {
+            echo view('template/_part/menukabtanggamus/menuadminadbang');
+        }
+        /*
+        * Menu untuk kabupaten lampung selatan===========================
+        */
+        if ($wilayah == 'lampungselatan' && $groupuser == 'skpdkab') {
+            // echo dd($groupuser);
+            echo view('template/_part/menukabtanggamus/menuopdkab');
+        }
+        if ($wilayah == 'lampungselatan' && $groupuser == 'Adminadbang') {
+            echo view('template/_part/menukabtanggamus/menuadminadbang');
+        }
 
         ?>
         <!--end::Sidebar-->
@@ -338,8 +358,8 @@
             <!--end::To the end-->
             <!--begin::Copyright-->
             <strong>
-                Copyright &copy; 2014-2026&nbsp;
-                <a href="https://adminlte.io" class="text-decoration-none">AdminLTE.io</a>.
+                Copyright &copy; 2019-2026&nbsp;
+                <a href="https://adbang.lampungprov.go.id" class="text-decoration-none">Biro Adbang Prov.Lampung</a>.
             </strong>
             All rights reserved.
             <!--end::Copyright-->
@@ -586,7 +606,7 @@
                                     <a href="updateuser?token=${rowData.update_token_passuser}" class="btn btn-sm btn-warning">Update Password</a><br>
                                 `;
                             }
-                            if (rowData.groupuser == 'Adminadbang') {
+                            if (rowData.groupuser == 'Adminadbang' || rowData.groupuser == 'superadmin') {
                                 return `
                                     <a href="updateuser?token=${rowData.update_token_groupuser}" class="btn btn-sm btn-primary">Update Role</a><br>
                                     <a href="updateuser?token=${rowData.update_token_opduser}" class="btn btn-sm btn-info">Update OPD</a><br>

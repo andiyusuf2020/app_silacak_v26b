@@ -10,7 +10,11 @@
     <!-- /.card-header -->
     <!-- form start -->
     <!-- form start -->
-    <?= form_open_multipart('' . $wilayah . '/' . $groupuser . '/groupset', 'class="form-horizontal'); ?>
+    <? if ($groupuser == 'superdamin') { ?>
+        <?= form_open_multipart('' . $wilayah . '/groupset', 'class="form-horizontal'); ?>
+    <? } else { ?>
+        <?= form_open_multipart('' . $wilayah . '/' . $groupuser . '/groupset', 'class="form-horizontal'); ?>
+    <? } ?>
     <?= csrf_field(); ?>
     <div class="card-body">
         <div class="form-group row">
@@ -23,7 +27,7 @@
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Email User XXX</label>
             <div class="col-sm-10">
-                <label class="col-sm-5 col-form-label"><?= $listuser['email'] ?>:<?= $listuser['id'] ?></label>
+                <label class="col-sm-5 col-form-label"><?= $listuser['email'] ?></label>
             </div>
         </div>
         <div class="form-group row">

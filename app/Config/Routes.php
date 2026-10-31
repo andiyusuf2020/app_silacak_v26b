@@ -26,93 +26,196 @@ $routes->get('/', 'HomeKabController::index');
 $routes->get('pilihakses', 'HomeKabController::pilihakses');
 $routes->post('simpantahun', 'HomeKabController::simpantahun');
 
-// Routes for the wilayah.
-$routes->get('lambar', 'HomeKabController::lambar');
-$routes->get('lampungselatan', 'HomeKabController::lampungselatan');
-$routes->get('lampungtimur', 'HomeKabController::lampungtimur');
-$routes->get('lampungtengah', 'HomeKabController::lampungtengah');
-$routes->get('lampungutara', 'KabtanggamusController\HomeController::dashboard');
-// $routes->group('lampungutara/superadmin', ['filter' => 'role:superadmin'], function ($routes) {
-//     $routes->get('', 'KablampuraController\AdminAdbangController::index');
-//     $routes->get('dataperopd', 'KablampuraController\AdminAdbangController::dataperopd');
-//     $routes->get('daftaruser', 'UserController\UserKabController\UserController::index');
-//     $routes->get('updateuser', 'UserController\UserKabController\UserController::updateuser');
-//     $routes->post('uploadapbd', 'KablampuraController\AdminAdbangController::uploadapbd');
-//     $routes->get('cetak', 'Silacak\HomeRfk::cetak');
-//     $routes->get('profile', 'Silacak\HomeRfk::profile');
-//     $routes->post('simpanprofile', 'Silacak\HomeRfk::simpanprofile');
-// });
-$routes->group('lampungutara/Adminadbang', ['filter' => 'role:Adminadbang'], function ($routes) {
-    $routes->get('', 'KabtanggamusController\AdminAdbangController::index');
-    $routes->get('dataperopd', 'KabtanggamusController\AdminAdbangController::dataperopd');
-    $routes->post('rekap/update_sro', 'KabtanggamusController\AdminAdbangController::update_sro');
-    $routes->get('getChartDataOpdRangking', 'KabtanggamusController\AdminAdbangController::getChartDataOpdRangking');
-    $routes->post('uploadapbd', 'KabtanggamusController\AdminAdbangController::uploadapbd');
-    $routes->get('exportExcelLrfkOpd', 'KabtanggamusController\AdminAdbangController::exportExcelLrfkOpd');
-    $routes->get('realisasi/get-tren-bulanan', 'KabtanggamusController\AdminAdbangController::getTrenBulanan');
-    $routes->get('realisasi/get-summary', 'KabtanggamusController\AdminAdbangController::getSummaryByPeriode'); // Endpoint AJAX Filter
-    $routes->post('realisasi/store', 'KabtanggamusController\AdminAdbangController::storependapatan'); ///====for user adminadbang
-    $routes->get('realisasi/get-detail/(:num)', 'KabtanggamusController\AdminAdbangController::getDetail/$1');
-    $routes->post('realisasi/update/(:num)', 'KabtanggamusController\AdminAdbangController::update/$1');
-    $routes->post('realisasi/delete/(:num)', 'KabtanggamusController\AdminAdbangController::delete/$1');
-    $routes->get('realisasi/data-list', 'KabtanggamusController\AdminAdbangController::listData');
-    $routes->post('dashboard-stats/update', 'KabtanggamusController\AdminAdbangController::updatedatadashboard');
-    $routes->get('realisasi/export-excel-pendapatan', 'KabtanggamusController\AdminAdbangController::exportExcelPendapatan');
-    $routes->post('realisasi/export-pdf-pendapatan', 'KabtanggamusController\AdminAdbangController::exportPdfrealisasiPendapatan');
-    $routes->get('tampillaporanperakun', 'KabtanggamusController\AdminAdbangController::getDataperAkun');
-    $routes->post('cetakpdfrekap', 'KabtanggamusController\AdminAdbangController::cetakpdfrekapperakun');
+// $routes->get('provinsi', 'KabtanggamusController\HomeController::dashboard');
+$routes->group('provinsi', ['filter' => 'role:superadmin'], function ($routes) {
+    $routes->get('', 'UserController\Kabtanggamus\UserController::index');
     $routes->get('daftaruser', 'UserController\Kabtanggamus\UserController::index');
     $routes->get('updateuser', 'UserController\Kabtanggamus\UserController::updateuser');
     $routes->post('groupset', 'UserController\Kabtanggamus\UserController::changeGroup');
     $routes->post('opdset', 'UserController\Kabtanggamus\UserController::simpanubahopd');
     $routes->post('opdsetpass', 'UserController\Kabtanggamus\UserController::setPassword');
-    $routes->post('anggaran-kas/store', 'KabtanggamusController\AdminAdbangController::storeangkas_ajax');
-    $routes->get('anggaran-kas/export-pdf', 'KabtanggamusController\AdminAdbangController::exportPdfAnggaranKas');
-    $routes->get('anggaran-kas/export-pdf-admin', 'KabtanggamusController\AdminAdbangController::exportPdfLaporanAngkasAdmin');
-    $routes->get('rekap/exportXlsx', 'KabtanggamusController\AdminAdbangController::exportXlsxRekapSKPD');
-    $routes->get('rekap/exportPdf', 'KabtanggamusController\AdminAdbangController::exportPdfRekapSKPD');
 });
+// Routes for the wilayah.
+$routes->get('lambar', 'HomeKabController::lambar');
+$routes->get('lampungtimur', 'HomeKabController::lampungtimur');
+$routes->get('lampungtengah', 'HomeKabController::lampungtengah');
 $routes->get('mesuji', 'HomeKabController::mesuji');
 $routes->get('pesawaran', 'HomeKabController::pesawaran');
 $routes->get('pringsewu', 'HomeKabController::pringsewu');
+$routes->get('tulangbawang', 'HomeKabController::tulangbawang');
+
 /**
- * ROUTE UNTUK PROVINSI LAMPUNG
- * =====================================================================================
+ * ROUTE For Kab Tulang Bawang Barat Sitapis-Kab 2026=======================================================
+ * ==============================================================================================
  */
-$routes->group('provinsi/superadmin', ['filter' => 'role:superadmin'], function ($routes) {
-    $routes->get('', 'KabtanggamusController\AdminAdbangController::index');
-    $routes->get('dataperopd', 'KabtanggamusController\AdminAdbangController::dataperopd');
-    $routes->post('rekap/update_sro', 'KabtanggamusController\AdminAdbangController::update_sro');
-    $routes->get('getChartDataOpdRangking', 'KabtanggamusController\AdminAdbangController::getChartDataOpdRangking');
-    $routes->post('uploadapbd', 'KabtanggamusController\AdminAdbangController::uploadapbd');
-    $routes->get('exportExcelLrfkOpd', 'KabtanggamusController\AdminAdbangController::exportExcelLrfkOpd');
-    $routes->get('realisasi/get-tren-bulanan', 'KabtanggamusController\AdminAdbangController::getTrenBulanan');
-    $routes->get('realisasi/get-summary', 'KabtanggamusController\AdminAdbangController::getSummaryByPeriode'); // Endpoint AJAX Filter
-    $routes->post('realisasi/store', 'KabtanggamusController\AdminAdbangController::storependapatan'); ///====for user adminadbang
-    $routes->get('realisasi/get-detail/(:num)', 'KabtanggamusController\AdminAdbangController::getDetail/$1');
-    $routes->post('realisasi/update/(:num)', 'KabtanggamusController\AdminAdbangController::update/$1');
-    $routes->post('realisasi/delete/(:num)', 'KabtanggamusController\AdminAdbangController::delete/$1');
-    $routes->get('realisasi/data-list', 'KabtanggamusController\AdminAdbangController::listData');
-    $routes->post('dashboard-stats/update', 'KabtanggamusController\AdminAdbangController::updatedatadashboard');
-    $routes->get('realisasi/export-excel-pendapatan', 'KabtanggamusController\AdminAdbangController::exportExcelPendapatan');
-    $routes->post('realisasi/export-pdf-pendapatan', 'KabtanggamusController\AdminAdbangController::exportPdfrealisasiPendapatan');
-    $routes->get('tampillaporanperakun', 'KabtanggamusController\AdminAdbangController::getDataperAkun');
-    $routes->post('cetakpdfrekap', 'KabtanggamusController\AdminAdbangController::cetakpdfrekapperakun');
+$routes->get('tulangbawangbarat', 'KabtanggamusController\HomeController::dashboard');
+$routes->group('tulangbawangbarat/Adminadbang', ['filter' => 'role:Adminadbang'], function ($routes) {
+    $routes->get('', 'KabtbbController\AdminAdbangController::index');
+    $routes->get('dataperopd', 'KabtbbController\AdminAdbangController::dataperopd');
+    $routes->post('rekap/update_sro', 'KabtbbController\AdminAdbangController::update_sro');
+    $routes->get('getChartDataOpdRangking', 'KabtbbController\AdminAdbangController::getChartDataOpdRangking');
+    $routes->post('uploadapbd', 'KabtbbController\AdminAdbangController::uploadapbd');
+    $routes->post('exportExcelLrfkOpd', 'KabtbbController\AdminAdbangController::exportExcelLrfkOpd');
+    $routes->get('realisasi/get-tren-bulanan', 'KabtbbController\AdminAdbangController::getTrenBulanan');
+    $routes->get('realisasi/get-summary', 'KabtbbController\AdminAdbangController::getSummaryByPeriode'); // Endpoint AJAX Filter
+    $routes->post('realisasi/store', 'KabtbbController\AdminAdbangController::storependapatan'); ///====for user adminadbang
+    $routes->get('realisasi/get-detail/(:num)', 'KabtbbController\AdminAdbangController::getDetail/$1');
+    $routes->post('realisasi/update/(:num)', 'KabtbbController\AdminAdbangController::update/$1');
+    $routes->post('realisasi/delete/(:num)', 'KabtbbController\AdminAdbangController::delete/$1');
+    $routes->get('realisasi/data-list', 'KabtbbController\AdminAdbangController::listData');
+    $routes->post('dashboard-stats/update', 'KabtbbController\AdminAdbangController::updatedatadashboard');
+    $routes->get('realisasi/export-excel-pendapatan', 'KabtbbController\AdminAdbangController::exportExcelPendapatan');
+    $routes->post('realisasi/export-pdf-pendapatan', 'KabtbbController\AdminAdbangController::exportPdfrealisasiPendapatan');
+    $routes->get('tampillaporanperakun', 'KabtbbController\AdminAdbangController::getDataperAkun');
+    $routes->post('cetakpdfrekap', 'KabtbbController\AdminAdbangController::cetakpdfrekapperakun');
     $routes->get('daftaruser', 'UserController\Kabtanggamus\UserController::index');
     $routes->get('updateuser', 'UserController\Kabtanggamus\UserController::updateuser');
     $routes->post('groupset', 'UserController\Kabtanggamus\UserController::changeGroup');
     $routes->post('opdset', 'UserController\Kabtanggamus\UserController::simpanubahopd');
     $routes->post('opdsetpass', 'UserController\Kabtanggamus\UserController::setPassword');
-    $routes->post('anggaran-kas/store', 'KabtanggamusController\AdminAdbangController::storeangkas_ajax');
-    $routes->get('anggaran-kas/export-pdf', 'KabtanggamusController\AdminAdbangController::exportPdfAnggaranKas');
-    $routes->get('anggaran-kas/export-pdf-admin', 'KabtanggamusController\AdminAdbangController::exportPdfLaporanAngkasAdmin');
-    $routes->get('rekap/exportXlsx', 'KabtanggamusController\AdminAdbangController::exportXlsxRekapSKPD');
-    $routes->get('rekap/exportPdf', 'KabtanggamusController\AdminAdbangController::exportPdfRekapSKPD');
+    $routes->post('anggaran-kas/store', 'KabtbbController\AdminAdbangController::storeangkas_ajax');
+    $routes->get('anggaran-kas/export-pdf', 'KabtbbController\AdminAdbangController::exportPdfAnggaranKas');
+    $routes->get('anggaran-kas/export-pdf-admin', 'KabtbbController\AdminAdbangController::exportPdfLaporanAngkasAdmin');
+    $routes->get('rekap/exportXlsx', 'KabtbbController\AdminAdbangController::exportXlsxRekapSKPD');
+    $routes->get('rekap/exportPdf', 'KabtbbController\AdminAdbangController::exportPdfRekapSKPD');
 });
+/**
+ * ROUTE For Kab Lampung Selatan Sitapis-Kab 2026==============================================================
+ * ==============================================================================================
+ */
+$routes->get('lampungselatan', 'KabtanggamusController\HomeController::dashboard');
+$routes->group('lampungselatan/Adminadbang', ['filter' => 'role:Adminadbang'], function ($routes) {
+    $routes->get('', 'KablamselController\AdminAdbangController::index');
+    $routes->get('dataperopd', 'KablamselController\AdminAdbangController::dataperopd');
+    $routes->post('rekap/update_sro', 'KablamselController\AdminAdbangController::update_sro');
+    $routes->get('getChartDataOpdRangking', 'KablamselController\AdminAdbangController::getChartDataOpdRangking');
+    $routes->post('uploadapbd', 'KablamselController\AdminAdbangController::uploadapbd');
+    $routes->post('exportExcelLrfkOpd', 'KablamselController\AdminAdbangController::exportExcelLrfkOpd');
+    $routes->get('realisasi/get-tren-bulanan', 'KablamselController\AdminAdbangController::getTrenBulanan');
+    $routes->get('realisasi/get-summary', 'KablamselController\AdminAdbangController::getSummaryByPeriode'); // Endpoint AJAX Filter
+    $routes->post('realisasi/store', 'KablamselController\AdminAdbangController::storependapatan'); ///====for user adminadbang
+    $routes->get('realisasi/get-detail/(:num)', 'KablamselController\AdminAdbangController::getDetail/$1');
+    $routes->post('realisasi/update/(:num)', 'KablamselController\AdminAdbangController::update/$1');
+    $routes->post('realisasi/delete/(:num)', 'KablamselController\AdminAdbangController::delete/$1');
+    $routes->get('realisasi/data-list', 'KablamselController\AdminAdbangController::listData');
+    $routes->post('dashboard-stats/update', 'KablamselController\AdminAdbangController::updatedatadashboard');
+    $routes->get('realisasi/export-excel-pendapatan', 'KablamselController\AdminAdbangController::exportExcelPendapatan');
+    $routes->post('realisasi/export-pdf-pendapatan', 'KablamselController\AdminAdbangController::exportPdfrealisasiPendapatan');
+    $routes->get('tampillaporanperakun', 'KablamselController\AdminAdbangController::getDataperAkun');
+    $routes->post('cetakpdfrekap', 'KablamselController\AdminAdbangController::cetakpdfrekapperakun');
+    $routes->get('daftaruser', 'UserController\Kabtanggamus\UserController::index');
+    $routes->get('updateuser', 'UserController\Kabtanggamus\UserController::updateuser');
+    $routes->post('groupset', 'UserController\Kabtanggamus\UserController::changeGroup');
+    $routes->post('opdset', 'UserController\Kabtanggamus\UserController::simpanubahopd');
+    $routes->post('opdsetpass', 'UserController\Kabtanggamus\UserController::setPassword');
+    $routes->post('anggaran-kas/store', 'KablamselController\AdminAdbangController::storeangkas_ajax');
+    $routes->get('anggaran-kas/export-pdf', 'KablamselController\AdminAdbangController::exportPdfAnggaranKas');
+    $routes->get('anggaran-kas/export-pdf-admin', 'KablamselController\AdminAdbangController::exportPdfLaporanAngkasAdmin');
+    $routes->get('rekap/exportXlsx', 'KablamselController\AdminAdbangController::exportXlsxRekapSKPD');
+    $routes->get('rekap/exportPdf', 'KablamselController\AdminAdbangController::exportPdfRekapSKPD');
+});
+$routes->group('lampungselatan/skpdkab', ['filter' => 'role:skpdkab'], function ($routes) {
+    $routes->get('', 'KablamselController\AdminAdbangController::index');
+    $routes->get('dataperopd', 'KablamselController\AdminAdbangController::dataperopd');
+    $routes->post('rekap/update_sro', 'KablamselController\AdminAdbangController::update_sro');
+    $routes->get('getChartDataOpdRangking', 'KablamselController\AdminAdbangController::getChartDataOpdRangking');
+    $routes->post('uploadapbd', 'KablamselController\AdminAdbangController::uploadapbd');
+    $routes->post('exportExcelLrfkOpd', 'KablamselController\AdminAdbangController::exportExcelLrfkOpd');
+    $routes->get('realisasi/get-tren-bulanan', 'KablamselController\AdminAdbangController::getTrenBulanan');
+    $routes->get('realisasi/get-summary', 'KablamselController\AdminAdbangController::getSummaryByPeriode'); // Endpoint AJAX Filter
+    $routes->post('realisasi/store', 'KablamselController\AdminAdbangController::storependapatan'); ///====for user adminadbang
+    $routes->get('realisasi/get-detail/(:num)', 'KablamselController\AdminAdbangController::getDetail/$1');
+    $routes->post('realisasi/update/(:num)', 'KablamselController\AdminAdbangController::update/$1');
+    $routes->post('realisasi/delete/(:num)', 'KablamselController\AdminAdbangController::delete/$1');
+    $routes->get('realisasi/data-list', 'KablamselController\AdminAdbangController::listData');
+    $routes->post('dashboard-stats/update', 'KablamselController\AdminAdbangController::updatedatadashboard');
+    $routes->get('realisasi/export-excel-pendapatan', 'KablamselController\AdminAdbangController::exportExcelPendapatan');
+    $routes->post('realisasi/export-pdf-pendapatan', 'KablamselController\AdminAdbangController::exportPdfrealisasiPendapatan');
+    $routes->get('tampillaporanperakun', 'KablamselController\AdminAdbangController::getDataperAkun');
+    $routes->post('cetakpdfrekap', 'KablamselController\AdminAdbangController::cetakpdfrekapperakun');
+    $routes->get('daftaruser', 'UserController\Kabtanggamus\UserController::index');
+    $routes->get('updateuser', 'UserController\Kabtanggamus\UserController::updateuser');
+    $routes->post('groupset', 'UserController\Kabtanggamus\UserController::changeGroup');
+    $routes->post('opdset', 'UserController\Kabtanggamus\UserController::simpanubahopd');
+    $routes->post('opdsetpass', 'UserController\Kabtanggamus\UserController::setPassword');
+    $routes->post('anggaran-kas/store', 'KablamselController\AdminAdbangController::storeangkas_ajax');
+    $routes->get('anggaran-kas/export-pdf', 'KablamselController\AdminAdbangController::exportPdfAnggaranKas');
+    $routes->get('anggaran-kas/export-pdf-admin', 'KablamselController\AdminAdbangController::exportPdfLaporanAngkasAdmin');
+    $routes->get('rekap/exportXlsx', 'KablamselController\AdminAdbangController::exportXlsxRekapSKPD');
+    $routes->get('rekap/exportPdf', 'KablamselController\AdminAdbangController::exportPdfRekapSKPD');
+});
+
+/**
+ * ROUTE FOR Kab Lampung Utara  SiTAPIS-KAB tahun 2026 ===============================================
+ * ===================================================================================================
+ */
+$routes->get('lampungutara', 'KabtanggamusController\HomeController::dashboard');
+$routes->group('lampungutara/skpdkab', ['filter' => 'role:skpdkab'], function ($routes) {
+    $routes->get('', 'KablampuraController\AdminAdbangController::index');
+    $routes->get('dataperopd', 'KablampuraController\AdminAdbangController::dataperopd');
+    $routes->post('rekap/update_sro', 'KablampuraController\AdminAdbangController::update_sro');
+    $routes->get('getChartDataOpdRangking', 'KablampuraController\AdminAdbangController::getChartDataOpdRangking');
+    $routes->post('uploadapbd', 'KablampuraController\AdminAdbangController::uploadapbd');
+    $routes->post('exportExcelLrfkOpd', 'KablampuraController\AdminAdbangController::exportExcelLrfkOpd');
+    $routes->get('realisasi/get-tren-bulanan', 'KablampuraController\AdminAdbangController::getTrenBulanan');
+    $routes->get('realisasi/get-summary', 'KablampuraController\AdminAdbangController::getSummaryByPeriode'); // Endpoint AJAX Filter
+    $routes->post('realisasi/store', 'KablampuraController\AdminAdbangController::storependapatan'); ///====for user adminadbang
+    $routes->get('realisasi/get-detail/(:num)', 'KablampuraController\AdminAdbangController::getDetail/$1');
+    $routes->post('realisasi/update/(:num)', 'KablampuraController\AdminAdbangController::update/$1');
+    $routes->post('realisasi/delete/(:num)', 'KablampuraController\AdminAdbangController::delete/$1');
+    $routes->get('realisasi/data-list', 'KablampuraController\AdminAdbangController::listData');
+    $routes->post('dashboard-stats/update', 'KablampuraController\AdminAdbangController::updatedatadashboard');
+    $routes->get('realisasi/export-excel-pendapatan', 'KablampuraController\AdminAdbangController::exportExcelPendapatan');
+    $routes->post('realisasi/export-pdf-pendapatan', 'KablampuraController\AdminAdbangController::exportPdfrealisasiPendapatan');
+    $routes->get('tampillaporanperakun', 'KablampuraController\AdminAdbangController::getDataperAkun');
+    $routes->post('cetakpdfrekap', 'KablampuraController\AdminAdbangController::cetakpdfrekapperakun');
+    $routes->get('daftaruser', 'UserController\Kabtanggamus\UserController::index');
+    $routes->get('updateuser', 'UserController\Kabtanggamus\UserController::updateuser');
+    $routes->post('groupset', 'UserController\Kabtanggamus\UserController::changeGroup');
+    $routes->post('opdset', 'UserController\Kabtanggamus\UserController::simpanubahopd');
+    $routes->post('opdsetpass', 'UserController\Kabtanggamus\UserController::setPassword');
+    $routes->post('anggaran-kas/store', 'KablampuraController\AdminAdbangController::storeangkas_ajax');
+    $routes->get('anggaran-kas/export-pdf', 'KablampuraController\AdminAdbangController::exportPdfAnggaranKas');
+    $routes->get('anggaran-kas/export-pdf-admin', 'KablampuraController\AdminAdbangController::exportPdfLaporanAngkasAdmin');
+    $routes->get('rekap/exportXlsx', 'KablampuraController\AdminAdbangController::exportXlsxRekapSKPD');
+    $routes->get('rekap/exportPdf', 'KablampuraController\AdminAdbangController::exportPdfRekapSKPD');
+});
+$routes->group('lampungutara/Adminadbang', ['filter' => 'role:Adminadbang'], function ($routes) {
+    $routes->get('', 'KablampuraController\AdminAdbangController::index');
+    $routes->get('dataperopd', 'KablampuraController\AdminAdbangController::dataperopd');
+    $routes->post('rekap/update_sro', 'KablampuraController\AdminAdbangController::update_sro');
+    $routes->get('getChartDataOpdRangking', 'KablampuraController\AdminAdbangController::getChartDataOpdRangking');
+    $routes->post('uploadapbd', 'KablampuraController\AdminAdbangController::uploadapbd');
+    $routes->post('exportExcelLrfkOpd', 'KablampuraController\AdminAdbangController::exportExcelLrfkOpd');
+    $routes->get('realisasi/get-tren-bulanan', 'KablampuraController\AdminAdbangController::getTrenBulanan');
+    $routes->get('realisasi/get-summary', 'KablampuraController\AdminAdbangController::getSummaryByPeriode'); // Endpoint AJAX Filter
+    $routes->post('realisasi/store', 'KablampuraController\AdminAdbangController::storependapatan'); ///====for user adminadbang
+    $routes->get('realisasi/get-detail/(:num)', 'KablampuraController\AdminAdbangController::getDetail/$1');
+    $routes->post('realisasi/update/(:num)', 'KablampuraController\AdminAdbangController::update/$1');
+    $routes->post('realisasi/delete/(:num)', 'KablampuraController\AdminAdbangController::delete/$1');
+    $routes->get('realisasi/data-list', 'KablampuraController\AdminAdbangController::listData');
+    $routes->post('dashboard-stats/update', 'KablampuraController\AdminAdbangController::updatedatadashboard');
+    $routes->get('realisasi/export-excel-pendapatan', 'KablampuraController\AdminAdbangController::exportExcelPendapatan');
+    $routes->post('realisasi/export-pdf-pendapatan', 'KablampuraController\AdminAdbangController::exportPdfrealisasiPendapatan');
+    $routes->get('tampillaporanperakun', 'KablampuraController\AdminAdbangController::getDataperAkun');
+    $routes->post('cetakpdfrekap', 'KablampuraController\AdminAdbangController::cetakpdfrekapperakun');
+    $routes->get('daftaruser', 'UserController\Kabtanggamus\UserController::index');
+    $routes->get('updateuser', 'UserController\Kabtanggamus\UserController::updateuser');
+    $routes->post('groupset', 'UserController\Kabtanggamus\UserController::changeGroup');
+    $routes->post('opdset', 'UserController\Kabtanggamus\UserController::simpanubahopd');
+    $routes->post('opdsetpass', 'UserController\Kabtanggamus\UserController::setPassword');
+    $routes->post('anggaran-kas/store', 'KablampuraController\AdminAdbangController::storeangkas_ajax');
+    $routes->get('anggaran-kas/export-pdf', 'KablampuraController\AdminAdbangController::exportPdfAnggaranKas');
+    $routes->get('anggaran-kas/export-pdf-admin', 'KablampuraController\AdminAdbangController::exportPdfLaporanAngkasAdmin');
+    $routes->get('rekap/exportXlsx', 'KablampuraController\AdminAdbangController::exportXlsxRekapSKPD');
+    $routes->get('rekap/exportPdf', 'KablampuraController\AdminAdbangController::exportPdfRekapSKPD');
+});
+
 //============================================================================================================================
 /*
 Route for Kab Tanggamus SiTAPIS-KAB tahun 2026 ===============================================
 */
+//============================================================================================================================
 $routes->get('tanggamus', 'KabtanggamusController\HomeController::dashboard');
 
 ///====for user superadmin
@@ -122,7 +225,6 @@ $routes->group('tanggamus/skpdkab', ['filter' => 'role:skpdkab'], function ($rou
     $routes->post('rekap/update_sro', 'KabtanggamusController\AdminAdbangController::update_sro');
     $routes->get('getChartDataOpdRangking', 'KabtanggamusController\AdminAdbangController::getChartDataOpdRangking');
     $routes->post('uploadapbd', 'KabtanggamusController\AdminAdbangController::uploadapbd');
-    $routes->get('exportExcelLrfkOpd', 'KabtanggamusController\AdminAdbangController::exportExcelLrfkOpd');
     $routes->post('exportExcelLrfkOpd', 'KabtanggamusController\AdminAdbangController::exportExcelLrfkOpd');
 
     $routes->get('realisasi/get-tren-bulanan', 'KabtanggamusController\AdminAdbangController::getTrenBulanan');
@@ -154,7 +256,7 @@ $routes->group('tanggamus/Adminadbang', ['filter' => 'role:Adminadbang'], functi
     $routes->post('rekap/update_sro', 'KabtanggamusController\AdminAdbangController::update_sro');
     $routes->get('getChartDataOpdRangking', 'KabtanggamusController\AdminAdbangController::getChartDataOpdRangking');
     $routes->post('uploadapbd', 'KabtanggamusController\AdminAdbangController::uploadapbd');
-    $routes->get('exportExcelLrfkOpd', 'KabtanggamusController\AdminAdbangController::exportExcelLrfkOpd');
+    $routes->post('exportExcelLrfkOpd', 'KabtanggamusController\AdminAdbangController::exportExcelLrfkOpd');
     $routes->get('realisasi/get-tren-bulanan', 'KabtanggamusController\AdminAdbangController::getTrenBulanan');
     $routes->get('realisasi/get-summary', 'KabtanggamusController\AdminAdbangController::getSummaryByPeriode'); // Endpoint AJAX Filter
     $routes->post('realisasi/store', 'KabtanggamusController\AdminAdbangController::storependapatan'); ///====for user adminadbang
@@ -179,29 +281,10 @@ $routes->group('tanggamus/Adminadbang', ['filter' => 'role:Adminadbang'], functi
     $routes->get('rekap/exportPdf', 'KabtanggamusController\AdminAdbangController::exportPdfRekapSKPD');
 });
 
-// $routes->get('realisasi', 'RealisasiController::index');
-$routes->get('rekap/get-data-json', 'KabtanggamusController\AdminAdbangController::getDataJsonPerAkun');
-$routes->get('realisasi/cetakPdf', 'KabtanggamusController\AdminAdbangController::cetakPdfPerAkun');
-$routes->get('realisasi/exportExcel', 'export-pdf-pendapatan\AdminAdbangController::exportExcel');
-// $routes->post('anggaran-kas/store', 'KabtanggamusController\AdminAdbangController::storeangkas_ajax');
-
-// $routes->get('rekap', [RekapController::class, 'index']);
-// $routes->get('rekap/exportXlsx', 'KabtanggamusController\AdminAdbangController::exportXlsxRekapSKPD');
-// $routes->get('rekap/exportPdf', 'KabtanggamusController\AdminAdbangController::exportPdfRekapSKPD');
-$routes->get('rekap/getDataJson', 'KabtanggamusController\AdminAdbangController::getDataJson');
-$routes->post('tanggamus/realisasi/store', 'KabtanggamusController\AdminAdbangController::storeangkas_ajax'); ///====for user adminadbang
-
-
-
-
-
-
 /*
 End of Route for Kab Tanggamus SiTAPIS-KAB tahun 2026==========================================
 */
 
-$routes->get('tulangbawang', 'HomeKabController::tulangbawang');
-$routes->get('tulangbawangbarat', 'HomeKabController::tulangbawangbarat');
 
 // $routes->get('/', 'Sipkabkota\Home::index');
 $routes->get('dashboard', 'Sipkabkota\Home::dashboard');

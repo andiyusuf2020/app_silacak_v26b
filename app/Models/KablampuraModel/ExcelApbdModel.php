@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 
 class ExcelApbdModel extends Model
 {
-    protected $table = 'ta_sipd_lampungutara';
+    protected $table = 'kablampura_ta_sipd';
     protected $primaryKey = 'NO';
     protected $returnType     = 'array'; // Tipe data yang dikembalikan
     protected $allowedFields = [
