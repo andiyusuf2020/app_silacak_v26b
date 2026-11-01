@@ -741,7 +741,7 @@ class AdminAdbangController extends BaseController
             'ANGGARAN (Rp)',
             'REALISASI (Rp)',
             'JUMLAH OUTPUT SUB-RINCIAN-OBJEK   BELANJA',
-            'JUMLAH OUTPUT SUB-RINCIAN-OBJEK  BELANJA  YANG TERLAKSANA',
+            'JUMLAH OUTPUT SUB-RINCIAN-OBJEK  BELANJA YANG BELUM TERLAKSANA',
             'CAPAIAN  REALISASI ANGGARAN (%)',
             'CAPAIAN  KINERJA  OUTPUT BELANJA',
             'KATEGORI EFISIENSI'

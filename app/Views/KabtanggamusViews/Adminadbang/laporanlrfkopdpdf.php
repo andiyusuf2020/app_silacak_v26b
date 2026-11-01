@@ -92,7 +92,7 @@
                 <th width="12%">ANGGARAN (Rp)</th>
                 <th width="12%">REALISASI (Rp)</th>
                 <th width="5%">JUMLAH OUTPUT<br> SUB-RINCIAN-OBJEK<br> BELANJA</th>
-                <th width="6%">JUMLAH OUTPUT <br>SUB-RINCIAN-OBJEK <br>BELANJA YANG <br>TERLAKSANA</th>
+                <th width="6%">JUMLAH OUTPUT <br>SUB-RINCIAN-OBJEK <br>BELANJA YANG BELUM<br>TERLAKSANA</th>
                 <th width="10%">CAPAIAN <br>REALISASI <br>ANGGARAN (%)</th>
                 <th width="10%">CAPAIAN <br>KINERJA <br>OUTPUT BELANJA</th>
                 <th width="8%">KATEGORI EFISIENSI</th>
