@@ -194,8 +194,12 @@ class AdminAdbangController extends BaseController
             return view('KabtanggamusViews/Adminadbang/upload_form', $data);
         } elseif ($hal == 'tambahdataangkasopd') {
             if ($data['groupuser'] == 'skpdkab') {
-                // echo dd($data['groupuser']);
-                $data['dataopdadmin'] = $this->realapbdmodel->getRekapSubSkpdperOPD(session()->get('tglaktif'), $user->kd_sub_unit);
+                if ($user->kd_sub_unit == '') {
+                    $kdOPD = $user->sub_unit;
+                } else {
+                    $kdOPD = $user->kd_sub_unit;
+                }
+                $data['dataopdadmin'] = $this->realapbdmodel->getRekapSubSkpdperOPD(session()->get('tglaktif'), $kdOPD);
             }
             if ($data['groupuser'] == 'Adminadbang') {
                 $data['dataopdadmin'] = $this->realapbdmodel->getRekapSubSkpd(session()->get('tglaktif'));
@@ -219,8 +223,18 @@ class AdminAdbangController extends BaseController
             return view('KabtanggamusViews/Adminadbang/listopdangkas', $data);
         } elseif ($hal == 'listopdangkas') {
             if ($data['groupuser'] == 'skpdkab') {
-                // echo dd($data['groupuser']);
-                $data['anggaran'] = $this->anggaranKasModel->where('perangkat_daerah_id', $user->kd_sub_unit)
+                if ($user->kd_sub_unit == '') {
+                    $kdOPD = $user->sub_unit;
+                } else {
+                    $kdOPD = $user->kd_sub_unit;
+                }
+                // echo dd($kdOPD);
+                $data['anggaran'] = $this->anggaranKasModel
+                    // ->where('perangkat_daerah_id', $kdOPD)
+                    ->groupStart()
+                    ->where('perangkat_daerah_id', $kdOPD)
+                    ->orWhere('sub_unit', $kdOPD)
+                    ->groupEnd()
                     ->get()->getResultArray();
             }
             if ($data['groupuser'] == 'Adminadbang') {
@@ -356,8 +370,12 @@ class AdminAdbangController extends BaseController
                 $rekapData = $this->realapbdmodel->getRekapRealisasiAkun($jadwalaktif['bulan'], $akun, session()->get('tahun'));
             }
             if ($data['groupuser'] == 'skpdkab') {
-                // Ambil data dari model berdasarkan filter
-                $rekapData = $this->realapbdmodel->getRekapRealisasiAkunperOpd($jadwalaktif['bulan'], $akun, $user->kd_sub_unit);
+                if ($user->kd_sub_unit == '') {
+                    $kdOPD = $user->sub_unit;
+                } else {
+                    $kdOPD = $user->kd_sub_unit;
+                }
+                $rekapData = $this->realapbdmodel->getRekapRealisasiAkunperOpd($jadwalaktif['bulan'], $akun, $kdOPD);
             }
             // Kirim data ke View
             $data['bulan'] = $jadwalaktif['bulan'];
@@ -422,9 +440,17 @@ class AdminAdbangController extends BaseController
 
                 $data['dataopdadmin'] = $this->realapbdmodel->getRekapSubSkpd($tglhasilcek);
             }
+            if ($user->kd_sub_unit == '') {
+                $kdOPD = $user->sub_unit;
+            } else {
+                $kdOPD = $user->kd_sub_unit;
+            }
             if ($data['groupuser'] == 'skpdkab') {
-                $data['dataopdadmin'] = $this->realapbdmodel->getRekapSubSkpdperOPD($tglhasilcek, $user->kd_sub_unit);
-            }            // echo dd($data['dataopdadmin']);
+                $data['dataopdadmin'] = $this->realapbdmodel->getRekapSubSkpdperOPD($tglhasilcek, $kdOPD);
+            }
+            // $userAV = $user->sub_unit;
+            // echo dd($userAV);
+            // echo dd($data['dataopdadmin']); //. $user->kd_sub_unit);
             // Hanya enkripsi 'id' dan 'name'
             $dataopdapbds = array_map(function ($dataopdapbd) {
                 $dataopdapbd['update_token'] = CryptoUrl::encrypt([
@@ -1036,10 +1062,13 @@ class AdminAdbangController extends BaseController
             $results = $this->realapbdmodel->getRekapSubSkpdRangking($tgldata, $tahun);
         }
         if ($groupuser == 'skpdkab') {
-            $data['dataopdadmin'] = $this->realapbdmodel->getRekapSubSkpdRangkingperOpd($tgldata, $user->kd_sub_unit, $tahun);
-
+            if ($user->kd_sub_unit == '') {
+                $kdOPD = $user->sub_unit;
+            } else {
+                $kdOPD = $user->kd_sub_unit;
+            }
             // Ambil data ringkasan per SKPD (nama, pagu, realisasi)
-            $results = $this->realapbdmodel->getRekapSubSkpdRangkingperOpd($tgldata, $user->kd_sub_unit, $tahun);
+            $results = $this->realapbdmodel->getRekapSubSkpdRangkingperOpd($tgldata, $kdOPD, $tahun);
         }
         // echo dd($results);
         return $this->response->setJSON($results);

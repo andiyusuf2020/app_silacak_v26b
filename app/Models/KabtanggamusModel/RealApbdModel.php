@@ -125,7 +125,11 @@ class RealApbdModel extends Model
 
         if (!empty($bulan)) {
             $builder->where('bulan', $bulan);
-            $builder->where('KODE_UNIT_SKPD', $kdSU);
+            $builder->groupStart()
+                ->where('KODE_UNIT_SKPD', $kdSU)
+                ->orWhere('NAMA_UNIT_SKPD', $kdSU)
+                ->groupEnd();
+            // $builder->where('KODE_UNIT_SKPD', $kdSU);
         }
 
         $builder->groupBy([$dataview]);
@@ -1467,8 +1471,12 @@ class RealApbdModel extends Model
         ) AS capaian_efisiensi
     ')
             ->where('CREATE_AT', $tgl)
+            // ->where('KODE_UNIT_SKPD', $kdSU)
+            // Filter fleksibel untuk Kode atau Nama Unit SKPD
+            ->groupStart()
             ->where('KODE_UNIT_SKPD', $kdSU)
-
+            ->orWhere('NAMA_UNIT_SKPD', $kdSU)
+            ->groupEnd()
             ->groupBy('nama_unit_skpd')
             ->orderBy('persen_capaian_anggaran', 'DESC')
             // ->limit(5)
@@ -1594,7 +1602,12 @@ class RealApbdModel extends Model
     ')
             ->where('CREATE_AT', $tgl)
             ->where('TAHUN', $tahun)
+            // ->where('KODE_UNIT_SKPD', $kdSU)
+            // // Filter fleksibel untuk Kode atau Nama Unit SKPD
+            ->groupStart()
             ->where('KODE_UNIT_SKPD', $kdSU)
+            ->orWhere('NAMA_UNIT_SKPD', $kdSU)
+            ->groupEnd()
             ->groupBy('nama_unit_skpd')
             ->orderBy('persen_capaian_anggaran', 'DESC')
             ->limit(10)
