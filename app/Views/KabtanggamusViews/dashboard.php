@@ -35,7 +35,6 @@
                 <li><a href="#dashboard">Dashboard Pembangunan</a></li>
                 <li><a href="#analytics">Capaian Kinerja Anggaran</a></li>
                 <li><a href="#reports">Program Unggulan Daerah</a></li>
-                <li><a href="#contact">Contact</a></li>
             </ul>
             <!-- <a href="https://www.google.com/search" target="_blank" rel="noopener" title="Search">
                 <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -54,7 +53,7 @@
             <li><a href="#dashboard">Dashboard Pembangunan</a></li>
             <li><a href="#analytics">Capaian Kinerja Anggaran</a></li>
             <li><a href="#reports">Program Unggulan Daerah</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <!-- <li><a href="#contact">Contact</a></li> -->
         </ul>
     </nav>
 
@@ -365,50 +364,6 @@
 
     </section>
 
-
-    <!-- Contact Section -->
-    <section class="contact-section" id="contact">
-        <div class="dashboard-container">
-            <h2 class="section-title">Get In Touch</h2>
-            <!-- Contact Info -->
-            <div class="contact-info">
-                <h3>BAGIAN ADMINISTRASI PEMBANGUNAN SETDA KABUPATEN Kab. Tanggamus</h3>
-
-                <a href="mailto:bagadbang@tubaba.go.id" class="contact-item" style="text-decoration: none; color: inherit;">
-                    <div class="contact-icon">📧</div>
-                    <div class="contact-details">
-                        <h4>Email Address</h4>
-                        <p>bagadbang@kab.lampungutara.go.id<br>adminsupport@kab.lampungutara.go.id</p>
-                    </div>
-                </a>
-
-                <a href="tel:+6281234567890" class="contact-item" style="text-decoration: none; color: inherit;">
-                    <div class="contact-icon">📞</div>
-                    <div class="contact-details">
-                        <h4>Phone Number</h4>
-                        <p>+62 812-3456-7890<br>Available 24/7</p>
-                    </div>
-                </a>
-
-                <a href="https://maps.google.com/?q=Kantor+Bupati+Tulang+Bawang+Barat" target="_blank" rel="noopener" class="contact-item" style="text-decoration: none; color: inherit;">
-                    <div class="contact-icon">📍</div>
-                    <div class="contact-details">
-                        <h4>Office Location</h4>
-                        <p>Jl. Diponegoro No. 86 ..., <br>Kab. Kab. Tanggamus, Lampung 34693</p>
-                    </div>
-                </a>
-
-                <div class="contact-item">
-                    <div class="contact-icon">🕒</div>
-                    <div class="contact-details">
-                        <h4>Business Hours</h4>
-                        <p>Monday - Friday: 9:00 AM - 6:00 PM<br>Weekend: Emergency support only</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        </div>
-    </section>
 
     <!-- Footer -->
     <footer>
