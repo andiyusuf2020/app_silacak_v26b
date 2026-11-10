@@ -28,7 +28,7 @@
                         <path d="M3 13h2v8H3zm4-8h2v13H7zm4-2h2v15h-2zm4 4h2v11h-2zm4-2h2v13h-2z" />
                     </svg>
                 </div>
-                <span class="logo-text">Dashboard SiTAPIS-KAB <> SIPAdbang</span>
+                <span class="logo-text">Dashboard SiTAPIS-KAB</span>
             </a>
             <ul class="nav-links">
                 <li><a href="<?= base_url() ?>" class="active">Home</a></li>
@@ -368,8 +368,8 @@
     <!-- Footer -->
     <footer>
         <div class="footer-content">
-            <p class="copyright">© 2026 SIPDal.
-                | Designed by <a href="https://adbang.lampungprov.go.id" rel="nofollow noopener" target="_blank">Bagian Administrasi Pembangunan Setda ...,</a></p>
+            <p class="copyright">© 2026 SiTAPIS-KAB
+                | Designed by <a href="https://adbang.lampungprov.go.id" rel="nofollow noopener" target="_blank">Bagian Administrasi Pembangunan Setda <?= session()->get('namawilayah') ?></a></p>
         </div>
     </footer>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
