@@ -45,6 +45,9 @@
                 use App\Models\KabtbbModel\RealApbdModel as sipdTbb;
                 use App\Models\KabtbbModel\TglApbdModel as  tglapbdTbb;
 
+                use App\Models\KabMesujiModel\RealApbdModel as sipdMesuji;
+                use App\Models\KabMesujiModel\TglApbdModel as  tglapbdMesuji;
+
                 if ($wilayah == 'tanggamus') {
                     $this->sipd = new sipdtanggamus();
                     $this->tglapbd = new tglapbdtanggamus();
@@ -64,6 +67,11 @@
                 if ($wilayah == 'tulangbawangbarat') {
                     $this->sipd = new sipdTbb();
                     $this->tglapbd = new tglapbdTbb();
+                    // $tgldata = $this->tglapbdtanggamus->tgldataaktif();
+                }
+                if ($wilayah == 'mesuji') {
+                    $this->sipd = new sipdMesuji();
+                    $this->tglapbd = new tglapbdMesuji();
                     // $tgldata = $this->tglapbdtanggamus->tgldataaktif();
                 }
                 $tgldata = $this->tglapbd->tgldataaktif();

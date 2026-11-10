@@ -86,10 +86,13 @@ class HomeKabController extends BaseController
 
             return redirect()->to(base_url('lampungutara'));
         } elseif ($wilayah === 'mesuji') {
-            return view('maintenis/soon');
-            // session()->set('wilayah', 'mesuji');
-            // session()->set('namawilayah', 'Kabupaten Mesuji');
-            // return redirect()->to(base_url('mesuji'));
+            // return view('maintenis/soon');
+            session()->set('wilayah', 'mesuji');
+            session()->set('namawilayah', 'Kabupaten Mesuji');
+            session()->set('logokabkota', 'cssportal/img_home/mesuji.png');
+            session()->set('logobupati', 'cssportal/img_home/bupati_mesuji.jpg');
+            session()->set('logowakil', 'cssportal/img_home/wabub_mesuji.jpg');
+            return redirect()->to(base_url('mesuji'));
         } elseif ($wilayah === 'pesawaran') {
             return view('maintenis/soon');
             // session()->set('wilayah', 'pesawaran');

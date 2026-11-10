@@ -41,6 +41,9 @@
                             use App\Models\KabtbbModel\RealApbdModel as sipdtbb;
                             use App\Models\KabtbbModel\TglApbdModel as  tglapbdtbb;
 
+                            use App\Models\KabMesujiModel\RealApbdModel as sipdmesuji;
+                            use App\Models\KabMesujiModel\TglApbdModel as  tglapbdmesuji;
+
                             if ($wilayah == 'tanggamus') {
                                 $this->sipd = new sipdtanggamus();
                                 $this->tglapbd = new tglapbdtanggamus();
@@ -60,6 +63,11 @@
                             if ($wilayah == 'tulangbawangbarat') {
                                 $this->sipd = new sipdtbb();
                                 $this->tglapbd = new tglapbdtbb();
+                                // $tgldata = $this->tglapbdtanggamus->tgldataaktif();
+                            }
+                            if ($wilayah == 'mesuji') {
+                                $this->sipd = new sipdmesuji();
+                                $this->tglapbd = new tglapbdmesuji();
                                 // $tgldata = $this->tglapbdtanggamus->tgldataaktif();
                             }
                             echo '<select name="sub_unit" class="form-control">';

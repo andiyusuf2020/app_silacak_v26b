@@ -23,6 +23,9 @@ use App\Models\KablamselModel\RealApbdModel as RealApbdModelLamsel;
 use App\Models\KabtbbModel\TglApbdModel as TglApbdModelTbb;
 use App\Models\KabtbbModel\RealApbdModel as RealApbdModelTbb;
 
+use App\Models\KabMesujiModel\TglApbdModel as TglApbdModelMesuji;
+use App\Models\KabMesujiModel\RealApbdModel as RealApbdModelMesuji;
+
 
 class UserController extends BaseController
 {
@@ -58,6 +61,10 @@ class UserController extends BaseController
         if ($wilayah == 'tulangbawangbarat') {
             $this->tglapbd = new TglApbdModelTbb();
             $this->realapbdmodel = new RealApbdModelTbb();
+        }
+        if ($wilayah == 'mesuji') {
+            $this->tglapbd = new TglApbdModelMesuji();
+            $this->realapbdmodel = new RealApbdModelMesuji();
         }
     }
 
