@@ -90,8 +90,8 @@ class HomeKabController extends BaseController
             session()->set('wilayah', 'mesuji');
             session()->set('namawilayah', 'Kabupaten Mesuji');
             session()->set('logokabkota', 'cssportal/img_home/mesuji.png');
-            session()->set('logobupati', 'cssportal/img_home/bupati_mesuji.jpg');
-            session()->set('logowakil', 'cssportal/img_home/wabub_mesuji.jpg');
+            session()->set('logobupati', 'cssportal/img_home/bupati_mesuji.png');
+            session()->set('logowakil', 'cssportal/img_home/wabub_mesuji.png');
             return redirect()->to(base_url('mesuji'));
         } elseif ($wilayah === 'pesawaran') {
             return view('maintenis/soon');
