@@ -291,6 +291,17 @@
         if ($wilayah == 'mesuji' && $groupuser == 'Adminadbang') {
             echo view('template/_part/menukabtanggamus/menuadminadbang');
         }
+        /*
+        * Menu untuk kabupaten way kanan================================
+        */
+        if ($wilayah == 'waykanan' && $groupuser == 'skpdkab') {
+            // echo dd($groupuser);
+            echo view('template/_part/menukabtanggamus/menuopdkab');
+        }
+        if ($wilayah == 'waykanan' && $groupuser == 'Adminadbang') {
+            echo view('template/_part/menukabtanggamus/menuadminadbang');
+        }
+
 
         ?>
         <!--end::Sidebar-->

@@ -28,6 +28,11 @@ use App\Models\KabMesujiModel\TglApbdModel as TglApbdModelMesuji;
 use App\Models\KabMesujiModel\DataDashboardModel as DataDashboardModelMesuji;
 use App\Models\KabMesujiModel\RealisasiPendapatanModel as RealisasiPendapatanModelMesuji;
 
+use App\Models\KabWaykananModel\RealApbdModel as RealApbdModelWaykanan;
+use App\Models\KabWaykananModel\TglApbdModel as TglApbdModelWaykanan;
+use App\Models\KabWaykananModel\DataDashboardModel as DataDashboardModelWaykanan;
+use App\Models\KabWaykananModel\RealisasiPendapatanModel as RealisasiPendapatanModelWaykanan;
+
 use App\Controllers\BaseController;
 use App\Controllers\HomeKabController;
 
@@ -69,6 +74,12 @@ class HomeController extends BaseController
             $this->dataDashboardModel = new DataDashboardModelMesuji();
             $this->tglapbdmodel = new TglApbdModelMesuji();
             $this->realisasiPendapatanModel = new RealisasiPendapatanModelMesuji();
+        }
+        if (session()->get('wilayah') === 'waykanan') {
+            $this->realapbdmodel = new RealApbdModelWaykanan();
+            $this->dataDashboardModel = new DataDashboardModelWaykanan();
+            $this->tglapbdmodel = new TglApbdModelWaykanan();
+            $this->realisasiPendapatanModel = new RealisasiPendapatanModelWaykanan();
         }
     }
 

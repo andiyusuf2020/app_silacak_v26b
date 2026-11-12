@@ -1467,13 +1467,26 @@ class RealApbdModel extends Model
         ) AS capaian_efisiensi
     ')
             ->where('CREATE_AT', $tgl)
+            // ->where('KODE_UNIT_SKPD', $kdSU)
+            // Filter fleksibel untuk Kode atau Nama Unit SKPD
+            ->groupStart()
             ->where('KODE_UNIT_SKPD', $kdSU)
-
+            ->orWhere('NAMA_UNIT_SKPD', $kdSU)
+            ->groupEnd()
             ->groupBy('nama_unit_skpd')
             ->orderBy('persen_capaian_anggaran', 'DESC')
             // ->limit(5)
             ->get()
             ->getResultArray();
+
+        // ->where('CREATE_AT', $tgl)
+        // ->where('KODE_UNIT_SKPD', $kdSU)
+
+        // ->groupBy('nama_unit_skpd')
+        // ->orderBy('persen_capaian_anggaran', 'DESC')
+        // // ->limit(5)
+        // ->get()
+        // ->getResultArray();
     }
     public function getRekapSubSkpdRangking($tgl, $tahun)
     {

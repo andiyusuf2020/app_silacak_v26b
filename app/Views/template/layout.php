@@ -263,6 +263,19 @@
         if (!($wilayah != '' || $groupuser != '' || $groupmenu != '')) {
             return redirect()->to(base_url('logout'));
         }
+        /*
+        * Menu untuk kabupaten waykanan================================
+        */
+        if ($wilayah == 'waykanan' && $groupuser == 'skpdkab') {
+            // echo dd($groupuser);
+            echo view('template/_part/menukabtanggamus/menuopdkab');
+        }
+        if ($wilayah == 'waykanan' && $groupuser == 'Adminadbang') {
+            echo view('template/_part/menukabtanggamus/menuadminadbang');
+        }
+        if (!($wilayah != '' || $groupuser != '' || $groupmenu != '')) {
+            return redirect()->to(base_url('logout'));
+        }
         ?>
 
         <!--end::Sidebar-->

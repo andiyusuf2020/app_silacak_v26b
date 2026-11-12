@@ -93,6 +93,14 @@ class HomeKabController extends BaseController
             session()->set('logobupati', 'cssportal/img_home/bupati_mesuji.png');
             session()->set('logowakil', 'cssportal/img_home/wabub_mesuji.png');
             return redirect()->to(base_url('mesuji'));
+        } elseif ($wilayah === 'waykanan') {
+            // return view('maintenis/soon');
+            session()->set('wilayah', 'waykanan');
+            session()->set('namawilayah', 'Kabupaten Way Kanan');
+            session()->set('logokabkota', 'cssportal/img_home/waykanan.png');
+            session()->set('logobupati', 'cssportal/img_home/bupati_waykanan.png');
+            session()->set('logowakil', 'cssportal/img_home/wabup_waykanan.png');
+            return redirect()->to(base_url('waykanan'));
         } elseif ($wilayah === 'pesawaran') {
             return view('maintenis/soon');
             // session()->set('wilayah', 'pesawaran');

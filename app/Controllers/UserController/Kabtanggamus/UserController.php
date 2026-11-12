@@ -26,6 +26,9 @@ use App\Models\KabtbbModel\RealApbdModel as RealApbdModelTbb;
 use App\Models\KabMesujiModel\TglApbdModel as TglApbdModelMesuji;
 use App\Models\KabMesujiModel\RealApbdModel as RealApbdModelMesuji;
 
+use App\Models\KabWaykananModel\TglApbdModel as TglApbdModelWaykanan;
+use App\Models\KabWaykananModel\RealApbdModel as RealApbdModelWaykanan;
+
 
 class UserController extends BaseController
 {
@@ -65,6 +68,10 @@ class UserController extends BaseController
         if ($wilayah == 'mesuji') {
             $this->tglapbd = new TglApbdModelMesuji();
             $this->realapbdmodel = new RealApbdModelMesuji();
+        }
+        if ($wilayah == 'waykanan') {
+            $this->tglapbd = new TglApbdModelWaykanan();
+            $this->realapbdmodel = new RealApbdModelWaykanan();
         }
     }
 
