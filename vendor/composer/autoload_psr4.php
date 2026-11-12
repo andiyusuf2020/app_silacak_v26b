@@ -17,6 +17,7 @@ return array(
     'Psr\\Http\\Client\\' => array($vendorDir . '/psr/http-client/src'),
     'Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
     'PhpParser\\' => array($vendorDir . '/nikic/php-parser/lib/PhpParser'),
+    'PhpOffice\\WMF\\' => array($vendorDir . '/phpoffice/wmf/src/WMF'),
     'PhpOffice\\PhpSpreadsheet\\' => array($vendorDir . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet'),
     'Myth\\Auth\\' => array($vendorDir . '/myth/auth/src'),
     'Matrix\\' => array($vendorDir . '/markbaker/matrix/classes/src'),

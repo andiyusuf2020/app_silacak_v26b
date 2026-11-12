@@ -448,6 +448,7 @@ class AdminAdbangController extends BaseController
             }
             if ($data['groupuser'] == 'skpdkab') {
                 $data['dataopdadmin'] = $this->realapbdmodel->getRekapSubSkpdperOPD($tglhasilcek, $kdOPD);
+                // echo dd($kdOPD);
             }
             // Hanya enkripsi 'id' dan 'name'
             $dataopdapbds = array_map(function ($dataopdapbd) {
@@ -509,8 +510,12 @@ class AdminAdbangController extends BaseController
             $rekapData = $this->realapbdmodel->getRekapRealisasiAkun($bulan, $akun, session()->get('tahun'));
         }
         if ($data['groupuser'] == 'skpdkab') {
-            // $rekapData = $this->realapbdmodel->getRekapRealisasiAkun($bulan, $akun);
-            $rekapData = $this->realapbdmodel->getRekapRealisasiAkunperOpd($bulan, $akun, $user->kd_sub_unit);
+            if ($user->kd_sub_unit == '') {
+                $kdOPD = $user->sub_unit;
+            } else {
+                $kdOPD = $user->kd_sub_unit;
+            }
+            $rekapData = $this->realapbdmodel->getRekapRealisasiAkunperOpd($bulan, $akun, $kdOPD);
         }
         // echo dd($rekapData);
         $data['rekapData'] = $rekapData;
@@ -546,8 +551,12 @@ class AdminAdbangController extends BaseController
             $rekapData = $this->realapbdmodel->getRekapRealisasiAkun($bulan, $akun, session()->get('tahun'));
         }
         if ($data['groupuser'] == 'skpdkab') {
-            // $rekapData = $this->realapbdmodel->getRekapRealisasiAkun($bulan, $akun);
-            $rekapData = $this->realapbdmodel->getRekapRealisasiAkunperOpd($bulan, $akun, $user->kd_sub_unit);
+            if ($user->kd_sub_unit == '') {
+                $kdOPD = $user->sub_unit;
+            } else {
+                $kdOPD = $user->kd_sub_unit;
+            }
+            $rekapData = $this->realapbdmodel->getRekapRealisasiAkunperOpd($bulan, $akun, $kdOPD);
         }
         // Path lokal file logo Anda
         $logokabkota = session()->get('logokabkota');
@@ -1060,10 +1069,13 @@ class AdminAdbangController extends BaseController
             $results = $this->realapbdmodel->getRekapSubSkpdRangking($tgldata, $tahun);
         }
         if ($groupuser == 'skpdkab') {
-            $data['dataopdadmin'] = $this->realapbdmodel->getRekapSubSkpdRangkingperOpd($tgldata, $user->kd_sub_unit, $tahun);
-
+            if ($user->kd_sub_unit == '') {
+                $kdOPD = $user->sub_unit;
+            } else {
+                $kdOPD = $user->kd_sub_unit;
+            }
             // Ambil data ringkasan per SKPD (nama, pagu, realisasi)
-            $results = $this->realapbdmodel->getRekapSubSkpdRangkingperOpd($tgldata, $user->kd_sub_unit, $tahun);
+            $results = $this->realapbdmodel->getRekapSubSkpdRangkingperOpd($tgldata, $kdOPD, $tahun);
         }
         // echo dd($results);
         return $this->response->setJSON($results);

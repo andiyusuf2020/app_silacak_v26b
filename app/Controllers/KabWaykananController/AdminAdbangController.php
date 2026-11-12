@@ -510,8 +510,12 @@ class AdminAdbangController extends BaseController
             $rekapData = $this->realapbdmodel->getRekapRealisasiAkun($bulan, $akun, session()->get('tahun'));
         }
         if ($data['groupuser'] == 'skpdkab') {
-            // $rekapData = $this->realapbdmodel->getRekapRealisasiAkun($bulan, $akun);
-            $rekapData = $this->realapbdmodel->getRekapRealisasiAkunperOpd($bulan, $akun, $user->kd_sub_unit);
+            if ($user->kd_sub_unit == '') {
+                $kdOPD = $user->sub_unit;
+            } else {
+                $kdOPD = $user->kd_sub_unit;
+            }
+            $rekapData = $this->realapbdmodel->getRekapRealisasiAkunperOpd($bulan, $akun, $kdOPD);
         }
         // echo dd($rekapData);
         $data['rekapData'] = $rekapData;
@@ -547,8 +551,12 @@ class AdminAdbangController extends BaseController
             $rekapData = $this->realapbdmodel->getRekapRealisasiAkun($bulan, $akun, session()->get('tahun'));
         }
         if ($data['groupuser'] == 'skpdkab') {
-            // $rekapData = $this->realapbdmodel->getRekapRealisasiAkun($bulan, $akun);
-            $rekapData = $this->realapbdmodel->getRekapRealisasiAkunperOpd($bulan, $akun, $user->kd_sub_unit);
+            if ($user->kd_sub_unit == '') {
+                $kdOPD = $user->sub_unit;
+            } else {
+                $kdOPD = $user->kd_sub_unit;
+            }
+            $rekapData = $this->realapbdmodel->getRekapRealisasiAkunperOpd($bulan, $akun, $kdOPD);
         }
         // Path lokal file logo Anda
         $logokabkota = session()->get('logokabkota');

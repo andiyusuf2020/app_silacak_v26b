@@ -6,7 +6,7 @@ use App\Controllers\Sipkabkota\SuperadminController;
 
 use \Myth\Auth\Authorization\GroupModel;
 // use App\Models\KabtanggamusModel\RealApbdModel as sipdtanggamusmodel;
-use App\Models\KablampuraModel\RealApbdModel as sipdlampuramodel;
+use App\Models\KablampuraModel\RealApbdModel; // as sipdlampuramodel;
 use App\Models\KablampuraModel\JadwalModel;
 use App\Models\KablampuraModel\AnggaranKasModel;
 use App\Models\KablampuraModel\RealisasiPendapatanModel;
@@ -51,7 +51,7 @@ class AdminAdbangController extends BaseController
         $this->jadwalmodel = new JadwalModel();
         $this->tausermodel = new TaUserModel();
         $this->anggaranKasModel = new AnggaranKasModel();
-        $this->realapbdmodel = new sipdlampuramodel();
+        $this->realapbdmodel = new RealApbdModel();
 
 
         $this->tglapbdmodel = new TglApbdModel();
@@ -154,7 +154,7 @@ class AdminAdbangController extends BaseController
             if ($url !== $data['wilayah']) {
                 return redirect()->to(base_url('user'));
             }
-            $tahunSelected = $this->request->getGet('tahun') ?? ''; //date('Y');
+            $tahunSelected = $this->request->getGet('tahun') ?? date('Y');
             $trenBulanan = $this->realisasiPendapatanModel->getTrenPersentaseBulanan($tahunSelected);
             $data['trenBulanan'] = $trenBulanan;
             $data['tahunSelected'] = $tahunSelected;
@@ -166,7 +166,7 @@ class AdminAdbangController extends BaseController
             // return view('KabtanggamusViews/Adminadbang/form_inputpendapatan', $data);
 
 
-            $tahunSelected = $this->request->getGet('tahun') ?? ''; //date('Y');
+            // $tahunSelected = $this->request->getGet('tahun') ?? ''; //date('Y');
             $bulanSelected = $this->request->getGet('bulan') ?? 'all';
 
             $dataRealisasi = $this->realisasiPendapatanModel->getDataFilter($tahunSelected, $bulanSelected);
@@ -362,7 +362,7 @@ class AdminAdbangController extends BaseController
             $data['dataRekap'] = $this->realapbdmodel->getRekapPerSKPD($jadwalaktif['bulan'], session()->get('tahun'));
             $data['bulan'] = $jadwalaktif['bulan'];
             $data['title'] = 'Rekap Per SKPD';
-            // echo dd($data['dataRekap']);
+            // echo dd('/' . $jadwalaktif['bulan'] . '/' . session()->get('tahun'));
             return view('KabtanggamusViews/Adminadbang/laporanlrfkopd2', $data);
         } elseif ($hal == 'laporanrfkopdperjenis') {
             $akun  = $this->request->getGet('akun') ?? 'nama_kelompok'; // Default akun
@@ -448,6 +448,7 @@ class AdminAdbangController extends BaseController
             }
             if ($data['groupuser'] == 'skpdkab') {
                 $data['dataopdadmin'] = $this->realapbdmodel->getRekapSubSkpdperOPD($tglhasilcek, $kdOPD);
+                // echo dd($kdOPD);
             }
             // Hanya enkripsi 'id' dan 'name'
             $dataopdapbds = array_map(function ($dataopdapbd) {
@@ -509,8 +510,12 @@ class AdminAdbangController extends BaseController
             $rekapData = $this->realapbdmodel->getRekapRealisasiAkun($bulan, $akun, session()->get('tahun'));
         }
         if ($data['groupuser'] == 'skpdkab') {
-            // $rekapData = $this->realapbdmodel->getRekapRealisasiAkun($bulan, $akun);
-            $rekapData = $this->realapbdmodel->getRekapRealisasiAkunperOpd($bulan, $akun, $user->kd_sub_unit);
+            if ($user->kd_sub_unit == '') {
+                $kdOPD = $user->sub_unit;
+            } else {
+                $kdOPD = $user->kd_sub_unit;
+            }
+            $rekapData = $this->realapbdmodel->getRekapRealisasiAkunperOpd($bulan, $akun, $kdOPD);
         }
         // echo dd($rekapData);
         $data['rekapData'] = $rekapData;
@@ -546,8 +551,12 @@ class AdminAdbangController extends BaseController
             $rekapData = $this->realapbdmodel->getRekapRealisasiAkun($bulan, $akun, session()->get('tahun'));
         }
         if ($data['groupuser'] == 'skpdkab') {
-            // $rekapData = $this->realapbdmodel->getRekapRealisasiAkun($bulan, $akun);
-            $rekapData = $this->realapbdmodel->getRekapRealisasiAkunperOpd($bulan, $akun, $user->kd_sub_unit);
+            if ($user->kd_sub_unit == '') {
+                $kdOPD = $user->sub_unit;
+            } else {
+                $kdOPD = $user->kd_sub_unit;
+            }
+            $rekapData = $this->realapbdmodel->getRekapRealisasiAkunperOpd($bulan, $akun, $kdOPD);
         }
         // Path lokal file logo Anda
         $logokabkota = session()->get('logokabkota');
@@ -763,7 +772,7 @@ class AdminAdbangController extends BaseController
             'ANGGARAN (Rp)',
             'REALISASI (Rp)',
             'JUMLAH OUTPUT SUB-RINCIAN-OBJEK   BELANJA',
-            'JUMLAH OUTPUT SUB-RINCIAN-OBJEK  BELANJA  YANG BELUM TERLAKSANA',
+            'JUMLAH OUTPUT SUB-RINCIAN-OBJEK  BELANJA YANG BELUM TERLAKSANA',
             'CAPAIAN  REALISASI ANGGARAN (%)',
             'CAPAIAN  KINERJA  OUTPUT BELANJA',
             'KATEGORI EFISIENSI'
@@ -1060,10 +1069,13 @@ class AdminAdbangController extends BaseController
             $results = $this->realapbdmodel->getRekapSubSkpdRangking($tgldata, $tahun);
         }
         if ($groupuser == 'skpdkab') {
-            $data['dataopdadmin'] = $this->realapbdmodel->getRekapSubSkpdRangkingperOpd($tgldata, $user->kd_sub_unit, $tahun);
-
+            if ($user->kd_sub_unit == '') {
+                $kdOPD = $user->sub_unit;
+            } else {
+                $kdOPD = $user->kd_sub_unit;
+            }
             // Ambil data ringkasan per SKPD (nama, pagu, realisasi)
-            $results = $this->realapbdmodel->getRekapSubSkpdRangkingperOpd($tgldata, $user->kd_sub_unit, $tahun);
+            $results = $this->realapbdmodel->getRekapSubSkpdRangkingperOpd($tgldata, $kdOPD, $tahun);
         }
         // echo dd($results);
         return $this->response->setJSON($results);
