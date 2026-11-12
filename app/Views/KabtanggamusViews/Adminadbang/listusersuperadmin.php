@@ -301,6 +301,16 @@
         if ($wilayah == 'waykanan' && $groupuser == 'Adminadbang') {
             echo view('template/_part/menukabtanggamus/menuadminadbang');
         }
+        /*
+        * Menu untuk kabupaten tulangbawang================================
+        */
+        if ($wilayah == 'tulangbawang' && $groupuser == 'skpdkab') {
+            // echo dd($groupuser);
+            echo view('template/_part/menukabtanggamus/menuopdkab');
+        }
+        if ($wilayah == 'tulangbawang' && $groupuser == 'Adminadbang') {
+            echo view('template/_part/menukabtanggamus/menuadminadbang');
+        }
 
 
         ?>

@@ -30,6 +30,10 @@ use App\Models\KabWaykananModel\TglApbdModel as TglApbdModelWaykanan;
 use App\Models\KabWaykananModel\RealApbdModel as RealApbdModelWaykanan;
 
 
+use App\Models\KabTubaModel\TglApbdModel as TglApbdModelTulangbawang;
+use App\Models\KabTUbaModel\RealApbdModel as RealApbdModelTulangbawang;
+
+
 class UserController extends BaseController
 {
 
@@ -72,6 +76,10 @@ class UserController extends BaseController
         if ($wilayah == 'waykanan') {
             $this->tglapbd = new TglApbdModelWaykanan();
             $this->realapbdmodel = new RealApbdModelWaykanan();
+        }
+        if ($wilayah == 'tulangbawang') {
+            $this->tglapbd = new TglApbdModelTulangbawang();
+            $this->realapbdmodel = new RealApbdModelTulangbawang();
         }
     }
 

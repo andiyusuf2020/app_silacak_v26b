@@ -119,11 +119,13 @@ class HomeKabController extends BaseController
             session()->set('logowakil', 'cssportal/img_home/wakil_bup_tanggamus.jpg');
             return redirect()->to(base_url('tanggamus'));
         } elseif ($wilayah === 'tulangbawang') {
-            return view('maintenis/soon');
-            // session()->set('wilayah', 'tulangbawang');
-            // session()->set('namawilayah', 'Kabupaten Tulang Bawang');
-            // return redirect()->to(base_url('tulangbawang'));
-
+            // return view('maintenis/soon');
+            session()->set('wilayah', 'tulangbawang');
+            session()->set('namawilayah', 'Kabupaten Tulang Bawang');
+            session()->set('logokabkota', 'cssportal/img_home/tulangbawang.png');
+            session()->set('logobupati', 'cssportal/img_home/bupati_tulangbawang.jpg');
+            session()->set('logowakil', 'cssportal/img_home/wabup_tulangbawang.jpg');
+            return redirect()->to(base_url('tulangbawang'));
         } elseif ($wilayah === 'tulangbawangbarat') {
             // return view('maintenis/soon');
             session()->set('wilayah', 'tulangbawangbarat');

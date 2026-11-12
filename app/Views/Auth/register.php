@@ -47,6 +47,9 @@
                             use App\Models\KabWaykananModel\RealApbdModel as sipdwaykanan;
                             use App\Models\KabWaykananModel\TglApbdModel as  tglapbdwaykanan;
 
+                            use App\Models\KabTubaModel\RealApbdModel as sipdTuba;
+                            use App\Models\KabTubaModel\TglApbdModel as  tglapbdTuba;
+
                             if ($wilayah == 'tanggamus') {
                                 $this->sipd = new sipdtanggamus();
                                 $this->tglapbd = new tglapbdtanggamus();
@@ -76,6 +79,11 @@
                             if ($wilayah == 'waykanan') {
                                 $this->sipd = new sipdwaykanan();
                                 $this->tglapbd = new tglapbdwaykanan();
+                                // $tgldata = $this->tglapbdtanggamus->tgldataaktif();
+                            }
+                            if ($wilayah == 'tulangbawang') {
+                                $this->sipd = new sipdTuba();
+                                $this->tglapbd = new tglapbdTuba();
                                 // $tgldata = $this->tglapbdtanggamus->tgldataaktif();
                             }
                             echo '<select name="sub_unit" class="form-control">';
