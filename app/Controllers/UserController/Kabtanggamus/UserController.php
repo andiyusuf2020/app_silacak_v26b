@@ -31,7 +31,7 @@ use App\Models\KabWaykananModel\RealApbdModel as RealApbdModelWaykanan;
 
 
 use App\Models\KabTubaModel\TglApbdModel as TglApbdModelTulangbawang;
-use App\Models\KabTUbaModel\RealApbdModel as RealApbdModelTulangbawang;
+use App\Models\KabTubaModel\RealApbdModel as RealApbdModelTulangbawang;
 
 
 class UserController extends BaseController
