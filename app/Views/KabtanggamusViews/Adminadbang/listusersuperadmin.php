@@ -311,7 +311,16 @@
         if ($wilayah == 'tulangbawang' && $groupuser == 'Adminadbang') {
             echo view('template/_part/menukabtanggamus/menuadminadbang');
         }
-
+        /*
+        * Menu untuk kabupaten lampung timur================================
+        */
+        if ($wilayah == 'lampungtimur' && $groupuser == 'skpdkab') {
+            // echo dd($groupuser);
+            echo view('template/_part/menukabtanggamus/menuopdkab');
+        }
+        if ($wilayah == 'lampungtimur' && $groupuser == 'Adminadbang') {
+            echo view('template/_part/menukabtanggamus/menuadminadbang');
+        }
 
         ?>
         <!--end::Sidebar-->

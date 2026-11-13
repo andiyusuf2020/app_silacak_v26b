@@ -37,11 +37,46 @@ $routes->group('provinsi/superadmin', ['filter' => 'role:superadmin'], function 
 });
 // Routes for the wilayah.
 $routes->get('lambar', 'HomeKabController::lambar');
-$routes->get('lampungtimur', 'HomeKabController::lampungtimur');
+// $routes->get('lampungtimur', 'HomeKabController::lampungtimur');
 $routes->get('lampungtengah', 'HomeKabController::lampungtengah');
 // $routes->get('mesuji', 'HomeKabController::mesuji');
 $routes->get('pesawaran', 'HomeKabController::pesawaran');
 $routes->get('pringsewu', 'HomeKabController::pringsewu');
+/**
+ * ROUTE For Kab Lampung TImur Sitapis-Kab 2026=======================================================
+ * ==============================================================================================
+ */
+$routes->get('lampungtimur', 'KabtanggamusController\HomeController::dashboard');
+$routes->group('lampungtimur/Adminadbang', ['filter' => 'role:Adminadbang'], function ($routes) {
+    $routes->get('', 'KabLamtimController\AdminAdbangController::index');
+    $routes->get('dataperopd', 'KabLamtimController\AdminAdbangController::dataperopd');
+    $routes->post('rekap/update_sro', 'KabLamtimController\AdminAdbangController::update_sro');
+    $routes->get('getChartDataOpdRangking', 'KabLamtimController\AdminAdbangController::getChartDataOpdRangking');
+    $routes->post('uploadapbd', 'KabLamtimController\AdminAdbangController::uploadapbd');
+    $routes->post('exportExcelLrfkOpd', 'KabLamtimController\AdminAdbangController::exportExcelLrfkOpd');
+    $routes->get('realisasi/get-tren-bulanan', 'KabLamtimController\AdminAdbangController::getTrenBulanan');
+    $routes->get('realisasi/get-summary', 'KabLamtimController\AdminAdbangController::getSummaryByPeriode'); // Endpoint AJAX Filter
+    $routes->post('realisasi/store', 'KabLamtimController\AdminAdbangController::storependapatan'); ///====for user adminadbang
+    $routes->get('realisasi/get-detail/(:num)', 'KabLamtimController\AdminAdbangController::getDetail/$1');
+    $routes->post('realisasi/update/(:num)', 'KabLamtimController\AdminAdbangController::update/$1');
+    $routes->post('realisasi/delete/(:num)', 'KabLamtimController\AdminAdbangController::delete/$1');
+    $routes->get('realisasi/data-list', 'KabLamtimController\AdminAdbangController::listData');
+    $routes->post('dashboard-stats/update', 'KabLamtimController\AdminAdbangController::updatedatadashboard');
+    $routes->get('realisasi/export-excel-pendapatan', 'KabLamtimController\AdminAdbangController::exportExcelPendapatan');
+    $routes->post('realisasi/export-pdf-pendapatan', 'KabLamtimController\AdminAdbangController::exportPdfrealisasiPendapatan');
+    $routes->get('tampillaporanperakun', 'KabLamtimController\AdminAdbangController::getDataperAkun');
+    $routes->post('cetakpdfrekap', 'KabLamtimController\AdminAdbangController::cetakpdfrekapperakun');
+    $routes->get('daftaruser', 'UserController\Kabtanggamus\UserController::index');
+    $routes->get('updateuser', 'UserController\Kabtanggamus\UserController::updateuser');
+    $routes->post('groupset', 'UserController\Kabtanggamus\UserController::changeGroup');
+    $routes->post('opdset', 'UserController\Kabtanggamus\UserController::simpanubahopd');
+    $routes->post('opdsetpass', 'UserController\Kabtanggamus\UserController::setPassword');
+    $routes->post('anggaran-kas/store', 'KabLamtimController\AdminAdbangController::storeangkas_ajax');
+    $routes->get('anggaran-kas/export-pdf', 'KabLamtimController\AdminAdbangController::exportPdfAnggaranKas');
+    $routes->get('anggaran-kas/export-pdf-admin', 'KabLamtimController\AdminAdbangController::exportPdfLaporanAngkasAdmin');
+    $routes->get('rekap/exportXlsx', 'KabLamtimController\AdminAdbangController::exportXlsxRekapSKPD');
+    $routes->get('rekap/exportPdf', 'KabLamtimController\AdminAdbangController::exportPdfRekapSKPD');
+});
 /**
  * ROUTE For Kab Tulang bawang Sitapis-Kab 2026=======================================================
  * ==============================================================================================

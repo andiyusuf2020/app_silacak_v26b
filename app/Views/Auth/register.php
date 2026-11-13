@@ -50,6 +50,9 @@
                             use App\Models\KabTubaModel\RealApbdModel as sipdTuba;
                             use App\Models\KabTubaModel\TglApbdModel as  tglapbdTuba;
 
+                            use App\Models\KabLamtimModel\RealApbdModel as sipdLamtim;
+                            use App\Models\KabLamtimModel\TglApbdModel as  tglapbdLamtim;
+
                             if ($wilayah == 'tanggamus') {
                                 $this->sipd = new sipdtanggamus();
                                 $this->tglapbd = new tglapbdtanggamus();
@@ -84,6 +87,11 @@
                             if ($wilayah == 'tulangbawang') {
                                 $this->sipd = new sipdTuba();
                                 $this->tglapbd = new tglapbdTuba();
+                                // $tgldata = $this->tglapbdtanggamus->tgldataaktif();
+                            }
+                            if ($wilayah == 'lampungtimur') {
+                                $this->sipd = new sipdLamtim();
+                                $this->tglapbd = new tglapbdLamtim();
                                 // $tgldata = $this->tglapbdtanggamus->tgldataaktif();
                             }
                             echo '<select name="sub_unit" class="form-control">';

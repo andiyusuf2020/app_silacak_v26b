@@ -38,6 +38,11 @@ use App\Models\KabTubaModel\TglApbdModel as TglApbdModelTuba;
 use App\Models\KabTubaModel\DataDashboardModel as DataDashboardModelTuba;
 use App\Models\KabTubaModel\RealisasiPendapatanModel as RealisasiPendapatanModelTuba;
 
+use App\Models\KabLamtimModel\RealApbdModel as RealApbdModelLamtim;
+use App\Models\KabLamtimModel\TglApbdModel as TglApbdModelLamtim;
+use App\Models\KabLamtimModel\DataDashboardModel as DataDashboardModelLamtim;
+use App\Models\KabLamtimModel\RealisasiPendapatanModel as RealisasiPendapatanModelLamtim;
+
 use App\Controllers\BaseController;
 use App\Controllers\HomeKabController;
 
@@ -91,6 +96,12 @@ class HomeController extends BaseController
             $this->dataDashboardModel = new DataDashboardModelTuba();
             $this->tglapbdmodel = new TglApbdModelTuba();
             $this->realisasiPendapatanModel = new RealisasiPendapatanModelTuba();
+        }
+        if (session()->get('wilayah') === 'lampungtimur') {
+            $this->realapbdmodel = new RealApbdModelLamtim();
+            $this->dataDashboardModel = new DataDashboardModelLamtim();
+            $this->tglapbdmodel = new TglApbdModelLamtim();
+            $this->realisasiPendapatanModel = new RealisasiPendapatanModelLamtim();
         }
     }
 

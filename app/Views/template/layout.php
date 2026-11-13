@@ -289,6 +289,20 @@
         if (!($wilayah != '' || $groupuser != '' || $groupmenu != '')) {
             return redirect()->to(base_url('logout'));
         }
+        /*
+        * Menu untuk kabupaten tulangbawang================================
+        */
+        if ($wilayah == 'lampungtimur' && $groupuser == 'skpdkab') {
+            // echo dd($groupuser);
+            echo view('template/_part/menukabtanggamus/menuopdkab');
+        }
+        if ($wilayah == 'lampungtimur' && $groupuser == 'Adminadbang') {
+            echo view('template/_part/menukabtanggamus/menuadminadbang');
+        }
+        if (!($wilayah != '' || $groupuser != '' || $groupmenu != '')) {
+            return redirect()->to(base_url('logout'));
+        }
+
 
         ?>
 

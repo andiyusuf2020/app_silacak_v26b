@@ -77,7 +77,7 @@
                             </a>
                         </li>
                     </ul>
-                    <?php if ($groupuser === 'Adminadbang-') : ?>
+                    <?php if ($groupuser === 'Adminadbang') : ?>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
                                 <a href="<?= hash_url(' ' . $wilayah . '/' . $groupuser, ['hal' => 'uploadapbd']) ?>" class="nav-link">

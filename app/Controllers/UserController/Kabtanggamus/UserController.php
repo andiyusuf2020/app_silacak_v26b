@@ -29,10 +29,11 @@ use App\Models\KabMesujiModel\RealApbdModel as RealApbdModelMesuji;
 use App\Models\KabWaykananModel\TglApbdModel as TglApbdModelWaykanan;
 use App\Models\KabWaykananModel\RealApbdModel as RealApbdModelWaykanan;
 
-
 use App\Models\KabTubaModel\TglApbdModel as TglApbdModelTulangbawang;
 use App\Models\KabTubaModel\RealApbdModel as RealApbdModelTulangbawang;
 
+use App\Models\KabLamtimModel\TglApbdModel as TglApbdModelLamtim;
+use App\Models\KabLamtimModel\RealApbdModel as RealApbdModelLamtim;
 
 class UserController extends BaseController
 {
@@ -80,6 +81,10 @@ class UserController extends BaseController
         if ($wilayah == 'tulangbawang') {
             $this->tglapbd = new TglApbdModelTulangbawang();
             $this->realapbdmodel = new RealApbdModelTulangbawang();
+        }
+        if ($wilayah == 'lampungtimur') {
+            $this->tglapbd = new TglApbdModelLamtim();
+            $this->realapbdmodel = new RealApbdModelLamtim();
         }
     }
 
