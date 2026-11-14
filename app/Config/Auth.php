@@ -128,7 +128,7 @@ class Auth extends \Myth\Auth\Config\Auth
      *
      * @var string[]
      */
-    public $personalFields = ['sub_unit', 'wilayah'];
+    public $personalFields = ['sub_unit', 'nama', 'nip', 'wilayah'];
 
     /**
      * --------------------------------------------------------------------
@@ -166,7 +166,7 @@ class Auth extends \Myth\Auth\Config\Auth
      *
      * @var int
      */
-    public $maxSimilarity = 50;
+    public $maxSimilarity = 1000;
 
     /**
      * --------------------------------------------------------------------

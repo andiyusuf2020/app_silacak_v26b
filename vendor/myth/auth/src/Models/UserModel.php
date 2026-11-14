@@ -19,6 +19,8 @@ class UserModel extends Model
     protected $allowedFields  = [
         'sub_unit',
         'wilayah',
+        'nama',
+        'nip',
         'email',
         'username',
         'password_hash',
@@ -37,6 +39,8 @@ class UserModel extends Model
     protected $validationRules = [
         'sub_unit'      => 'required|alpha_numeric_space|min_length[3]|max_length[50]',
         'wilayah'       => 'required|alpha_numeric_space|min_length[3]|max_length[30]',
+        'nama'          => 'required|alpha_numeric_space|min_length[3]|max_length[100]',
+        'nip'           => 'required|numeric|exact_length[18]|is_unique[users.nip,id,{id}]',
         'email'         => 'required|valid_email|is_unique[users.email,id,{id}]',
         'username'      => 'required|alpha_numeric_punct|min_length[3]|max_length[30]|is_unique[users.username,id,{id}]',
         'password_hash' => 'required',

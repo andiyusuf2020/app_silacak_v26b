@@ -576,8 +576,8 @@
                     },
 
                     {
-                        title: 'Email',
-                        field: 'email',
+                        title: 'Name Lengkap',
+                        field: 'nama',
                         headerFilter: 'input'
                     },
                     {

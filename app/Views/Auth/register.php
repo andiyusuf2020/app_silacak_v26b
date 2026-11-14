@@ -115,6 +115,15 @@
                             <label for="username"><?= lang('Auth.username') ?></label>
                             <input type="text" class="form-control <?php if (session('errors.username')) : ?>is-invalid<?php endif ?>" name="username" placeholder="<?= lang('Auth.username') ?>" value="<?= old('username') ?>">
                         </div>
+                        <div class="form-group">
+                            <label for="nama">Nama Lengkap</label>
+                            <input type="text" class="form-control <?php if (session('errors.nama')) : ?>is-invalid<?php endif ?>" name="nama" placeholder="Nama Lengkap" value="<?= old('nama') ?>">
+                        </div>
+                        <div class="form-group">
+                            <label for="nip">NIP / NI PPPK</label>
+                            <input type="number" class="form-control <?php if (session('errors.nip')) : ?>is-invalid<?php endif ?>" name="nip" placeholder="NIP" value="<?= old('nip') ?>">
+                        </div>
+
 
                         <div class="form-group">
                             <label for="password"><?= lang('Auth.password') ?></label>
