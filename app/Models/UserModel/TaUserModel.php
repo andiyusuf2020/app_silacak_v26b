@@ -81,7 +81,7 @@ class TaUserModel extends Model
             //     ->where('wilayah', $wilayah)
             //     ->get()
             //     ->getRowArray();
-            $result = $this->select('users.id, sub_unit, email, username, active, created_at')
+            $result = $this->select('users.id, sub_unit, email,nama,nip, username, active, created_at')
                 ->select("users.link = '" . base_url('lrfkadmin/manajemenuser/') . "' as linka")
                 ->select('auth_groups.name as group_name')
                 ->join('auth_groups_users', 'users.id = auth_groups_users.user_id')
@@ -95,7 +95,7 @@ class TaUserModel extends Model
         if ($id == null) {
 
             // Ambil data dari database
-            $result = $this->select('users.id, sub_unit, email, username, active, created_at')
+            $result = $this->select('users.id, sub_unit, email, ,nama,nip,username, active, created_at')
                 ->select("users.link = '" . base_url('lrfkadmin/manajemenuser/') . "' as linka")
                 ->select('auth_groups.name as group_name')
                 ->join('auth_groups_users', 'users.id = auth_groups_users.user_id')

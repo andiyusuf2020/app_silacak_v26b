@@ -53,7 +53,6 @@ class AdminAdbangController extends BaseController
         $this->anggaranKasModel = new AnggaranKasModel();
         $this->realapbdmodel = new RealApbdModel();
 
-
         $this->tglapbdmodel = new TglApbdModel();
         $this->excelmodel = new ExcelApbdModel();
         $this->realisasiPendapatanModel = new RealisasiPendapatanModel();

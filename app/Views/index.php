@@ -355,9 +355,9 @@
     <script type="text/javascript" src="https://bankdata.bpkad.lampungprov.go.id/public/depan/js/bootstrap.min.js"></script>
     -->
 
-    <center><audio controls autoplay loop>
+    <!-- <center><audio controls autoplay loop>
             <source src="https://adbang.lampungprov.go.id/uploads/tunggal_lampung(1).mp3" type="audio/ogg">
-        </audio></center>
+        </audio></center> -->
 
 </html>
 <!-- DEBUG-VIEW ENDED 1 APPPATH/Views/home/home.php -->

@@ -585,7 +585,7 @@
                         field: 'group_name',
                         headerFilter: 'list',
                         headerFilterParams: {
-                            values: ['', 'Admin', 'Editor', 'Viewer']
+                            values: ['', 'Adminadbang', 'skpdkab']
                         },
                         width: 120,
                     },
