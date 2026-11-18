@@ -260,9 +260,6 @@
         if ($wilayah == 'mesuji' && $groupuser == 'Adminadbang') {
             echo view('template/_part/menukabtanggamus/menuadminadbang');
         }
-        if (!($wilayah != '' || $groupuser != '' || $groupmenu != '')) {
-            return redirect()->to(base_url('logout'));
-        }
         /*
         * Menu untuk kabupaten waykanan================================
         */
@@ -272,9 +269,6 @@
         }
         if ($wilayah == 'waykanan' && $groupuser == 'Adminadbang') {
             echo view('template/_part/menukabtanggamus/menuadminadbang');
-        }
-        if (!($wilayah != '' || $groupuser != '' || $groupmenu != '')) {
-            return redirect()->to(base_url('logout'));
         }
         /*
         * Menu untuk kabupaten tulangbawang================================
@@ -286,23 +280,16 @@
         if ($wilayah == 'tulangbawang' && $groupuser == 'Adminadbang') {
             echo view('template/_part/menukabtanggamus/menuadminadbang');
         }
-        if (!($wilayah != '' || $groupuser != '' || $groupmenu != '')) {
-            return redirect()->to(base_url('logout'));
-        }
         /*
-        * Menu untuk kabupaten tulangbawang================================
+        * Menu untuk kota metro================================
         */
-        if ($wilayah == 'lampungtimur' && $groupuser == 'skpdkab') {
+        if ($wilayah == 'metro' && $groupuser == 'skpdkab') {
             // echo dd($groupuser);
             echo view('template/_part/menukabtanggamus/menuopdkab');
         }
-        if ($wilayah == 'lampungtimur' && $groupuser == 'Adminadbang') {
+        if ($wilayah == 'metro' && $groupuser == 'Adminadbang') {
             echo view('template/_part/menukabtanggamus/menuadminadbang');
         }
-        if (!($wilayah != '' || $groupuser != '' || $groupmenu != '')) {
-            return redirect()->to(base_url('logout'));
-        }
-
 
         ?>
 

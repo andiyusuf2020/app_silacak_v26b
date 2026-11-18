@@ -43,6 +43,12 @@ use App\Models\KabLamtimModel\TglApbdModel as TglApbdModelLamtim;
 use App\Models\KabLamtimModel\DataDashboardModel as DataDashboardModelLamtim;
 use App\Models\KabLamtimModel\RealisasiPendapatanModel as RealisasiPendapatanModelLamtim;
 
+use App\Models\KabMetroModel\RealApbdModel as RealApbdModelMetro;
+use App\Models\KabMetroModel\TglApbdModel as TglApbdModelMetro;
+use App\Models\KabMetroModel\DataDashboardModel as DataDashboardModelMetro;
+use App\Models\KabMetroModel\RealisasiPendapatanModel as RealisasiPendapatanModelMetro;
+
+
 use App\Controllers\BaseController;
 use App\Controllers\HomeKabController;
 
@@ -102,6 +108,12 @@ class HomeController extends BaseController
             $this->dataDashboardModel = new DataDashboardModelLamtim();
             $this->tglapbdmodel = new TglApbdModelLamtim();
             $this->realisasiPendapatanModel = new RealisasiPendapatanModelLamtim();
+        }
+        if (session()->get('wilayah') === 'metro') {
+            $this->realapbdmodel = new RealApbdModelMetro();
+            $this->dataDashboardModel = new DataDashboardModelMetro();
+            $this->tglapbdmodel = new TglApbdModelMetro();
+            $this->realisasiPendapatanModel = new RealisasiPendapatanModelMetro();
         }
     }
 

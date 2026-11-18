@@ -53,11 +53,14 @@ class HomeKabController extends BaseController
             session()->set('namawilayah', 'Provinsi Lampung');
             return redirect()->to(base_url('provinsi'));
         }
-        if ($wilayah == 'lambar') {
-            return view('maintenis/soon');
-            // session()->set('wilayah', 'lambar');
-            // session()->set('namawilayah', 'Kabuapaten Lampung Barat');
-            // return redirect()->to(base_url('lambar'));
+        if ($wilayah == 'metro') {
+            // return view('maintenis/soon');
+            session()->set('wilayah', 'metro');
+            session()->set('namawilayah', 'Kota Metro');
+            session()->set('logokabkota', 'cssportal/img_home/metro.png');
+            session()->set('logobupati', 'cssportal/img_home/walkotmetro.png');
+            session()->set('logowakil', 'cssportal/img_home/wawalkotmetro.png');
+            return redirect()->to(base_url('metro'));
         } elseif ($wilayah === 'lampungselatan') {
             // return view('maintenis/soon');
             session()->set('wilayah', 'lampungselatan');
