@@ -321,6 +321,16 @@
         if ($wilayah == 'lampungtimur' && $groupuser == 'Adminadbang') {
             echo view('template/_part/menukabtanggamus/menuadminadbang');
         }
+        /*
+        * Menu untuk kota metro================================
+        */
+        if ($wilayah == 'metro' && $groupuser == 'skpdkab') {
+            // echo dd($groupuser);
+            echo view('template/_part/menukabtanggamus/menuopdkab');
+        }
+        if ($wilayah == 'metro' && $groupuser == 'Adminadbang') {
+            echo view('template/_part/menukabtanggamus/menuadminadbang');
+        }
 
         ?>
         <!--end::Sidebar-->
