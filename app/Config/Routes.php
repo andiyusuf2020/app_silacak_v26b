@@ -77,6 +77,36 @@ $routes->group('metro/Adminadbang', ['filter' => 'role:Adminadbang'], function (
     $routes->get('rekap/exportXlsx', 'KabMetroController\AdminAdbangController::exportXlsxRekapSKPD');
     $routes->get('rekap/exportPdf', 'KabMetroController\AdminAdbangController::exportPdfRekapSKPD');
 });
+$routes->group('metro/skpdkab', ['filter' => 'role:skpdkab'], function ($routes) {
+    $routes->get('', 'KabMetroController\AdminAdbangController::index');
+    $routes->get('dataperopd', 'KabMetroController\AdminAdbangController::dataperopd');
+    $routes->post('rekap/update_sro', 'KabMetroController\AdminAdbangController::update_sro');
+    $routes->get('getChartDataOpdRangking', 'KabMetroController\AdminAdbangController::getChartDataOpdRangking');
+    $routes->post('uploadapbd', 'KabMetroController\AdminAdbangController::uploadapbd');
+    $routes->post('exportExcelLrfkOpd', 'KabMetroController\AdminAdbangController::exportExcelLrfkOpd');
+    $routes->get('realisasi/get-tren-bulanan', 'KabMetroController\AdminAdbangController::getTrenBulanan');
+    $routes->get('realisasi/get-summary', 'KabMetroController\AdminAdbangController::getSummaryByPeriode'); // Endpoint AJAX Filter
+    $routes->post('realisasi/store', 'KabMetroController\AdminAdbangController::storependapatan'); ///====for user adminadbang
+    $routes->get('realisasi/get-detail/(:num)', 'KabMetroController\AdminAdbangController::getDetail/$1');
+    $routes->post('realisasi/update/(:num)', 'KabMetroController\AdminAdbangController::update/$1');
+    $routes->post('realisasi/delete/(:num)', 'KabMetroController\AdminAdbangController::delete/$1');
+    $routes->get('realisasi/data-list', 'KabMetroController\AdminAdbangController::listData');
+    $routes->post('dashboard-stats/update', 'KabMetroController\AdminAdbangController::updatedatadashboard');
+    $routes->get('realisasi/export-excel-pendapatan', 'KabMetroController\AdminAdbangController::exportExcelPendapatan');
+    $routes->post('realisasi/export-pdf-pendapatan', 'KabMetroController\AdminAdbangController::exportPdfrealisasiPendapatan');
+    $routes->get('tampillaporanperakun', 'KabMetroController\AdminAdbangController::getDataperAkun');
+    $routes->post('cetakpdfrekap', 'KabMetroController\AdminAdbangController::cetakpdfrekapperakun');
+    $routes->get('daftaruser', 'UserController\Kabtanggamus\UserController::index');
+    $routes->get('updateuser', 'UserController\Kabtanggamus\UserController::updateuser');
+    $routes->post('groupset', 'UserController\Kabtanggamus\UserController::changeGroup');
+    $routes->post('opdset', 'UserController\Kabtanggamus\UserController::simpanubahopd');
+    $routes->post('opdsetpass', 'UserController\Kabtanggamus\UserController::setPassword');
+    $routes->post('anggaran-kas/store', 'KabMetroController\AdminAdbangController::storeangkas_ajax');
+    $routes->get('anggaran-kas/export-pdf', 'KabMetroController\AdminAdbangController::exportPdfAnggaranKas');
+    $routes->get('anggaran-kas/export-pdf-admin', 'KabMetroController\AdminAdbangController::exportPdfLaporanAngkasAdmin');
+    $routes->get('rekap/exportXlsx', 'KabMetroController\AdminAdbangController::exportXlsxRekapSKPD');
+    $routes->get('rekap/exportPdf', 'KabMetroController\AdminAdbangController::exportPdfRekapSKPD');
+});
 /** 
  * ROUTE For Kab Lampung TImur Sitapis-Kab 2026=======================================================
  * ==============================================================================================

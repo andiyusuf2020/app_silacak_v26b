@@ -108,7 +108,6 @@
                     // $tgldata = $this->tglapbdtanggamus->tgldataaktif();
                 }
 
-
                 $tgldata = $this->tglapbd->tgldataaktif();
                 $listopdadmin = $this->sipd->listopduserreg($tgldata['tanggal']);
                 ?>
