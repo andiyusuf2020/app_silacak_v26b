@@ -38,6 +38,10 @@ use App\Models\KabLamtimModel\RealApbdModel as RealApbdModelLamtim;
 use App\Models\KabMetroModel\TglApbdModel as TglApbdModelMetro;
 use App\Models\KabMetroModel\RealApbdModel as RealApbdModelMetro;
 
+use App\Models\KabLamtengModel\TglApbdModel as TglApbdModelLamteng;
+use App\Models\KabLamtengModel\RealApbdModel as RealApbdModelLamteng;
+
+
 class UserController extends BaseController
 {
 
@@ -92,6 +96,10 @@ class UserController extends BaseController
         if ($wilayah == 'metro') {
             $this->tglapbd = new TglApbdModelMetro();
             $this->realapbdmodel = new RealApbdModelMetro();
+        }
+        if ($wilayah == 'lampungtengah') {
+            $this->tglapbd = new TglApbdModelLamteng();
+            $this->realapbdmodel = new RealApbdModelLamteng();
         }
     }
 

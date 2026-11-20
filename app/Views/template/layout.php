@@ -300,6 +300,16 @@
         if ($wilayah == 'lampungtimur' && $groupuser == 'Adminadbang') {
             echo view('template/_part/menukabtanggamus/menuadminadbang');
         }
+        /*
+        * Menu untuk kota lampung timur================================
+        */
+        if ($wilayah == 'lampungtengah' && $groupuser == 'skpdkab') {
+            // echo dd($groupuser);
+            echo view('template/_part/menukabtanggamus/menuopdkab');
+        }
+        if ($wilayah == 'lampungtengah' && $groupuser == 'Adminadbang') {
+            echo view('template/_part/menukabtanggamus/menuadminadbang');
+        }
         ?>
         <!--end::Sidebar-->
         <!--begin::App Main-->

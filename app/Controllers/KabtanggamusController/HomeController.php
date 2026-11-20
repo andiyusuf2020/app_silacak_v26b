@@ -48,6 +48,11 @@ use App\Models\KabMetroModel\TglApbdModel as TglApbdModelMetro;
 use App\Models\KabMetroModel\DataDashboardModel as DataDashboardModelMetro;
 use App\Models\KabMetroModel\RealisasiPendapatanModel as RealisasiPendapatanModelMetro;
 
+use App\Models\KabLamtengModel\RealApbdModel as RealApbdModelLamteng;
+use App\Models\KabLamtengModel\TglApbdModel as TglApbdModelLamteng;
+use App\Models\KabLamtengModel\DataDashboardModel as DataDashboardModelLamteng;
+use App\Models\KabLamtengModel\RealisasiPendapatanModel as RealisasiPendapatanModelLamteng;
+
 
 use App\Controllers\BaseController;
 use App\Controllers\HomeKabController;
@@ -114,6 +119,12 @@ class HomeController extends BaseController
             $this->dataDashboardModel = new DataDashboardModelMetro();
             $this->tglapbdmodel = new TglApbdModelMetro();
             $this->realisasiPendapatanModel = new RealisasiPendapatanModelMetro();
+        }
+        if (session()->get('wilayah') === 'lampungtengah') {
+            $this->realapbdmodel = new RealApbdModelLamteng();
+            $this->dataDashboardModel = new DataDashboardModelLamteng();
+            $this->tglapbdmodel = new TglApbdModelLamteng();
+            $this->realisasiPendapatanModel = new RealisasiPendapatanModelLamteng();
         }
     }
 

@@ -78,10 +78,13 @@ class HomeKabController extends BaseController
             session()->set('logowakil', 'cssportal/img_home/wabup_lamtim.png');
             return redirect()->to(base_url('lampungtimur'));
         } elseif ($wilayah === 'lampungtengah') {
-            return view('maintenis/soon');
-            // session()->set('wilayah', 'lampungtengah');
-            // session()->set('namawilayah', 'Kabupaten Lampung Tengah');
-            // return redirect()->to(base_url('lampungtengah'));
+            // return view('maintenis/soon');
+            session()->set('wilayah', 'lampungtengah');
+            session()->set('namawilayah', 'Kabupaten Lampung Tengah');
+            session()->set('logokabkota', 'cssportal/img_home/lamteng.png');
+            session()->set('logobupati', 'cssportal/img_home/bupatilamteng.png');
+            session()->set('logowakil', 'cssportal/img_home/wabuplateng.png');
+            return redirect()->to(base_url('lampungtengah'));
         } elseif ($wilayah === 'lampungutara') {
             // return view('maintenis/soon');
             session()->set('wilayah', 'lampungutara');

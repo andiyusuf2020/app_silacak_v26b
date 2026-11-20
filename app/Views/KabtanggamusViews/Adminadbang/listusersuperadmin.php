@@ -331,6 +331,16 @@
         if ($wilayah == 'metro' && $groupuser == 'Adminadbang') {
             echo view('template/_part/menukabtanggamus/menuadminadbang');
         }
+        /*
+        * Menu untuk kabupaten lampung tengah================================
+        */
+        if ($wilayah == 'lampungtengah' && $groupuser == 'skpdkab') {
+            // echo dd($groupuser);
+            echo view('template/_part/menukabtanggamus/menuopdkab');
+        }
+        if ($wilayah == 'lampungtengah' && $groupuser == 'Adminadbang') {
+            echo view('template/_part/menukabtanggamus/menuadminadbang');
+        }
 
         ?>
         <!--end::Sidebar-->

@@ -56,6 +56,10 @@
                             use App\Models\KabMetroModel\RealApbdModel as sipdMetro;
                             use App\Models\KabMetroModel\TglApbdModel as  tglapbdMetro;
 
+                            use App\Models\KabLamtengModel\RealApbdModel as sipdLamteng;
+                            use App\Models\KabLamtengModel\TglApbdModel as  tglapbdLamteng;
+
+
 
                             if ($wilayah == 'tanggamus') {
                                 $this->sipd = new sipdtanggamus();
@@ -101,6 +105,11 @@
                             if ($wilayah == 'metro') {
                                 $this->sipd = new sipdMetro();
                                 $this->tglapbd = new tglapbdMetro();
+                                // $tgldata = $this->tglapbdtanggamus->tgldataaktif();
+                            }
+                            if ($wilayah == 'lampungtengah') {
+                                $this->sipd = new sipdLamteng();
+                                $this->tglapbd = new tglapbdLamteng();
                                 // $tgldata = $this->tglapbdtanggamus->tgldataaktif();
                             }
                             echo '<select name="sub_unit" class="form-control">';
