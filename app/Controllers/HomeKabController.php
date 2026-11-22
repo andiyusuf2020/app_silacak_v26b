@@ -144,6 +144,14 @@ class HomeKabController extends BaseController
             session()->set('logobupati', 'cssportal/img_home/bupatitubaba.png');
             session()->set('logowakil', 'cssportal/img_home/wabubtubaba.png');
             return redirect()->to(base_url('tulangbawangbarat'));
+        } elseif ($wilayah === 'pesisirbarat') {
+            // return view('maintenis/soon');
+            session()->set('wilayah', 'pesisirbarat');
+            session()->set('namawilayah', 'Kabupaten Pesisir Barat');
+            session()->set('logokabkota', 'cssportal/img_home/pesibar.png');
+            session()->set('logobupati', 'cssportal/img_home/bupati_pesisirbarat.jpg');
+            session()->set('logowakil', 'cssportal/img_home/wabup_pesisirbarat.jpg');
+            return redirect()->to(base_url('pesisirbarat'));
         } else {
             // Handle the case when the wilayah parameter is not recognized
             // You can choose to show an error page or redirect to a default page

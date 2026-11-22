@@ -310,6 +310,17 @@
         if ($wilayah == 'lampungtengah' && $groupuser == 'Adminadbang') {
             echo view('template/_part/menukabtanggamus/menuadminadbang');
         }
+        /*
+        * Menu untuk kabupaten pesisirbarat================================
+        */
+        if ($wilayah == 'pesisirbarat' && $groupuser == 'skpdkab') {
+            // echo dd($groupuser);
+            echo view('template/_part/menukabtanggamus/menuopdkab');
+        }
+        if ($wilayah == 'pesisirbarat' && $groupuser == 'Adminadbang') {
+            echo view('template/_part/menukabtanggamus/menuadminadbang');
+        }
+
         ?>
         <!--end::Sidebar-->
         <!--begin::App Main-->
