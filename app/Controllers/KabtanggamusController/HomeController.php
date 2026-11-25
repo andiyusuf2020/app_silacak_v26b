@@ -139,7 +139,7 @@ class HomeController extends BaseController
 
     public function dashboard()
     {
-        // session()->set('tahun', date('Y'));
+        // session()->set('tahun', date('Y'));asas
         $tgldata = $this->tglapbdmodel->tgldataaktif();
         if ($tgldata == null) {
             $tgldata = [
