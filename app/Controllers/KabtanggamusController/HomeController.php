@@ -52,6 +52,10 @@ use App\Models\KabLamtengModel\TglApbdModel as TglApbdModelLamteng;
 use App\Models\KabLamtengModel\DataDashboardModel as DataDashboardModelLamteng;
 use App\Models\KabLamtengModel\RealisasiPendapatanModel as RealisasiPendapatanModelLamteng;
 
+use App\Models\KabPesbarModel\RealApbdModel as RealApbdModelPesbar;
+use App\Models\KabPesbarModel\TglApbdModel as TglApbdModelPesbar;
+use App\Models\KabPesbarModel\DataDashboardModel as DataDashboardModelPesbar;
+use App\Models\KabPesbarModel\RealisasiPendapatanModel as RealisasiPendapatanModelPesbar;
 
 use App\Controllers\BaseController;
 use App\Controllers\HomeKabController;
@@ -124,6 +128,12 @@ class HomeController extends BaseController
             $this->dataDashboardModel = new DataDashboardModelLamteng();
             $this->tglapbdmodel = new TglApbdModelLamteng();
             $this->realisasiPendapatanModel = new RealisasiPendapatanModelLamteng();
+        }
+        if (session()->get('wilayah') === 'pesisirbarat') {
+            $this->realapbdmodel = new RealApbdModelPesbar();
+            $this->dataDashboardModel = new DataDashboardModelPesbar();
+            $this->tglapbdmodel = new TglApbdModelPesbar();
+            $this->realisasiPendapatanModel = new RealisasiPendapatanModelPesbar();
         }
     }
 

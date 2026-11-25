@@ -59,6 +59,8 @@
                             use App\Models\KabLamtengModel\RealApbdModel as sipdLamteng;
                             use App\Models\KabLamtengModel\TglApbdModel as  tglapbdLamteng;
 
+                            use App\Models\KabPesbarModel\RealApbdModel as sipdPesbar;
+                            use App\Models\KabPesbarModel\TglApbdModel as  tglapbdPesbar;
 
 
                             if ($wilayah == 'tanggamus') {
@@ -110,6 +112,11 @@
                             if ($wilayah == 'lampungtengah') {
                                 $this->sipd = new sipdLamteng();
                                 $this->tglapbd = new tglapbdLamteng();
+                                // $tgldata = $this->tglapbdtanggamus->tgldataaktif();
+                            }
+                            if ($wilayah == 'pesisirbarat') {
+                                $this->sipd = new sipdPesbar();
+                                $this->tglapbd = new tglapbdPesbar();
                                 // $tgldata = $this->tglapbdtanggamus->tgldataaktif();
                             }
                             echo '<select name="sub_unit" class="form-control">';

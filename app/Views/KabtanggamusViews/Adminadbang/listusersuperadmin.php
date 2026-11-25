@@ -341,6 +341,17 @@
         if ($wilayah == 'lampungtengah' && $groupuser == 'Adminadbang') {
             echo view('template/_part/menukabtanggamus/menuadminadbang');
         }
+        /*
+        * Menu untuk kabupaten pesisirbarat================================
+        */
+        if ($wilayah == 'pesisirbarat' && $groupuser == 'skpdkab') {
+            // echo dd($groupuser);
+            echo view('template/_part/menukabtanggamus/menuopdkab');
+        }
+        if ($wilayah == 'pesisirbarat' && $groupuser == 'Adminadbang') {
+            echo view('template/_part/menukabtanggamus/menuadminadbang');
+        }
+
 
         ?>
         <!--end::Sidebar-->
@@ -641,15 +652,16 @@
                                 return `<a href="updateuser?token=${rowData.update_token_aktif}" 
                                 title="Klik untuk menonaktifkan" 
                                 onclick="return confirm('Apakah Anda yakin ingin menonaktifkan user ini?')">
-                        <span class="badge bg-success">Aktif</span>
-                    </a>`;
+                                    <span class="badge bg-success">Aktif</span>
+                                </a>`;
                             } else {
                                 return `<a href="updateuser?token=${rowData.update_token_aktif}" 
                                 title="Klik untuk mengaktifkan" 
                                 onclick="return confirm('Apakah Anda yakin ingin mengaktifkan user ini?')">
-                        <span class="badge bg-danger">NonAktif</span>
-                    </a>`;
+                                    <span class="badge bg-danger">NonAktif</span>
+                                </a>`;
                             }
+
                         },
                         headerFilter: 'list',
                         headerFilterParams: {
