@@ -7,7 +7,6 @@ use App\Models\KabtanggamusModel\TglApbdModel;
 use App\Models\KabtanggamusModel\DataDashboardModel;
 use App\Models\KabtanggamusModel\RealisasiPendapatanModel;
 
-
 use App\Models\KablampuraModel\RealApbdModel as RealApbdModelLampura;
 use App\Models\KablampuraModel\TglApbdModel as TglApbdModelLampura;
 use App\Models\KablampuraModel\DataDashboardModel as DataDashboardModelLampura;
@@ -168,7 +167,7 @@ class HomeController extends BaseController
         $data['tahunSelected'] = $tahunSelected;
         $data['bulanSelected'] = $bulanSelected;
         $data['namawilayah'] = session()->get('namawilayah');        // return view('realisasi/data_list', [
-
+        // echo dd($data['dataRealisasi']);
         return view('KabtanggamusViews/dashboard', $data);
     }
 }
