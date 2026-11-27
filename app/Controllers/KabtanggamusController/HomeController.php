@@ -147,6 +147,7 @@ class HomeController extends BaseController
                 'tanggal' => date('Y-m-d')
             ];
         }
+
         // echo dd($tgldata);
         session()->set('tglaktif', $tgldata['tanggal']);
         $tahun = date('Y');
